@@ -10,15 +10,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Set initial sidebar state based on localStorage
-  if (sidebarState === 'true') {
-    homeNavigation.classList.add('collapse');
-  }
+//   if (sidebarState === 'true') {
+//     homeNavigation.classList.add('collapse');
+//   }
 
   // Event listener for collapse button
-  collapseButton.addEventListener('click', function(event) {
-    event.stopPropagation(); // Prevents triggering parent click events
-    toggleCollapse();
-  });
+//   collapseButton.addEventListener('click', function(event) {
+//     event.stopPropagation(); // Prevents triggering parent click events
+//     toggleCollapse();
+//   });
 
   // Event listener for input[type=number]
   // document.querySelector("input[type=number]").addEventListener('input', function(e) {

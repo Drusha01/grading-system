@@ -42,7 +42,6 @@ class AddCollege extends Component
             'Added successfully!',
                 route($this->route.'-lists'));
         }
-
     }
 
     public function render()

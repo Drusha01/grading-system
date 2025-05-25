@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE TABLE rooms(
+        DB::statement('CREATE TABLE faculty_types(
             id INT PRIMARY KEY AUTO_INCREMENT,
             code VARCHAR(100) UNIQUE,
             name VARCHAR(255) NOT NULL,
@@ -19,6 +19,8 @@ return new class extends Migration
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
+        DB::statement('INSERT INTO faculty_types VALUES(NULL,"RL","Regular Lecturer",1,NOW(),NOW());');
+        DB::statement('INSERT INTO faculty_types VALUES(NULL,"VL","Visiting Lecturer",1,NOW(),NOW());');
     }
 
     /**
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rooms');
+        Schema::dropIfExists('faculty_types');
     }
 };

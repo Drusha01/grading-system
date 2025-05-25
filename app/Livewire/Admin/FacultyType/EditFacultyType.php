@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Room;
+namespace App\Livewire\Admin\FacultyType;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
@@ -8,16 +8,16 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class EditRoom extends Component
+class EditFacultyType extends Component
 {
-    public $title = "Room";
+    public $title = "FacultyType";
 
-    public $route = 'room';
+    public $route = 'faculty-type';
 
      public function rules(){
         return [
-            'detail.code' => 'required|string|unique:rooms,code,' . $this->detail['id'],
-            'detail.name' => 'required|string|unique:rooms,name,' . $this->detail['id'],
+            'detail.code' => 'required|string|unique:faculty_types,code,' . $this->detail['id'],
+            'detail.name' => 'required|string|unique:faculty_types,name,' . $this->detail['id'],
         ];
     }
     protected $messages = [
@@ -33,7 +33,7 @@ class EditRoom extends Component
     ];
 
     public function mount($id){
-        if($college = DB::table('rooms')
+        if($college = DB::table('faculty_types')
             ->where('id','=',$id)
             ->first()){
 
@@ -49,7 +49,7 @@ class EditRoom extends Component
     public function saveEdit(){
         $this->validate();
 
-        if(DB::table('rooms')
+        if(DB::table('faculty_types')
             ->where('id','=',$this->detail['id'])
             ->update([
             'code'=>$this->detail['code'],
@@ -64,7 +64,7 @@ class EditRoom extends Component
 
     public function render()
     {
-        return view('livewire.admin.room.edit-room')
+        return view('livewire.admin.faculty-type.edit-faculty-type')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

@@ -8,25 +8,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class EditRoom extends Component
+class ActivateRoom extends Component
 {
     public $title = "Room";
 
     public $route = 'room';
-
-     public function rules(){
-        return [
-            'detail.code' => 'required|string|unique:rooms,code,' . $this->detail['id'],
-            'detail.name' => 'required|string|unique:rooms,name,' . $this->detail['id'],
-        ];
-    }
-    protected $messages = [
-        'detail.code.required' => 'The code field is required.',
-        'detail.code.unique' => 'The code already exists.',
-        'detail.name.required' => 'The name field is required.',
-        'detail.name.unique' => 'The name already exists.',
-    ];
-
     public $detail = [
         'code'=> NULL,
         'name'=> NULL,
@@ -46,14 +32,12 @@ class EditRoom extends Component
         ];
     }
 
-    public function saveEdit(){
-        $this->validate();
+    public function save(){
 
         if(DB::table('rooms')
             ->where('id','=',$this->detail['id'])
             ->update([
-            'code'=>$this->detail['code'],
-            'name'=>$this->detail['name'],
+            'is_active'=> !$this->detail['is_active'],
         ])){
         }
         $this->dispatch('notifySuccess', 
@@ -61,11 +45,10 @@ class EditRoom extends Component
             route($this->route.'-lists'));
         
     }
-
     public function render()
     {
-        return view('livewire.admin.room.edit-room')
-        ->layout('components.layouts.admin-app',[
+        return view('livewire.admin.room.activate-room')
+         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);
     }

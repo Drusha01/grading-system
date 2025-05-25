@@ -27,7 +27,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ $title ?? 'Dashboard' }} | GRADING SYSTEM </title>
 
-        <link rel="icon" href="{{asset('image/wmsu_logo.png')}}">
+        <link rel="icon" href="{{asset('image/wmsu_logo.webp')}}">
         <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
         <!-- boxicon -->

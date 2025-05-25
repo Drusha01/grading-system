@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Room;
+namespace App\Livewire\Admin\Designation;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
@@ -8,19 +8,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class DeleteRoom extends Component
+class ActivateDesignation extends Component
 {
-    public $title = "Room";
+    public $title = "Designation";
 
-    public $route = 'room';
-
+    public $route = 'designation';
     public $detail = [
         'code'=> NULL,
         'name'=> NULL,
     ];
 
     public function mount($id){
-        if($college = DB::table('rooms')
+        if($college = DB::table('designations')
             ->where('id','=',$id)
             ->first()){
 
@@ -35,7 +34,7 @@ class DeleteRoom extends Component
 
     public function save(){
 
-        if(DB::table('rooms')
+        if(DB::table('designations')
             ->where('id','=',$this->detail['id'])
             ->update([
             'is_active'=> !$this->detail['is_active'],
@@ -46,12 +45,10 @@ class DeleteRoom extends Component
             route($this->route.'-lists'));
         
     }
-
-
     public function render()
     {
-        return view('livewire.admin.room.delete-room')
-        ->layout('components.layouts.admin-app',[
+        return view('livewire.admin.designation.activate-designation')
+         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);
     }

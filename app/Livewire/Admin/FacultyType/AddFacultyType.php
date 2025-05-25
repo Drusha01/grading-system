@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Room;
+namespace App\Livewire\Admin\FacultyType;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class AddRoom extends Component
+class AddFacultyType extends Component
 {
-    public $title = "Room";
+    public $title = "FacultyType";
 
-    public $route = 'room';
+    public $route = 'faculty-type';
 
     public $detail = [
         'code'=> NULL,
@@ -20,8 +20,8 @@ class AddRoom extends Component
     ];
 
     protected $rules = [
-        'detail.code' => 'required|string|unique:rooms,code',
-        'detail.name' => 'required|string|unique:rooms,name',
+        'detail.code' => 'required|string|unique:faculty_types,code',
+        'detail.name' => 'required|string|unique:faculty_types,name',
     ];
 
     protected $messages = [
@@ -35,7 +35,7 @@ class AddRoom extends Component
     public function saveAdd(){
         $this->validate();
 
-        if(DB::table('rooms')->insert([
+        if(DB::table('faculty_types')->insert([
             'code'=>$this->detail['code'],
             'name'=>$this->detail['name'],
         ])){
@@ -47,7 +47,7 @@ class AddRoom extends Component
 
     public function render()
     {
-        return view('livewire.admin.room.add-room')
+        return view('livewire.admin.faculty-type.add-faculty-type')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

@@ -38,6 +38,7 @@ use App\Livewire\Admin\Faculty\AddFaculty;
 use App\Livewire\Admin\Faculty\EditFaculty;
 use App\Livewire\Admin\Faculty\ViewFaculty;
 use App\Livewire\Admin\Faculty\DeleteFaculty;
+use App\Livewire\Admin\Faculty\ActivateFaculty;
 use App\Livewire\Admin\Faculty\FacultyLists;
 
 use App\Livewire\Admin\SchoolYear\AddSchoolYear;
@@ -83,7 +84,30 @@ use App\Livewire\Admin\Room\AddRoom;
 use App\Livewire\Admin\Room\EditRoom;
 use App\Livewire\Admin\Room\ViewRoom;
 use App\Livewire\Admin\Room\DeleteRoom;
+use App\Livewire\Admin\Room\ActivateRoom;
 use App\Livewire\Admin\Room\RoomLists;
+
+use App\Livewire\Admin\FacultyType\AddFacultyType;
+use App\Livewire\Admin\FacultyType\EditFacultyType;
+use App\Livewire\Admin\FacultyType\ViewFacultyType;
+use App\Livewire\Admin\FacultyType\DeleteFacultyType;
+use App\Livewire\Admin\FacultyType\ActivateFacultyType;
+use App\Livewire\Admin\FacultyType\FacultyTypeLists;
+
+use App\Livewire\Admin\Designation\AddDesignation;
+use App\Livewire\Admin\Designation\EditDesignation;
+use App\Livewire\Admin\Designation\ViewDesignation;
+use App\Livewire\Admin\Designation\DeleteDesignation;
+use App\Livewire\Admin\Designation\ActivateDesignation;
+use App\Livewire\Admin\Designation\DesignationLists;
+
+use App\Livewire\Admin\Rank\AddRank;
+use App\Livewire\Admin\Rank\EditRank;
+use App\Livewire\Admin\Rank\ViewRank;
+use App\Livewire\Admin\Rank\DeleteRank;
+use App\Livewire\Admin\Rank\ActivateRank;
+use App\Livewire\Admin\Rank\RankLists;
+
 
 use App\Livewire\Admin\Profile\Profile;
 
@@ -177,18 +201,10 @@ Route::middleware([IsAuthenticated::class])->group(function () {
             Route::get('/add',AddRoom::class)->name('room-add');
             Route::get('/edit-{id}',EditRoom::class)->name('room-edit');
             Route::get('/delete-{id}',DeleteRoom::class)->name('room-delete');
+            Route::get('/activate-{id}',ActivateRoom::class)->name('room-activate');
             Route::get('/view-{id}',ViewRoom::class)->name('room-view');
         });
         
-        Route::prefix('faculty')->group(function () {
-            Route::get('/',FacultyLists::class)->name('faculty-lists');
-            Route::get('/add',AddFaculty::class)->name('faculty-add');
-            Route::get('/edit-{id}',EditFaculty::class)->name('faculty-edit');
-            Route::get('/delete-{id}',DeleteFaculty::class)->name('faculty-delete');
-            Route::get('/view-{id}',ViewFaculty::class)->name('faculty-view');
-        });
-        
-
         Route::prefix('admins')->group(function () {
             Route::get('/',AdminLists::class)->name('admin-lists');
             Route::get('/add',AddAdmin::class)->name('admin-add');
@@ -200,6 +216,41 @@ Route::middleware([IsAuthenticated::class])->group(function () {
             Route::get('/',Profile::class)->name('admin-profile');
         });
 
+        Route::prefix('academic')->group(function () {
+            Route::prefix('faculty')->group(function () {
+                Route::get('/',FacultyLists::class)->name('faculty-lists');
+                Route::get('/add',AddFaculty::class)->name('faculty-add');
+                Route::get('/edit-{id}',EditFaculty::class)->name('faculty-edit');
+                Route::get('/delete-{id}',DeleteFaculty::class)->name('faculty-delete');
+                Route::get('/activate-{id}',ActivateFaculty::class)->name('faculty-activate');
+                Route::get('/view-{id}',ViewFaculty::class)->name('faculty-view');
+            });
+            Route::prefix('faculty-types')->group(function () {
+                Route::get('/',FacultyTypeLists::class)->name('faculty-type-lists');
+                Route::get('/add',AddFacultyType::class)->name('faculty-type-add');
+                Route::get('/edit-{id}',EditFacultyType::class)->name('faculty-type-edit');
+                Route::get('/delete-{id}',DeleteFacultyType::class)->name('faculty-type-delete');
+                Route::get('/activate-{id}',ActivateFacultyType::class)->name('faculty-type-activate');
+                Route::get('/view-{id}',ViewFacultyType::class)->name('faculty-type-view');
+            });
+            Route::prefix('ranks')->group(function () {
+                Route::get('/',RankLists::class)->name('rank-lists');
+                Route::get('/add',AddRank::class)->name('rank-add');
+                Route::get('/edit-{id}',EditRank::class)->name('rank-edit');
+                Route::get('/delete-{id}',DeleteRank::class)->name('rank-delete');
+                Route::get('/activate-{id}',ActivateRank::class)->name('rank-activate');
+                Route::get('/view-{id}',ViewRank::class)->name('rank-view');
+            });
+            Route::prefix('designations')->group(function () {
+                Route::get('/',DesignationLists::class)->name('designation-lists');
+                Route::get('/add',AddDesignation::class)->name('designation-add');
+                Route::get('/edit-{id}',EditDesignation::class)->name('designation-edit');
+                Route::get('/delete-{id}',DeleteDesignation::class)->name('designation-delete');
+                Route::get('/activate-{id}',ActivateDesignation::class)->name('designation-activate');
+                Route::get('/view-{id}',ViewDesignation::class)->name('designation-view');
+            });
+        });
+        
     });
 
 

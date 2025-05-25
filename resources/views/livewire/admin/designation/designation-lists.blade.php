@@ -75,7 +75,7 @@
                 <tr>
                     <th scope="col" class="px-4">#</th>
                     <th scope="col" class="px-4 ">Code</th>
-                    <th scope="col" class="px-4 ">Room</th>
+                    <th scope="col" class="px-4 ">Designation</th>
                     <th scope="col" class="text-center px-4 ">Actions</th> 
                 </tr>
             </thead>
