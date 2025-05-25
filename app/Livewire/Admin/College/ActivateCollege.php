@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class DeleteCollege extends Component
+class ActivateCollege extends Component
 {
     public $title = "College";
     public $route = 'college';
@@ -45,10 +45,9 @@ class DeleteCollege extends Component
             route($this->route.'-lists'));
         
     }
-
     public function render()
     {
-        return view('livewire.admin.college.delete-college')
+        return view('livewire.admin.college.activate-college')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

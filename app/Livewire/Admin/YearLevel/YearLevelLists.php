@@ -3,14 +3,30 @@
 namespace App\Livewire\Admin\YearLevel;
 
 use Livewire\Component;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
 
 class YearLevelLists extends Component
 {
     public $title = "Year Level";
 
+    public $route = 'year-level';
+
+    public $filters = [
+        'search'=> NULL,
+    ];
+
     public function render()
     {
-        return view('livewire.admin.year-level.year-level-lists')
+        $table_data = DB::table('year_levels as yl')
+            ->orwhere('yl.year_level','like','%'.$this->filters['search'] .'%')
+            ->orderBy('yl.id', 'desc')
+            ->paginate(10);
+        return view('livewire.admin.year-level.year-level-lists',[
+            'table_data'=>$table_data
+        ])
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

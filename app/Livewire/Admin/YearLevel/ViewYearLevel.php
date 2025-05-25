@@ -3,6 +3,10 @@
 namespace App\Livewire\Admin\YearLevel;
 
 use Livewire\Component;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
 
 class ViewYearLevel extends Component
 {

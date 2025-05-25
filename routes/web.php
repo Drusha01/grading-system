@@ -23,6 +23,7 @@ use App\Livewire\Admin\College\AddCollege;
 use App\Livewire\Admin\College\EditCollege;
 use App\Livewire\Admin\College\ViewCollege;
 use App\Livewire\Admin\College\DeleteCollege;
+use App\Livewire\Admin\College\ActivateCollege;
 use App\Livewire\Admin\College\CollegeLists;
 
 
@@ -30,6 +31,7 @@ use App\Livewire\Admin\Department\AddDepartment;
 use App\Livewire\Admin\Department\EditDepartment;
 use App\Livewire\Admin\Department\ViewDepartment;
 use App\Livewire\Admin\Department\DeleteDepartment;
+use App\Livewire\Admin\Department\ActivateDepartment;
 use App\Livewire\Admin\Department\DepartmentLists;
 
 use App\Livewire\Admin\Faculty\AddFaculty;
@@ -49,6 +51,7 @@ use App\Livewire\Admin\Semester\AddSemester;
 use App\Livewire\Admin\Semester\EditSemester;
 use App\Livewire\Admin\Semester\ViewSemester;
 use App\Livewire\Admin\Semester\DeleteSemester;
+use App\Livewire\Admin\Semester\ActivateSemester;
 use App\Livewire\Admin\Semester\SemesterLists;
 
 
@@ -114,13 +117,17 @@ Route::middleware([IsAuthenticated::class])->group(function () {
             Route::get('/add',AddCollege::class)->name('college-add');
             Route::get('/edit-{id}',EditCollege::class)->name('college-edit');
             Route::get('/delete-{id}',DeleteCollege::class)->name('college-delete');
+            Route::get('/activate-{id}',ActivateCollege::class)->name('college-activate');
             Route::get('/view-{id}',ViewCollege::class)->name('college-view');
         });
+        Route::get('departments-{id?}', DepartmentLists::class)->name('department-lists-college');
         Route::prefix('departments')->group(function () {
-            Route::get('/',DepartmentLists::class)->name('department-lists');
+            Route::get('/', DepartmentLists::class)->name('department-lists');
             Route::get('/add',AddDepartment::class)->name('department-add');
             Route::get('/edit-{id}',EditDepartment::class)->name('department-edit');
             Route::get('/delete-{id}',DeleteDepartment::class)->name('department-delete');
+            Route::get('/activate-{id}',ActivateDepartment::class)->name('department-activate');
+
             Route::get('/view-{id}',ViewDepartment::class)->name('department-view');
         });
 
@@ -137,6 +144,7 @@ Route::middleware([IsAuthenticated::class])->group(function () {
             Route::get('/add',AddSemester::class)->name('semester-add');
             Route::get('/edit-{id}',EditSemester::class)->name('semester-edit');
             Route::get('/delete-{id}',DeleteSemester::class)->name('semester-delete');
+            Route::get('/activate-{id}',ActivateSemester::class)->name('semester-activate');
             Route::get('/view-{id}',ViewSemester::class)->name('semester-view');
         });
         

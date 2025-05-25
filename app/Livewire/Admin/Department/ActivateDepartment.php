@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class DeleteDepartment extends Component
+
+class ActivateDepartment extends Component
 {
     public $title = "Department";
 
@@ -49,12 +50,7 @@ class DeleteDepartment extends Component
     }
     public function render()
     {
-        $this->colleges = DB::table('colleges')
-            ->where('is_active','=',1)
-            ->get()
-            ->toArray();
-
-        return view('livewire.admin.department.delete-department')
+        return view('livewire.admin.department.activate-department')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

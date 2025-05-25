@@ -42,17 +42,16 @@
                 </div>
             </div>
 
-
             <div class="row">
-                <p class="text-danger d-flex justify-content-center">
-                    Are you sure you want to delete this ?
+                <p class="text-warning d-flex justify-content-center">
+                    Are you sure you want to activate this ?
                 </p>
             </div>
             <div class="row my-4">
                 <div class="col-12 d-flex justify-content-center">
                     <div class="p-2">
-                        <button class="btn btn-danger" type="submit">
-                            Delete
+                        <button class="btn btn-warning" type="submit">
+                            Activate
                         </button>
                     </div>
                 </div>

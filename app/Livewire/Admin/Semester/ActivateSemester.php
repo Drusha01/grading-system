@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class DeleteSemester extends Component
+class ActivateSemester extends Component
 {
-    public $title = "Semester";
+     public $title = "Semester";
 
     public $route = "semester";
 
@@ -20,7 +20,7 @@ class DeleteSemester extends Component
         'date_start_month' => NULL,
         'date_end_date' => 1,
         'date_end_month' => NULL,
-        'is_active'=> NULL,
+        'is_active' => NULL,
     ];
 
     public $months = [
@@ -72,7 +72,7 @@ class DeleteSemester extends Component
     }
     public function render()
     {
-        return view('livewire.admin.semester.delete-semester')
+        return view('livewire.admin.semester.activate-semester')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

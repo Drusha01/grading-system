@@ -18,6 +18,7 @@ return new class extends Migration
             date_start_month INT,
             date_end_date INT,
             date_end_month INT,
+            is_active BOOL DEFAULT 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');

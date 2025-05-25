@@ -21,6 +21,39 @@
             #backToTop:hover {
                 background-color: #00bad1;
             }
+            /* Spinner container (optional) */
+            .form-loader {
+                text-align: center;
+                font-weight: bold;
+                font-size: 1.25rem;
+            }
+
+            /* Wave spinner */
+            .sk-wave {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .sk-wave-rect {
+                background-color: #0d6efd; /* Bootstrap primary */
+                height: 40px;
+                width: 6px;
+                animation: sk-wave 1.2s infinite ease-in-out;
+            }
+
+            .sk-wave-rect:nth-child(1) { animation-delay: -1.2s; }
+            .sk-wave-rect:nth-child(2) { animation-delay: -1.1s; }
+            .sk-wave-rect:nth-child(3) { animation-delay: -1.0s; }
+            .sk-wave-rect:nth-child(4) { animation-delay: -0.9s; }
+            .sk-wave-rect:nth-child(5) { animation-delay: -0.8s; }
+
+            @keyframes sk-wave {
+                0%, 40%, 100% { transform: scaleY(0.4); }
+                20% { transform: scaleY(1.0); }
+            }
+
         </style>
 
         <meta charset="UTF-8">
@@ -37,7 +70,7 @@
 
         <!-- bootstrap-5 -->
          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="crossorigin="anonymous" referrerpolicy="no-referrer"></script>
