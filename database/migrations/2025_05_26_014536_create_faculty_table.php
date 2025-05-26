@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -12,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE TABLE students(
+        DB::statement('CREATE TABLE faculty(
             id INT PRIMARY KEY AUTO_INCREMENT,
             college_id INT,
             department_id INT,
@@ -22,19 +21,16 @@ return new class extends Migration
             last_name VARCHAR(255) NOT NULL,
             suffix VARCHAR(255) NOT NULL,
             email VARCHAR(100) UNIQUE,
+            academic_ran_id INT,  
+            designation_id INT,
+            faculty_type_id INT,
             is_active BOOL DEFAULT 1,
-            year_level INT, 
+            release_time ENUM("Pending", "Attending")
+	        hours_per_week INT ,
+            subject_id INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
-
-        DB::statement('CREATE INDEX idx_students_student_code ON students(student_code(10));');
-        DB::statement('CREATE INDEX idx_students_fullname ON students(first_name(10),middle_name(10),last_name(10),suffix(10));');
-        DB::statement('CREATE INDEX idx_students_email ON students(email(10));');
-        DB::statement('CREATE INDEX idx_students_college_id ON students(college_id);');
-        DB::statement('CREATE INDEX idx_students_department_id ON students(department_id);');
-        
-      
     }
 
     /**
@@ -42,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('faculty');
     }
 };

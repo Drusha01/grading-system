@@ -11,10 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('enrolled_students', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
+
+    //     student
+	// college
+	// department
+	// school year
+	// year level	
+	// semester	
+	// 	subjects
+	// 		schedule
     }
 
     /**
@@ -22,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('enrolled_students');
     }
 };

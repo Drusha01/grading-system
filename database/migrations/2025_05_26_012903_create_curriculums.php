@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE TABLE semesters(
+        DB::statement('CREATE TABLE curriculums(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            semester VARCHAR(100) UNIQUE,
-            date_start_date INT,
-            date_start_month INT,
-            date_end_date INT,
-            date_end_month INT,
-            is_active BOOL DEFAULT 1,
+            school_year_id INT,
+            college_id INT,
+            department_id INT,
+            year_level_id INT,
+            semester_id INT,
+            subject_id INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
-        
-        DB::statement('CREATE INDEX idx_semester_semester ON semesters(semester(10));');
     }
 
     /**
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('semesters');
+        Schema::dropIfExists('curriculums');
     }
 };
