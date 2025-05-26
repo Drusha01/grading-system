@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class AddSubject extends Component
+class ActivateSubject extends Component
 {
     public $title = "Subject";
 
@@ -28,15 +28,24 @@ class AddSubject extends Component
         'prerequisite_subject_id' => NULL,
         'lecture_unit'=> 3,
         'laboratory_unit' => 0,
+        'is_active'=>NULL,
     ];
 
     public function rules(){
         return [
             'detail.college_id' => 'required|exists:colleges,id',
             'detail.department_id' => 'required|exists:departments,id',
-            'detail.prerequisite_subject_id' => 'nullable|exists:subjects,id',
-            'detail.subject_id' => 'required|unique:subjects,subject_id',
-            'detail.subject_code' => 'required|unique:subjects,subject_code,',
+            'detail.prerequisite_subject_id' => [
+                'nullable',
+                'exists:subjects,id',
+                function ($attribute, $value, $fail) {
+                    if (intval($this->detail['id']) > 0 && $value == $this->detail['id']) {
+                        $fail('A subject cannot be its own prerequisite.');
+                    }
+                },
+            ],
+            'detail.subject_id' => 'required|unique:subjects,subject_id,'.$this->detail['id'],
+            'detail.subject_code' => 'required|unique:subjects,subject_code,'.$this->detail['id'],
             'detail.lecture_unit' => 'integer|min:0',
             'detail.laboratory_unit' => 'integer|min:0',
         ];
@@ -67,40 +76,51 @@ class AddSubject extends Component
         ];
     }
 
-    public function updatedDetailCollegeId($value){
-        $this->detail['department_id'] = null;
-    }
 
     public function save(){
-        $this->validate();
 
-        if (
-            intval( $this->detail['lecture_unit']) < 1 &&
-            intval( $this->detail['laboratory_unit']) < 1
-        ) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'detail.lecture_unit' => 'Either Lecture Unit or Laboratory Unit must be at least 1.',
-                'detail.laboratory_unit' => 'Either Lecture Unit or Laboratory Unit must be at least 1.',
-            ]);
-        }
-        if(DB::table('subjects')->insert([
-            'college_id'=> $this->detail['college_id'],
-            'department_id'=> $this->detail['department_id'],
-            'subject_id' => $this->detail['subject_id'],
-            'subject_code' => $this->detail['subject_code'],
-            'description'=> $this->detail['description'],
-            'prerequisite_subject_id' => intval($this->detail['prerequisite_subject_id']),
-            'lecture_unit'=> intval($this->detail['lecture_unit']),
-            'laboratory_unit' => intval($this->detail['laboratory_unit']),
+        if(DB::table('subjects')
+            ->where('id','=',$this->detail['id'])
+            ->update([
+            'is_active' => !$this->detail['is_active'],
         ])){
-            $this->dispatch('notifySuccess', 
-            'Added successfully!',
-                route($this->route.'-lists'));
         }
+        $this->dispatch('notifySuccess', 
+        'Updated successfully!',
+            route($this->route.'-lists'));
     }
 
 
-    public function mount(){
+    public function mount($id){
+        $detail = DB::table('subjects as s')
+            ->where('id','=',$id)
+            ->select(
+                's.id' ,
+                's.college_id' ,
+                's.department_id' ,
+                's.subject_id' ,
+                's.subject_code' ,
+                's.description',
+                's.prerequisite_subject_id' ,
+                's.lecture_unit',
+                's.laboratory_unit' ,
+                's.is_active',
+            )
+            ->first();
+
+        $this->detail = [
+            'id' => $detail->id,
+            'college_id' => $detail->college_id,
+            'department_id' => $detail->department_id,
+            'subject_id' => $detail->subject_id,
+            'subject_code' => $detail->subject_code,
+            'description'=> $detail->description,
+            'prerequisite_subject_id' => ($detail->prerequisite_subject_id == 0 ? NULL:$detail->prerequisite_subject_id),
+            'lecture_unit'=> $detail->lecture_unit,
+            'laboratory_unit' => $detail->laboratory_unit,
+            'is_active'=>$detail->is_active,
+        ];
+
         $this->colleges = DB::table('colleges')
             ->where('is_active','=',1)
             ->get()
@@ -118,7 +138,7 @@ class AddSubject extends Component
 
     public function render()
     {
-        return view('livewire.admin.subjects.add-subject')
+        return view('livewire.admin.subjects.activate-subject')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

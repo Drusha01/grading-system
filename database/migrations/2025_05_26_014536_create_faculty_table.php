@@ -25,7 +25,7 @@ return new class extends Migration
             designation_id INT,
             faculty_type_id INT,
             is_active BOOL DEFAULT 1,
-            release_time ENUM("Pending", "Attending")
+            release_time ENUM("Without Release Time", "With Release Time"),
 	        hours_per_week INT ,
             subject_id INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,

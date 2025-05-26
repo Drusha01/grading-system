@@ -11,7 +11,7 @@
                 <input type="search" wire:model.live="filters.search" name="" id="" placeholder="Search ... " class="form-control">
             </div>
             <div class="col-2">
-                <select name="" id="" wire:change="updateCollege()" wire:model="college_id" class="form-select"> 
+                <select name="" id="" wire:change="updateCollege()" wire:model="filters.college_id" class="form-select"> 
                     <option value="">Select College</option>
                     @foreach ($colleges as $key => $value )
                         <option value="{{ $value->id }}" >{{ $value->code }}</option>
@@ -66,7 +66,7 @@
         </div>
         <table class="table table-striped border" >
             <thead style="background:#952323;color:white;">
-                <tr>
+                <tr class="align-middle">
                     <th scope="col" class="px-4">#</th>
                     <th scope="col" class="px-4 ">College</th>
                     <th scope="col" class="px-4 ">Code</th>
@@ -105,7 +105,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        <tr class="align-middle">
                             <td colspan="42">
                                 <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
                             </td>

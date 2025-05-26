@@ -21,6 +21,25 @@
             #backToTop:hover {
                 background-color: #00bad1;
             }
+            .form-loader {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                backdrop-filter: blur(3px);
+                -webkit-backdrop-filter: blur(25px) saturate(180%);
+                width: 100%;
+                height: 100%;
+                color: #fff;
+                text-align: center;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                background: rgba(0, 0, 0, .5);
+                z-index: 20;
+            }
         </style>
 
         <meta charset="UTF-8">

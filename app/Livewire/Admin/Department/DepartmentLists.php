@@ -29,8 +29,7 @@ class DepartmentLists extends Component
     public $colleges = [];
     public $filters = [
         'search'=> NULL,
-        'search_by' => 'Department code',
-        'prev_search'=> NULL,
+        'college_id'=> NULL,
 
     ];
 
@@ -58,8 +57,8 @@ class DepartmentLists extends Component
             ->select('d.id','d.code','d.name','c.code as college_code','d.is_active')
             ->leftJoin('colleges as c','c.id','d.college_id');
 
-        if (!empty($this->college_ids)) {
-            $table_data->whereIn('d.college_id', $this->college_ids);
+        if($this->filters['college_id']){
+            $table_data->where('d.college_id', '=',$this->filters['college_id']);
         }
 
         if (!empty($this->filters['search'])) {

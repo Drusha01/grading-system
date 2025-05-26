@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class EditStudent extends Component
+class ActivateStudent extends Component
 {
     public $title = "Student";
-    
+
     public $route = 'student';
 
     public $colleges = [];
@@ -31,6 +31,8 @@ class EditStudent extends Component
         'middle_name'=> NULL,
         'last_name'=> NULL,
         'suffix'=> NULL,
+        'is_active'=> NULL,
+
     ];
     
 
@@ -65,10 +67,6 @@ class EditStudent extends Component
             'detail.first_name.required' => 'First name is required.',
             'detail.last_name.required' => 'Last name is required.',
         ];
-    }
-
-    public function updatedDetailCollegeId($value){
-        $this->detail['department_id'] = null;
     }
     public function mount($id){
         $detail = DB::table('students as s')
@@ -106,6 +104,8 @@ class EditStudent extends Component
             'middle_name'=> $detail->middle_name,
             'last_name'=> $detail->last_name,
             'suffix'=> $detail->suffix,
+            'is_active'=> $detail->is_active,
+
         ];
 
         $this->colleges = DB::table('colleges')
@@ -123,29 +123,21 @@ class EditStudent extends Component
     }
 
     public function save(){
-        $this->validate($this->rules(), $this->messages());
-
-         if(DB::table('students')
-            ->where('id','=',$this->detail['id'])
+        $updated = DB::table('students')
+            ->where(
+                'id','=', $this->detail['id'],
+            )
             ->update([
-            'college_id'=> $this->detail['college_id'],
-            'department_id'=> $this->detail['department_id'],
-            'year_level_id'=> $this->detail['year_level_id'],
-            'code'=> $this->detail['code'],
-            'email'=> $this->detail['email'],
-            'first_name'=> $this->detail['first_name'],
-            'middle_name'=> $this->detail['middle_name'],
-            'last_name'=> $this->detail['last_name'],
-            'suffix'=> $this->detail['suffix'],
-        ])){
-        }
+                'is_active' => !$this->detail['is_active'],
+            ]);
         $this->dispatch('notifySuccess', 
         'Updated successfully!',
             route($this->route.'-lists'));
     }
+    
     public function render()
     {
-        return view('livewire.admin.student.edit-student')
+        return view('livewire.admin.student.activate-student')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

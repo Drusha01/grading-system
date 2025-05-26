@@ -18,7 +18,7 @@
         </div>
         <table class="table table-striped border" >
             <thead style="background:#952323;color:white;">
-                <tr>
+                <tr class="align-middle">
                     <th scope="col" class="px-4 ">#</th>
                     <th scope="col" class="px-4 ">School Year</th>
                     <th scope="col" class="px-4 ">Start Date</th>

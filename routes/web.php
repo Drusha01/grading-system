@@ -60,12 +60,14 @@ use App\Livewire\Admin\Student\AddStudent;
 use App\Livewire\Admin\Student\EditStudent;
 use App\Livewire\Admin\Student\ViewStudent;
 use App\Livewire\Admin\Student\DeleteStudent;
+use App\Livewire\Admin\Student\ActivateStudent;
 use App\Livewire\Admin\Student\StudentLists;
 
 use App\Livewire\Admin\Subjects\AddSubject;
 use App\Livewire\Admin\Subjects\EditSubject;
 use App\Livewire\Admin\Subjects\ViewSubject;
 use App\Livewire\Admin\Subjects\DeleteSubject;
+use App\Livewire\Admin\Subjects\ActivateSubject;
 use App\Livewire\Admin\Subjects\SubjectLists;
 
 use App\Livewire\Admin\YearLevel\AddYearLevel;
@@ -185,14 +187,16 @@ Route::middleware([IsAuthenticated::class])->group(function () {
             Route::get('/add',AddSubject::class)->name('subject-add');
             Route::get('/edit-{id}',EditSubject::class)->name('subject-edit');
             Route::get('/delete-{id}',DeleteSubject::class)->name('subject-delete');
+            Route::get('/activate-{id}',ActivateSubject::class)->name('subject-activate');
             Route::get('/view-{id}',ViewSubject::class)->name('subject-view');
         });
 
         Route::prefix('students')->group(function () {
             Route::get('/',StudentLists::class)->name('student-lists');
-            Route::get('/add',AddStudent::class)->name('student-add');
+            Route::get('/add',AddStudent::class)->name('student-add');  
             Route::get('/edit-{id}',EditStudent::class)->name('student-edit');
             Route::get('/delete-{id}',DeleteStudent::class)->name('student-delete');
+            Route::get('/activate-{id}',ActivateStudent::class)->name('student-activate');
             Route::get('/view-{id}',ViewStudent::class)->name('student-view');
         });
 

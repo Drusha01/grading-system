@@ -16,19 +16,19 @@ return new class extends Migration
             id INT PRIMARY KEY AUTO_INCREMENT,
             college_id INT,
             department_id INT,
+            year_level_id INT, 
             code VARCHAR(100) UNIQUE,
             first_name VARCHAR(255)  NOT NULL,
             middle_name VARCHAR(255) ,
             last_name VARCHAR(255) NOT NULL,
-            suffix VARCHAR(255) NOT NULL,
+            suffix VARCHAR(255),
             email VARCHAR(100) UNIQUE,
             is_active BOOL DEFAULT 1,
-            year_level INT, 
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
 
-        DB::statement('CREATE INDEX idx_students_student_code ON students(student_code(10));');
+        DB::statement('CREATE INDEX idx_students_student_code ON students(code(10));');
         DB::statement('CREATE INDEX idx_students_fullname ON students(first_name(10),middle_name(10),last_name(10),suffix(10));');
         DB::statement('CREATE INDEX idx_students_email ON students(email(10));');
         DB::statement('CREATE INDEX idx_students_college_id ON students(college_id);');

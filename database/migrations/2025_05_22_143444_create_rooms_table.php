@@ -19,6 +19,12 @@ return new class extends Migration
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
+
+        DB::statement('INSERT INTO rooms VALUES(NULL,"LR1","Lecture Room 1",1,NOW(),NOW());');
+        DB::statement('INSERT INTO rooms VALUES(NULL,"LR2","Lecture Room 1",1,NOW(),NOW());');
+        DB::statement('INSERT INTO rooms VALUES(NULL,"CLAR","College of Liberal Arts Room",1,NOW(),NOW());');
+        DB::statement('INSERT INTO rooms VALUES(NULL,"LAB1","Laboratory Room 1",1,NOW(),NOW());');
+        DB::statement('INSERT INTO rooms VALUES(NULL,"LAB2","Laboratory Room 2",1,NOW(),NOW());');
     }
 
     /**

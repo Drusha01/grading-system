@@ -20,6 +20,7 @@ class Semesters extends Seeder
             8,
             31,
             12,
+            1,
             NOW(),
             NOW()
         );');
@@ -30,6 +31,7 @@ class Semesters extends Seeder
             1,
             31,
             5,
+            1,
             NOW(),
             NOW()
         );');

@@ -15,11 +15,12 @@ return new class extends Migration
             college_id INT,
             department_id INT,
             subject_id VARCHAR(50) NOT NULL,
-            code VARCHAR(100),
-            description VARCHAR (255),
+            subject_code VARCHAR(100),
+            description VARCHAR(255),
             prerequisite_subject_id INT,
             lecture_unit INT,
-            laboratory_ unit INT,
+            laboratory_unit INT,
+            is_active BOOL DEFAULT 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');

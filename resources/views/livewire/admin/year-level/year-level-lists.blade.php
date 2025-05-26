@@ -56,7 +56,7 @@
 
                 </div>
             <thead style="background:#952323;color:white;">
-                <tr>
+                <tr class="align-middle">
                     <th scope="col" class="px-4">#</th>
                     <th scope="col" class="px-4 ">Year Level</th>
                     <th scope="col" class="text-center px-4 ">Actions</th> 
@@ -91,7 +91,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        <tr class="align-middle">
                             <td colspan="42">
                                 <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
                             </td>
