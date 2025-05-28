@@ -110,6 +110,30 @@ use App\Livewire\Admin\Rank\DeleteRank;
 use App\Livewire\Admin\Rank\ActivateRank;
 use App\Livewire\Admin\Rank\RankLists;
 
+use App\Livewire\Admin\Curriculum\AddCurriculum;
+use App\Livewire\Admin\Curriculum\EditCurriculum;
+use App\Livewire\Admin\Curriculum\ViewCurriculum;
+use App\Livewire\Admin\Curriculum\DeleteCurriculum;
+use App\Livewire\Admin\Curriculum\ActivateCurriculum;
+use App\Livewire\Admin\Curriculum\CurriculumLists;
+
+use App\Livewire\Admin\Schedule\AddSchedule;
+use App\Livewire\Admin\Schedule\EditSchedule;
+use App\Livewire\Admin\Schedule\ViewSchedule;
+use App\Livewire\Admin\Schedule\DeleteSchedule;
+use App\Livewire\Admin\Schedule\ActivateSchedule;
+use App\Livewire\Admin\Schedule\ScheduleLists;
+
+
+use App\Livewire\Admin\EnrolledStudent\AddEnrolledStudent;
+use App\Livewire\Admin\EnrolledStudent\EditEnrolledStudent;
+use App\Livewire\Admin\EnrolledStudent\ViewEnrolledStudent;
+use App\Livewire\Admin\EnrolledStudent\DeleteEnrolledStudent;
+use App\Livewire\Admin\EnrolledStudent\ActivateEnrolledStudent;
+use App\Livewire\Admin\EnrolledStudent\EnrolledStudentLists;
+
+
+
 
 use App\Livewire\Admin\Profile\Profile;
 
@@ -254,6 +278,32 @@ Route::middleware([IsAuthenticated::class])->group(function () {
                 Route::get('/view-{id}',ViewDesignation::class)->name('designation-view');
             });
         });
+
+        Route::prefix('curriculums')->group(function () {
+            Route::get('/',CurriculumLists::class)->name('curriculum-lists');
+            Route::get('/add',AddCurriculum::class)->name('curriculum-add');
+            Route::get('/edit-{id}',EditCurriculum::class)->name('curriculum-edit');
+            Route::get('/delete-{id}',DeleteCurriculum::class)->name('curriculum-delete');
+            Route::get('/activate-{id}',ActivateCurriculum::class)->name('curriculum-activate');
+            Route::get('/view-{id}',ViewCurriculum::class)->name('curriculum-view');
+        });
+         Route::prefix('schedules')->group(function () {
+            Route::get('/',ScheduleLists::class)->name('schedule-lists');
+            Route::get('/add',AddSchedule::class)->name('schedule-add');
+            Route::get('/edit-{id}',EditSchedule::class)->name('schedule-edit');
+            Route::get('/delete-{id}',DeleteSchedule::class)->name('schedule-delete');
+            Route::get('/activate-{id}',ActivateSchedule::class)->name('schedule-activate');
+            Route::get('/view-{id}',ViewSchedule::class)->name('schedule-view');
+        });
+            Route::prefix('enrolled-students')->group(function () {
+            Route::get('/',EnrolledStudentLists::class)->name('enrolled-student-lists');
+            Route::get('/add',AddEnrolledStudent::class)->name('enrolled-student-add');
+            Route::get('/edit-{id}',EditEnrolledStudent::class)->name('enrolled-student-edit');
+            Route::get('/delete-{id}',DeleteEnrolledStudent::class)->name('enrolled-student-delete');
+            Route::get('/activate-{id}',ActivateEnrolledStudent::class)->name('enrolled-student-activate');
+            Route::get('/view-{id}',ViewEnrolledStudent::class)->name('enrolled-student-view');
+        });
+
         
     });
 

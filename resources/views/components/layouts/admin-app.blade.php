@@ -58,7 +58,7 @@
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ $title ?? 'Dashboard' }}s | GRADING SYSTEM </title>
+        <title>{{ $title ?? 'Dashboard' }}@if(strtolower($title) != strtolower('Faculty')){{'s'}} @endif | GRADING SYSTEM </title>
 
         <link rel="icon" href="{{asset('image/wmsu_logo.webp')}}">
         <link rel="stylesheet" href="{{asset('css/style.css')}}">

@@ -13,21 +13,15 @@ return new class extends Migration
     {
         DB::statement('CREATE TABLE faculty(
             id INT PRIMARY KEY AUTO_INCREMENT,
+            user_id INT, 
             college_id INT,
             department_id INT,
             code VARCHAR(100) UNIQUE,
-            first_name VARCHAR(255)  NOT NULL,
-            middle_name VARCHAR(255) ,
-            last_name VARCHAR(255) NOT NULL,
-            suffix VARCHAR(255) NOT NULL,
-            email VARCHAR(100) UNIQUE,
-            academic_ran_id INT,  
+            academic_rank_id INT,  
             designation_id INT,
             faculty_type_id INT,
-            is_active BOOL DEFAULT 1,
             release_time ENUM("Without Release Time", "With Release Time"),
 	        hours_per_week INT ,
-            subject_id INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
