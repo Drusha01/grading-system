@@ -90,7 +90,7 @@
             <thead style="background:#952323;color:white;">
                 <tr class="align-middle">
                     <th scope="col" class="px-4">#</th>
-                    <th scope="col" class="px-4 ">Code</th>
+                    <th scope="col" class="px-4 ">Faculty ID</th>
                     <th scope="col" class="px-4 ">FullName</th>
                     <th scope="col" class="px-4 ">College</th>
                     <th scope="col" class="px-4 ">Department</th>
@@ -108,11 +108,31 @@
                         <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
                             <td class="px-4">{{$value->code}}</td>
                             <td class="px-4">{{$value->fullname}}</td>
-                            <td class="px-4">{{$value->college_code}}</td>
-                            <td class="px-4">{{$value->department_code}}</td>
-                            <td class="px-4">{{$value->designation_code}}</td>
-                            <td class="px-4">{{$value->academic_rank_code}}</td>
-                            <td class="px-4">{{$value->faculty_type_code}}</td>
+                            <td class="px-4">
+                                <a href="/admin/colleges/view-{{ $value->college_id }}" target="_blank">
+                                    {{ $value->college_code }}
+                                </a>
+                            </td>
+                            <td class="px-4">
+                                <a href="/admin/departments/view-{{ $value->department_id }}" target="_blank">
+                                    {{ $value->department_code }}
+                                </a>
+                            </td>
+                            <td class="px-4">
+                                <a href="/admin/academic/designations/view-{{ $value->designation_id }}" target="_blank">
+                                    {{ $value->designation_code }}
+                                </a>
+                            </td>
+                            <td class="px-4">
+                                <a href="/admin/academic/ranks/view-{{ $value->academic_rank_id }}" target="_blank">
+                                    {{ $value->academic_rank_code }}
+                                </a>
+                            </td>
+                            <td class="px-4">
+                                <a href="/admin/academic/faculty-types/view-{{ $value->faculty_type_id }}" target="_blank">
+                                    {{ $value->faculty_type_code }}
+                                </a>
+                            </td>
                             <td class="px-4">{{$value->email}}</td>
                             <td class="px-4">
                                 @if($value->is_active)

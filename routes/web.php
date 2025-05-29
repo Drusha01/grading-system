@@ -177,6 +177,7 @@ Route::middleware([IsAuthenticated::class])->group(function () {
             Route::get('/edit-{id}',EditDepartment::class)->name('department-edit');
             Route::get('/delete-{id}',DeleteDepartment::class)->name('department-delete');
             Route::get('/activate-{id}',ActivateDepartment::class)->name('department-activate');
+            Route::get('/view-{id}',ViewDepartment::class)->name('department-view');
 
             Route::get('/view-{id}',ViewDepartment::class)->name('department-view');
         });

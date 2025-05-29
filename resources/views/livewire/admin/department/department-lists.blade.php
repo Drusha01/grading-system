@@ -78,7 +78,11 @@
                  @forelse($table_data as $key =>$value)
                         <tr class="align-middle">
                             <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
-                            <td class="px-4">{{ $value->college_code }}</td>
+                            <td class="px-4">
+                                <a href="/admin/colleges/view-{{ $value->college_id }}" target="_blank">
+                                    {{ $value->college_code }}
+                                </a>
+                            </td>
                             <td class="px-4">{{$value->code}}</td>
                             <td class="px-4">{{$value->name}}</td>
                             <td class="px-4">

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class ViewFaculty extends Component
+class viewFaculty extends Component
 {
     public $title = "Faculty";
 

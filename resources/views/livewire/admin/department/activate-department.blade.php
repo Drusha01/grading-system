@@ -1,6 +1,6 @@
 <div>
     <div class="container-fluid d-flex justify-content-center shadow">
-        <span class="fs-2 fw-bold h1 m-0 brand-color"> Edit {{ $title }}</span>
+        <span class="fs-2 fw-bold h1 m-0 brand-color"> Activate {{ $title }}</span>
     </div>
     <div class="container-fluid">
         <div class="table-header">

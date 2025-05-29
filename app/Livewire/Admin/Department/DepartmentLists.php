@@ -54,7 +54,7 @@ class DepartmentLists extends Component
     public function render()
     {
        $table_data = DB::table('departments as d')
-            ->select('d.id','d.code','d.name','c.code as college_code','d.is_active')
+            ->select('d.id','d.code','d.name','c.code as college_code','d.is_active','d.college_id')
             ->leftJoin('colleges as c','c.id','d.college_id');
 
         if($this->filters['college_id']){

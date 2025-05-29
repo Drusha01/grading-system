@@ -19,8 +19,8 @@
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="code" class="form-label">Code</label>
-                    <input type="text" id="code" disabled wire:model.defer="detail.code" placeholder="Code" class="form-control @error('detail.code') is-invalid @enderror">
+                    <label for="code" class="form-label">ID</label>
+                    <input type="text" id="code" disabled wire:model.defer="detail.code" placeholder="ID" class="form-control @error('detail.code') is-invalid @enderror">
                     @error('detail.code')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

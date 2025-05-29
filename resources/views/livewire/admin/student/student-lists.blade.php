@@ -96,7 +96,7 @@
             <thead style="background:#952323;color:white;">
                 <tr class="align-middle">
                     <th scope="col" class="px-4">#</th>
-                    <th scope="col" class="px-4 ">Code</th>
+                    <th scope="col" class="px-4 ">ID</th>
                     <th scope="col" class="px-4 ">FullName</th>
                     <th scope="col" class="px-4 ">College</th>
                     <th scope="col" class="px-4 ">Department</th>
@@ -110,8 +110,14 @@
                  @forelse($table_data as $key =>$value)
                     <tr class="align-middle">
                         <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
-                            <td class="px-4">{{$value->code}}</td>
-                            <td class="px-4">{{$value->fullname}}</td>
+                            <td class="px-4">
+                                <a href="">
+                                    {{$value->code}}
+                                </a>
+                            </td>
+                            <td class="px-4">
+                                {{$value->fullname}}
+                            </td>
                             <td class="px-4">{{$value->college_code}}</td>
                             <td class="px-4">{{$value->department_code}}</td>
                             <td class="px-4">{{$value->email}}</td>

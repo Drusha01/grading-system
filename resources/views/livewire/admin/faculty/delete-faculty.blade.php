@@ -1,6 +1,6 @@
 <div>
     <div class="container-fluid d-flex justify-content-center shadow text-dark">
-        <span class="fs-2 fw-bold h1 m-0 brand-color"> Add {{ $title }}</span>
+        <span class="fs-2 fw-bold h1 m-0 brand-color"> Delete {{ $title }}</span>
     </div>
     <div class="container-fluid">
         <div class="table-header">
@@ -19,8 +19,8 @@
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="code" class="form-label">Code</label>
-                    <input type="text" id="code" disabled wire:model.defer="detail.code" placeholder="Code" class="form-control @error('detail.code') is-invalid @enderror">
+                    <label for="code" class="form-label">ID</label>
+                    <input type="text" id="code" disabled wire:model.defer="detail.code" placeholder="ID" class="form-control @error('detail.code') is-invalid @enderror">
                     @error('detail.code')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

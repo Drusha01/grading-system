@@ -33,6 +33,7 @@ class FacultyLists extends Component
             ->get()
             ->toArray();
             
+            
     }
     public function render()
     {

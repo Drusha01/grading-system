@@ -43,6 +43,12 @@
                 animation: sk-wave 1.2s infinite ease-in-out;
             }
 
+            .select2-results__option[aria-disabled="true"] {
+                background-color: #f2f2f2;
+                color: #999;
+                cursor: not-allowed;
+            }
+
             .sk-wave-rect:nth-child(1) { animation-delay: -1.2s; }
             .sk-wave-rect:nth-child(2) { animation-delay: -1.1s; }
             .sk-wave-rect:nth-child(3) { animation-delay: -1.0s; }
@@ -81,6 +87,18 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
         <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+        <!-- <link rel="stylesheet" href="{{ asset('assets/vendor/css/rtl/core.css') }}" class="template-customizer-core-css" />
+        <link rel="stylesheet" href="{{ asset('assets/vendor/css/rtl/theme-default.css') }}" class="template-customizer-theme-css" />
+        <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" /> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <link rel="stylesheet" href="{{ asset("assets/vendor/libs/flatpickr/flatpickr.css")}}" />
+        <script src="{{ asset("assets/vendor/libs/flatpickr/flatpickr.js")}}"></script>
+        <!-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+        <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script> -->
 
 
         @livewireStyles
@@ -146,6 +164,14 @@
                     }, 1500); // delay in milliseconds, e.g. 2000 = 2 seconds
                 }
             });
+            @if (request()->is('admin/schedule*')) 
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(()=>{
+                        $('#day').trigger('change');
+                    },100)
+                });
+            @endif
+           
         </script>
 
     </body>
