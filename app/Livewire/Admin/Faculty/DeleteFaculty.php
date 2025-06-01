@@ -183,7 +183,7 @@ class DeleteFaculty extends Component
 
     public function render()
     {
-        return view('livewire.admin.faculty.activate-faculty')
+        return view('livewire.admin.faculty.delete-faculty')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

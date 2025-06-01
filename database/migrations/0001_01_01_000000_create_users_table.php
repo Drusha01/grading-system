@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
-            $table->string('suffix');
+            $table->string('suffix')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('admin_type')->default(2)->comment('1-admin,2-faculty');
@@ -40,6 +40,10 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        DB::statement('
+            INSERT INTO `users`( `first_name`, `middle_name`, `last_name`, `suffix`, `email`, `password`, `admin_type`, `is_active`) VALUES ("Sairyl", NULL, "Zendaya",NULL, "sairylzendaya@wmsu.edu.ph", "$2y$12$bhn5OsWUjzGmgs.0b3cW9.gPv2493VPtOcJqLnfmXmVizf1eTLibu",1,1)
+        ');
     }
 
     /**

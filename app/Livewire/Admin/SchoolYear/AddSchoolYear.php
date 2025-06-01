@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
+use Carbon\Carbon;
+
 
 class AddSchoolYear extends Component
 {
@@ -60,18 +62,32 @@ class AddSchoolYear extends Component
         $second_semester = DB::table('semesters')
             ->where('semester','=','2nd semester')
             ->first();
-        $this->school_year = [
-            'id' => NULL,
-            'year_start'=> $latest_school_year->year_start+1,
-            'year_end' => $latest_school_year->year_end+1,
-            'date_start' => ($latest_school_year->year_start+1).'-'.$first_semester->date_start_month.'-'.$first_semester->date_start_date,
-            'date_end' => ($latest_school_year->year_end+1).'-'.$second_semester->date_end_month.'-'.$second_semester->date_end_date,
-            'date_start_date' => $first_semester->date_start_date,
-            'date_start_month' => $first_semester->date_start_month,
-            'date_end_date'=> $second_semester->date_end_date,
-            'date_end_month' => $second_semester->date_end_month,
-        ];
-
+        if( $latest_school_year){
+            $this->school_year = [
+                'id' => NULL,
+                'year_start'=> $latest_school_year->year_start+1,
+                'year_end' => $latest_school_year->year_end+1,
+                'date_start' => ($latest_school_year->year_start+1).'-'.$first_semester->date_start_month.'-'.$first_semester->date_start_date,
+                'date_end' => ($latest_school_year->year_end+1).'-'.$second_semester->date_end_month.'-'.$second_semester->date_end_date,
+                'date_start_date' => $first_semester->date_start_date,
+                'date_start_month' => $first_semester->date_start_month,
+                'date_end_date'=> $second_semester->date_end_date,
+                'date_end_month' => $second_semester->date_end_month,
+            ];
+        }else{
+            $this->school_year = [
+                'id' => NULL,
+                'year_start'=> Carbon::now()->year,
+                'year_end' => Carbon::now()->year+1,
+                'date_start' => (Carbon::now()->year).'-'.$first_semester->date_start_month.'-'.$first_semester->date_start_date,
+                'date_end' => (Carbon::now()->year+1).'-'.$second_semester->date_end_month.'-'.$second_semester->date_end_date,
+                'date_start_date' => $first_semester->date_start_date,
+                'date_start_month' => $first_semester->date_start_month,
+                'date_end_date'=> $second_semester->date_end_date,
+                'date_end_month' => $second_semester->date_end_month,
+            ];
+        }
+        
         $this->detail = [
             'id' => NULL,
             // 'detail' => $detail->semester,

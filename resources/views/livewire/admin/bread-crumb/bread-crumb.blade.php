@@ -11,7 +11,7 @@
                     $path .='/'.$segment;
                 @endphp
                 <a href="{{$path}}" class="fw-bold" style="color: black !important;" wire:navigatex>
-                    {{ str_replace('', '', ucfirst(end($segment_temp))) }}
+                    {{ urldecode(htmlspecialchars_decode(str_replace('', '', ucfirst(end($segment_temp))))) }}
                 </a>
             </li>
             @endforeach

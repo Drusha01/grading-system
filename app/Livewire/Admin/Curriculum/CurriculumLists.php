@@ -16,7 +16,13 @@ class CurriculumLists extends Component
 
     public function render()
     {
-        return view('livewire.admin.curriculum.curriculum-lists')
+         $table_data = DB::table('school_years as sy')
+            ->orderBy('sy.id', 'desc')
+            ->paginate(10);
+        
+        return view('livewire.admin.curriculum.curriculum-lists',[
+            'table_data' =>$table_data
+        ])
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

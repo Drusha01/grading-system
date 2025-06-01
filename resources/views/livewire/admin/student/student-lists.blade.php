@@ -111,7 +111,7 @@
                     <tr class="align-middle">
                         <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
                             <td class="px-4">
-                                <a href="">
+                                <a href="/admin/departments/view/">
                                     {{$value->code}}
                                 </a>
                             </td>

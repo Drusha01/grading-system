@@ -27,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                 @foreach($table_data as $key =>$value)
+                @forelse($table_data as $key =>$value)
                     <tr class="align-middle">
                     <th scope="row" class="px-4 ">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
                         <td class="px-4 ">{{$value->year_start.' - '.$value->year_end}}</td>
@@ -44,7 +44,13 @@
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                @empty
+                    <tr class="align-middle">
+                        <td colspan="42">
+                            <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
         <div class="row mx-5 d-flex justify-content-end">

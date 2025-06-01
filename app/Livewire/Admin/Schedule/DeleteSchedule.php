@@ -109,36 +109,13 @@ class DeleteSchedule extends Component
 
 
     public function save(){
-        $this->validate();
-        if(!count($this->detail['day'])){
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'detail.day' => 'Please select at least one (1) day',
-            ]);
-        }
-
-        // make sure to only target is_active
-        // schedule overlapped ; same day, same room, same lecture , overlapped time
-
-        // faculty overlapped schedule ; same faculty, same day, overlapped time
-
-        // 
 
         if(DB::table('schedules')
             ->where('id','=',$this->detail['id'])
-            ->update([
-                'subject_id' => $this->detail['subject_id'],
-                'faculty_id' => $this->detail['faculty_id'],
-                'room_id' => $this->detail['room_id'],
-                'code' => $this->detail['code'],
-                'schedule_from' => Carbon::createFromFormat('H:i', $this->detail['schedule_from']),
-                'schedule_to' => Carbon::createFromFormat('H:i', $this->detail['schedule_to']),
-                'day' => json_encode($this->detail['day']),
-                'is_lec' => $this->detail['is_lec'],
-            ]
-        )){
+            ->delete()){
         }
         $this->dispatch('notifySuccess', 
-        'Updated successfully!',
+        'Deleted successfully!',
             route($this->route.'-lists'));
     }
 

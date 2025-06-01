@@ -138,7 +138,6 @@
 
         <script>
             Livewire.on('notifySuccess', message => {
-                console.log(message);
                 const notyf = new Notyf({
                     position: {
                         x: 'center',
@@ -171,7 +170,17 @@
                     },100)
                 });
             @endif
-           
+            Livewire.on('navigateTo', ({ url }) => {
+                Livewire.navigate(url);
+            });
+            Livewire.on('openModal', ({ modal_id }) => {
+                var myModal = new bootstrap.Modal(document.getElementById(modal_id));
+                myModal.show();
+            }); 
+            Livewire.on('closeModal', ({ modal_id }) => {
+                var myModal = document.getElementById(modal_id+'close');
+                myModal.click();
+            }); 
         </script>
 
     </body>

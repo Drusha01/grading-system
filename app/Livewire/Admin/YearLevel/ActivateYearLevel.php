@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class DeleteYearLevel extends Component
+class ActivateYearLevel extends Component
 {
     public $title = "Year Level";
 
@@ -48,7 +48,7 @@ class DeleteYearLevel extends Component
     }
     public function render()
     {
-        return view('livewire.admin.year-level.delete-year-level')
+        return view('livewire.admin.year-level.activate-year-level')
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);

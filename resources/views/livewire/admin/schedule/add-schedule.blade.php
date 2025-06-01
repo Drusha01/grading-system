@@ -39,7 +39,7 @@
             <div class="row">
                  <div class="col-md-6 mb-3">
                     <label for="schedule_from" class="form-label">Start period</label>
-                    <input type="time" name="schedule_from" id="schedule_from" class="form-select @error('detail.schedule_from') is-invalid @enderror">  
+                    <input type="time" name="schedule_from" wire:model="detail.schedule_from" id="schedule_from" class="form-select @error('detail.schedule_from') is-invalid @enderror">  
                     @error('detail.schedule_from')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror  

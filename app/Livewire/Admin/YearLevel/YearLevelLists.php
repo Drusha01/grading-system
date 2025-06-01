@@ -21,7 +21,9 @@ class YearLevelLists extends Component
     public function render()
     {
         $table_data = DB::table('year_levels as yl')
+            ->where('yl.is_active','=',1)
             ->orwhere('yl.year_level','like','%'.$this->filters['search'] .'%')
+            ->orderBy('yl.is_active','desc')
             ->orderBy('yl.id', 'desc')
             ->paginate(10);
         return view('livewire.admin.year-level.year-level-lists',[

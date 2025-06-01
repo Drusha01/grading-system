@@ -85,10 +85,6 @@ class AddSchedule extends Component
             ->get()
             ->toArray();
 
-        $this->rooms = DB::table('rooms')
-            ->where('is_active','=',1)
-            ->get()
-            ->toArray();
     }
 
 

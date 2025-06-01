@@ -5,29 +5,24 @@
         <img src="{{ asset('image/wmsu_logo.png')}}" alt="wmsu-logo" class="img-fluid" width="175px" height="175px">
         </p>
         <h1 class="fs-1 fw-bold my-3 mb-4 text-white text-center brand-color">MyWMSU</h1>
-        <form action="#" method="post" id="loginForm">
-        <div class="field">
-            <i class='bx bxs-user'></i>
-            <input type="text" name="emp_id" id="emp_id" required value="">
-            <label for="emp_id">School ID</label>
-        </div>
-        <div class="field">
-            <i class='bx bxs-lock-alt'></i>
-            <input type="password" name="password" id="password" required value="">
-            <button type="button" class="toggle-password" style="background: none; color: white;">
-            <i class="bx bx-show"></i>
-            </button>
-            <label for="password">Password</label>
-        </div>
-
-        <div class="w-full d-flex justify-content-end">
-            <a href="./forgot-pass.php" id="forgot-pass" class="forgot-pass form-text w-auto" name="login"
-            id="login">Forgot your password?</a>
-        </div>
-        <button type="submit" name="login" class="btn d-flex p-2 p-sm-3 justify-content-center">LOGIN</button>
-        <div id="emailHelp" class="form-text d-flex justify-content-center">
-            <p>Don't have an account?<a href="signup.php" style="color: #7797f7;"> Sign up</a></p>
-        </div>
+        <form wire:submit.prevent="login()" method="post" id="loginForm">
+            <div class="row mb-2 mx-1">
+                <label for="email" class="form-label text-white">Email</label>
+                <input type="email" wire:model="detail.email" id="email" placeholder="Email"class="form-control" >
+                @error('detail.email') <span class="text-white">{{ $message }}</span> @enderror
+            </div>
+            <div class="row mb-2 mx-1">
+                <label for="password" class="form-label text-white">Password</label>
+                <input type="password" wire:model="detail.password" id="password" placeholder="Password"class="form-control" >
+                @error('detail.password') <span class="text-white">{{ $message }}</span> @enderror
+            </div>
+            <div class="row mb-2 mx-1">
+                <a href="/forgot-password" wire:navigate id="forgot-pass" class="form-text" name="login" id="login">Forgot your password?</a>
+            </div>
+            <button type="submit" name="login" class="btn d-flex p-2 p-sm-3 justify-content-center">LOGIN</button>
+            <div id="emailHelp" class="form-text d-flex justify-content-center">
+                <p>Don't have an account?<a href="signup.php" style="color: #7797f7;"> Sign up</a></p>
+            </div>
         </form>
     </div>
     </div>

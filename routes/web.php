@@ -9,10 +9,13 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsAuthenticated;
 use App\Http\Middleware\IsFaculty;
 use App\Http\Middleware\IsUnauthenticated;
+use App\Http\Middleware\IsValid;
 
 // authentication
 use App\Livewire\Authentication\Login;
+use App\Livewire\Authentication\Logout;
 use App\Livewire\Authentication\Signup;
+use App\Livewire\Authentication\Deactivated;
 
 
 
@@ -74,6 +77,7 @@ use App\Livewire\Admin\YearLevel\AddYearLevel;
 use App\Livewire\Admin\YearLevel\EditYearLevel;
 use App\Livewire\Admin\YearLevel\ViewYearLevel;
 use App\Livewire\Admin\YearLevel\DeleteYearLevel;
+use App\Livewire\Admin\YearLevel\ActivateYearLevel;
 use App\Livewire\Admin\YearLevel\YearLevelLists;
 
 use App\Livewire\Admin\Admin\AddAdmin;
@@ -116,6 +120,11 @@ use App\Livewire\Admin\Curriculum\ViewCurriculum;
 use App\Livewire\Admin\Curriculum\DeleteCurriculum;
 use App\Livewire\Admin\Curriculum\ActivateCurriculum;
 use App\Livewire\Admin\Curriculum\CurriculumLists;
+use App\Livewire\Admin\Curriculum\CurriculumColleges;
+use App\Livewire\Admin\Curriculum\CurriculumDepartments;
+use App\Livewire\Admin\Curriculum\CurriculumEnrolled;
+use App\Livewire\Admin\Curriculum\CurriculumSubjects;
+
 
 use App\Livewire\Admin\Schedule\AddSchedule;
 use App\Livewire\Admin\Schedule\EditSchedule;
@@ -150,11 +159,14 @@ Route::middleware([IsUnauthenticated::class])->group(function () {
 
 
 
-// admin routes
 Route::middleware([IsAuthenticated::class])->group(function () {
-    Route::get('/logout',function(){
+    Route::get('/account-deactivated',Deactivated::class)->name('deactivated');
+    Route::get('/logout',Logout::class)->name('logout');
+});
 
-    })->name('logout');
+
+// admin routes
+Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
     Route::prefix('admin')->middleware([IsAdmin::class])->group(function () {
         Route::get('/',function (){
             return redirect (route('dashboard'));
@@ -204,6 +216,7 @@ Route::middleware([IsAuthenticated::class])->group(function () {
             Route::get('/add',AddYearLevel::class)->name('year-level-add');
             Route::get('/edit-{id}',EditYearLevel::class)->name('year-level-edit');
             Route::get('/delete-{id}',DeleteYearLevel::class)->name('year-level-delete');
+            Route::get('/activate-{id}',ActivateYearLevel::class)->name('year-level-activate');
             Route::get('/view-{id}',ViewYearLevel::class)->name('year-level-view');
         });
 
@@ -282,11 +295,29 @@ Route::middleware([IsAuthenticated::class])->group(function () {
 
         Route::prefix('curriculums')->group(function () {
             Route::get('/',CurriculumLists::class)->name('curriculum-lists');
-            Route::get('/add',AddCurriculum::class)->name('curriculum-add');
-            Route::get('/edit-{id}',EditCurriculum::class)->name('curriculum-edit');
-            Route::get('/delete-{id}',DeleteCurriculum::class)->name('curriculum-delete');
-            Route::get('/activate-{id}',ActivateCurriculum::class)->name('curriculum-activate');
-            Route::get('/view-{id}',ViewCurriculum::class)->name('curriculum-view');
+
+            Route::get('/enrolled-{curriculum_id}',EnrolledStudentLists::class)->name('enrolled-student-lists');
+            Route::get('/enrolled-{curriculum_id}/add',AddEnrolledStudent::class)->name('enrolled-student-add');
+            Route::get('/enrolled-{curriculum_id}/edit-{id}',EditEnrolledStudent::class)->name('enrolled-student-edit');
+            Route::get('/enrolled-{curriculum_id}/delete-{id}',DeleteEnrolledStudent::class)->name('enrolled-student-delete');
+            Route::get('/enrolled-{curriculum_id}/activate-{id}',ActivateEnrolledStudent::class)->name('enrolled-student-activate');
+            Route::get('/enrolled-{curriculum_id}/view-{id}',ViewEnrolledStudent::class)->name('enrolled-student-view');
+
+            Route::get('/{school_year}/{college}/{department}/{year_level}/{semester}/',CurriculumSubjects::class)->name('curriculum-subjects-list');
+            Route::get('/{school_year}/{college}/{department}',CurriculumEnrolled::class)->name('curriculum-lists-enrolled');
+            Route::get('/{school_year}/{college}',CurriculumDepartments::class)->name('curriculum-lists-departments');
+            Route::get('/{school_year}',CurriculumColleges::class)->name('curriculum-lists-college');
+            
+        });
+        
+        Route::prefix('enrolled')->group(function () {
+           
+
+            // Route::get('/add',AddCurriculum::class)->name('curriculum-add');
+            // Route::get('/edit-{id}',EditCurriculum::class)->name('curriculum-edit');
+            // Route::get('/delete-{id}',DeleteCurriculum::class)->name('curriculum-delete');
+            // Route::get('/activate-{id}',ActivateCurriculum::class)->name('curriculum-activate');
+            // Route::get('/view-{id}',ViewCurriculum::class)->name('curriculum-view');
         });
          Route::prefix('schedules')->group(function () {
             Route::get('/',ScheduleLists::class)->name('schedule-lists');
@@ -296,20 +327,15 @@ Route::middleware([IsAuthenticated::class])->group(function () {
             Route::get('/activate-{id}',ActivateSchedule::class)->name('schedule-activate');
             Route::get('/view-{id}',ViewSchedule::class)->name('schedule-view');
         });
-            Route::prefix('enrolled-students')->group(function () {
-            Route::get('/',EnrolledStudentLists::class)->name('enrolled-student-lists');
-            Route::get('/add',AddEnrolledStudent::class)->name('enrolled-student-add');
-            Route::get('/edit-{id}',EditEnrolledStudent::class)->name('enrolled-student-edit');
-            Route::get('/delete-{id}',DeleteEnrolledStudent::class)->name('enrolled-student-delete');
-            Route::get('/activate-{id}',ActivateEnrolledStudent::class)->name('enrolled-student-activate');
-            Route::get('/view-{id}',ViewEnrolledStudent::class)->name('enrolled-student-view');
-        });
+        
 
         
     });
 
 
     Route::prefix('faculty')->middleware([IsFaculty::class])->group(function () {
-        Route::get('/',AdminLists::class)->name('Admin-listsss');
+        Route::get('/',function(){
+            return 'faculty dashboard here0';
+        })->name('Admin-listsss');
     });
 });

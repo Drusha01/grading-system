@@ -65,8 +65,8 @@ class SubjectLists extends Component
 
         if($this->filters['department_id']){
             if($this->filters['department_id']){
-            $table_data->where('s.department_id', '=',$this->filters['department_id']);
-        }
+                $table_data->where('s.department_id', '=',$this->filters['department_id']);
+            }
         }
     
 

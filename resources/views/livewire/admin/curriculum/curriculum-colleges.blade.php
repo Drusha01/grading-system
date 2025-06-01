@@ -11,22 +11,6 @@
                 <input type="search" wire:model.live="filters.search" name="" id="" placeholder="Search ... " class="form-control">
             </div>
             <div class="d-flex col justify-content-end gap-2">
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <svg viewBox="0 0 24 24" width="15px" class="mx-1" fill="none"  xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z" fill="currentColor"></path> <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="currentColor"></path> </g></svg>
-                        Import 
-                    </button>
-                    <ul class="dropdown-menu" style="">
-                        <li>
-                            <a class="dropdown-item waves-effect" wire:click="export('Csv','exportModal')">
-                                <span><i class="ti ti-file-text me-1"></i>Import Data</span>
-                            </a>
-                            <a class="dropdown-item waves-effect" wire:click="export('Csv','exportModal')">
-                                <span><i class="ti ti-file-text me-1"></i>Download Template</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
                 <div class="btn-group">
                     <button type="button" class="btn btn btn-outline-primary dropdown-toggle waves-effect"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,22 +37,23 @@
                 </div>
             </div>
         </div>
-        <div class="row p-2">
-                @forelse($table_data as $key =>$value)
-                    <div class="col-3 p-0 mx-2">
-                        <a href="/admin/curriculums/{{ $value->year_start.'-'.$value->year_end }}">
-                            <div class="d-flex align-items-center justify-content-between brand-bg-color p-3 rounded " style="min-width:200px;">
-                                <div class="d-flex justify-content-end">
-                                    <div class="">
-                                        <p>Curriculum</p>
-                                        <span class="fs-5">{{$value->year_start.' - '.$value->year_end}}</span>
-                                    </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-3">
+            @forelse($table_data as $key =>$value)
+                <div class="col">
+                    <a class="course d-flex align-items-center justify-content-start brand-bg-color fs-5 h-100 rounded position-relative" 
+                        href="/admin/curriculums/{{ $school_year }}/{{ $value->code }}">
+                        <div class="p-3 rounded " style="min-width:200px; height: 120px;">
+                            <div class="d-flex justify-content-end">
+                                <div class="">
+                                    <p>{{ $value->name }}</p>
+                                    <span class="fs-5"></span>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                @empty
-                @endforelse
+                        </div>
+                    </a>
+                </div>
+            @empty
+            @endforelse
         </div>
         <div class="row mx-5 d-flex justify-content-end">
             {{ $table_data->links('pagination::bootstrap-5') }}

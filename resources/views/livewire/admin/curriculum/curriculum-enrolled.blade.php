@@ -1,13 +1,7 @@
 <div>
-    <div class="container-fluid position-relative shadow" style="min-height: 110px;">
-        <!-- Centered Title -->
-        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
-            <span class="fs-2 fw-bold h1 m-0 brand-color">{{ $title }}s</span>
-        </div>
+    <div class="container-fluid d-flex justify-content-center shadow">
+        <span class="fs-2 fw-bold h1 m-0 brand-color">  {{ $title }}s</span>
     </div>
-
-
-
     <div class="container-fluid">
         <div class="table-header">
             <livewire:admin.BreadCrumb.BreadCrumb/>
@@ -16,21 +10,7 @@
             <div class="col-4">
                 <input type="search" wire:model.live="filters.search" name="" id="" placeholder="Search ... " class="form-control">
             </div>
-            <div class="col d-flex justify-items-start gap-1">
-                <select name="" id="" wire:model.live="filters.college_id" class="form-select"> 
-                    <option value="">Select College</option>
-                    @foreach ($colleges as $key => $value )
-                        <option value="{{ $value->id }}" >{{ $value->code }}</option>
-                    @endforeach
-                </select>
-                <select name="" id="" wire:model.live="filters.department_id" class="form-select"> 
-                    <option value="">Select Department</option>
-                    @foreach ($departments as $key => $value )
-                        <option value="{{ $value->id }}" >{{ $value->code }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="d-flex col justify-content-end gap-2">
+            <div class="d-flex col-7 justify-content-end gap-2">
                 <div class="dropdown">
                     <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <svg viewBox="0 0 24 24" width="15px" class="mx-1" fill="none"  xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z" fill="currentColor"></path> <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="currentColor"></path> </g></svg>
@@ -71,7 +51,7 @@
                         </li>
                     </ul>
                 </div>
-                <a class="btn btn-primary" wire:wire:click="add()">
+                <a class="btn btn-primary" wire:wire:navigate href="{{ route('enrolled-student-add') }}">
                     <svg  viewBox="0 0 20 20" width="20px" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="currentColor" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
                 </a>
             </div>
@@ -94,13 +74,9 @@
             <thead style="background:#952323;color:white;">
                 <tr class="align-middle">
                     <th scope="col" class="px-4">#</th>
-                    <th scope="col" class="px-4 ">Subject ID</th>
-                    <th scope="col" class="px-4 ">Subject Code</th>
+                    <th scope="col" class="px-4 ">Code</th>
                     <th scope="col" class="px-4 ">College</th>
-                    <th scope="col" class="px-4 ">Department</th>
-                    <th scope="col" class="px-4 ">Lecture Unit</th>
-                    <th scope="col" class="px-4 ">Laboratory Unit</th>
-                    <th scope="col" class="px-4 ">Is Active?</th>
+                    <th scope="col" class="px-4 ">Departments</th>
                     <th scope="col" class="text-center px-4 ">Actions</th> 
                 </tr>
             </thead>
@@ -108,31 +84,16 @@
                  @forelse($table_data as $key =>$value)
                     <tr class="align-middle">
                         <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
-                            <td class="px-4">{{$value->subject_id}}</td>
-                            <td class="px-4">{{$value->subject_code}}</td>
+                            <td class="px-4">{{$value->code}}</td>
+                            <td class="px-4">{{$value->name}}</td>
                             <td class="px-4">
-                                <a href="/admin/colleges/view-{{ $value->college_id }}" target="_blank">
-                                    {{ $value->college_code }}
+                                <a class="btn btn-outline-primary" wire:wire:navigate href="{{ route('department-lists-college',$value->id) }}">
+                                    Departments
                                 </a>
                             </td>
-                            <td class="px-4">
-                                <a href="/admin/departments/view-{{ $value->department_id }}" target="_blank">
-                                    {{ $value->department_code }}
-                                </a>
-                            </td>
-                            <td class="px-4">{{$value->lecture_unit}}</td>
-                            <td class="px-4">{{$value->laboratory_unit}}</td>
-                            <td class="px-4">
-                                @if($value->is_active)
-                                    <span class="badge bg-success">Active</span>
-                                @else
-                                    <span class="badge bg-danger">Inactive</span>
-                                @endif
-                            </td>
-
                             <td class="px-4">
                                 <div class="d-flex justify-content-center gap-2">
-                                    
+                                   
                                 </div>
                             </td>
                         </tr>
@@ -147,24 +108,6 @@
         </table>
         <div class="row d-flex justify-content-end">
             {{ $table_data->links('pagination::bootstrap-5') }}
-        </div>
-    </div>
-
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
-            </div>
-            </div>
         </div>
     </div>
 </div>
