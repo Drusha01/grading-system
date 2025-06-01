@@ -14,31 +14,13 @@ return new class extends Migration
          DB::statement('CREATE TABLE enrolled_students(
             id INT PRIMARY KEY AUTO_INCREMENT,
             student_id INT,
-            college_id INT,
-            department_id INT ,
-            school_year_id INT NOT NULL,
-            semester_id INT NOT NULL,
-            year_level_id INT ,
-            schedule_id INT,
+            curriculum_id INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
 
         DB::statement('CREATE INDEX idx_enrolled_student_id ON enrolled_students(student_id);');
-        DB::statement('CREATE INDEX idx_enrolled_school_year_id ON enrolled_students(school_year_id);');
-        DB::statement('CREATE INDEX idx_enrolled_semester_id ON enrolled_students(semester_id);');
-        DB::statement('CREATE INDEX idx_enrolled_college_id ON enrolled_students(college_id);');
-        DB::statement('CREATE INDEX idx_enrolled_department_id ON enrolled_students(department_id);');
-        DB::statement('CREATE INDEX idx_enrolled_year_level_id ON enrolled_students(year_level_id);');
-
-    //     student
-	// college
-	// department
-	// school year
-	// year level	
-	// semester	
-	// 	subjects
-	// 		schedule
+        DB::statement('CREATE INDEX idx_enrolled_curriculum_id ON enrolled_students(curriculum_id);');
     }
 
     /**

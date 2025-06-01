@@ -89,7 +89,8 @@
                     <th scope="col" class="px-4 ">Start period</th>
                     <th scope="col" class="px-4 ">End period</th>
                     <th scope="col" class="px-4 ">Days</th>
-                    <th scope="col" class="px-4 ">Lecture</th>
+                    <th scope="col" class="px-4 ">is Lecture?</th>
+                    <th scope="col" class="px-4 ">Unit</th>
                     <th scope="col" class="px-4 ">Laboratory</th>
                     <th scope="col" class="text-center px-4 ">Actions</th> 
                 </tr>
@@ -112,8 +113,8 @@
                             <td class="px-4">{{$value->schedule_from}}</td>
                             <td class="px-4">{{$value->schedule_to}}</td>
                             <td class="px-4">{{implode(', ', json_decode($value->day, true))}}</td>
-                            <td class="px-4">{{$value->lecture_unit}}</td>
-                            <td class="px-4">{{$value->laboratory_unit}}</td>
+                            <td class="px-4">{!!  ($value->is_lec ? '<span class="badge bg-success">Lecture</span>': '<span class="badge bg-dark">Laboratory</span>') !!}</td>
+                            <td class="px-4">{{($value->is_lec ?  $value->lecture_unit : $value->laboratory_unit )}}</td>
                             <td class="px-4">
                                 <div class="d-flex justify-content-center gap-2">
                                     <a href="{{ route($route.'-view',$value->id) }}" type="button" wire:wire:navigate  class="btn btn-outline-secondary d-flex justify-content-center items-center">

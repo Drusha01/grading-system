@@ -78,7 +78,7 @@
 
                 <div class="col-md-6 mb-3">
                     <label for="lecture_unit" class="form-label">Lecture Units</label>
-                    <input type="number" id="lecture_unit" min="1" wire:model.defer="detail.lecture_unit" placeholder="Lecture Units"  class="form-control rounded-md @error('detail.lecture_unit') is-invalid @enderror">
+                    <input type="number" id="lecture_unit" min="0" wire:model.defer="detail.lecture_unit" placeholder="Lecture Units"  class="form-control rounded-md @error('detail.lecture_unit') is-invalid @enderror">
                     @error('detail.lecture_unit')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

@@ -82,6 +82,9 @@
                                 Laboratory Subject
                             </label>
                         </div>
+                        @error('detail.is_lec')
+                            <div class="text-danger text-xs">{{ $message }}</div>
+                        @enderror  
                     </div>
                 </div>
             </div>

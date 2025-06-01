@@ -96,13 +96,27 @@ class AddSchedule extends Component
             ]);
         }
 
+        $subjects = DB::table('subjects')
+            ->where('is_active','=',1)
+            ->where('id','=',$this->detail['subject_id'])
+            ->first();
+
+        if($this->detail['is_lec'] == "1" && ($subjects->lecture_unit) == 0){
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'detail.is_lec' => 'Please select the other option.',
+            ]);
+        }
+
+        if($this->detail['is_lec'] == "0" && ($subjects->laboratory_unit) == 0){
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'detail.is_lec' => 'Please select the other option.',
+            ]);
+        }
+
         // make sure to only target is_active
 
         // schedule overlapped ; same day, same room, same lecture , overlapped time
-
-        // faculty overlapped schedule ; same faculty, same day, overlapped time
-
-        // 
+        
 
         if(DB::table('schedules')->insert([
                 'subject_id' => $this->detail['subject_id'],

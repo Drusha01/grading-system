@@ -4,6 +4,14 @@
         <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
             <span class="fs-2 fw-bold h1 m-0 brand-color">{{ $title }}s</span>
         </div>
+
+        <!-- Top Right Filters -->
+        <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-2">
+            <button class="btn btn-info">
+                View Details
+            </button>
+            
+        </div>
     </div>
 
 
@@ -17,18 +25,7 @@
                 <input type="search" wire:model.live="filters.search" name="" id="" placeholder="Search ... " class="form-control">
             </div>
             <div class="col d-flex justify-items-start gap-1">
-                <select name="" id="" wire:model.live="filters.college_id" class="form-select"> 
-                    <option value="">Select College</option>
-                    @foreach ($colleges as $key => $value )
-                        <option value="{{ $value->id }}" >{{ $value->code }}</option>
-                    @endforeach
-                </select>
-                <select name="" id="" wire:model.live="filters.department_id" class="form-select"> 
-                    <option value="">Select Department</option>
-                    @foreach ($departments as $key => $value )
-                        <option value="{{ $value->id }}" >{{ $value->code }}</option>
-                    @endforeach
-                </select>
+             
             </div>
             <div class="d-flex col justify-content-end gap-2">
                 <div class="dropdown">
@@ -94,13 +91,11 @@
             <thead style="background:#952323;color:white;">
                 <tr class="align-middle">
                     <th scope="col" class="px-4">#</th>
-                    <th scope="col" class="px-4 ">Subject ID</th>
-                    <th scope="col" class="px-4 ">Subject Code</th>
-                    <th scope="col" class="px-4 ">College</th>
+                    <!-- <th scope="col" class="px-4 ">College</th>
                     <th scope="col" class="px-4 ">Department</th>
-                    <th scope="col" class="px-4 ">Lecture Unit</th>
-                    <th scope="col" class="px-4 ">Laboratory Unit</th>
-                    <th scope="col" class="px-4 ">Is Active?</th>
+                    <th scope="col" class="px-4 ">Student ID</th> -->
+                    <th scope="col" class="px-4 ">Student</th>
+                    <th scope="col" class="px-4 ">Attendance</th>
                     <th scope="col" class="text-center px-4 ">Actions</th> 
                 </tr>
             </thead>
@@ -108,20 +103,11 @@
                  @forelse($table_data as $key =>$value)
                     <tr class="align-middle">
                         <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
-                            <td class="px-4">{{$value->subject_id}}</td>
-                            <td class="px-4">{{$value->subject_code}}</td>
-                            <td class="px-4">
-                                <a href="/admin/colleges/view-{{ $value->college_id }}" target="_blank">
-                                    {{ $value->college_code }}
-                                </a>
-                            </td>
-                            <td class="px-4">
-                                <a href="/admin/departments/view-{{ $value->department_id }}" target="_blank">
-                                    {{ $value->department_code }}
-                                </a>
-                            </td>
-                            <td class="px-4">{{$value->lecture_unit}}</td>
-                            <td class="px-4">{{$value->laboratory_unit}}</td>
+                            <!-- <td class="px-4">College</td>
+                            <td class="px-4">Deparment</td>
+                            <td class="px-4">Student ID</td> -->
+                            <td class="px-4">Student Name</td>
+                            <td class="px-4">Attendance</td>
                             <td class="px-4">
                                 @if($value->is_active)
                                     <span class="badge bg-success">Active</span>
