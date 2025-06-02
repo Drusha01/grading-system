@@ -161,7 +161,7 @@
     </div>
 
     <div class="modal fade" id="AddSubjectModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable d-flex justify-content-center">
             <form wire:submit.prevent="addSchedule('AddSubjectModal')">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -286,7 +286,7 @@
     </div>
 
     <div class="modal fade" id="EditSubjectModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable d-flex justify-content-center">
             <form wire:submit.prevent="editSchedule('EditSubjectModal')">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -410,9 +410,9 @@
         </div>
     </div>
 
-      <div class="modal fade" id="deleteCurriculumModal" wire:ignore.self
+    <div class="modal fade" id="deleteCurriculumModal" wire:ignore.self
         data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable d-flex justify-content-center">
             <form wire:submit.prevent="deleteSchedule({{ $detail['id'] }},'deleteCurriculumModal')">
                 <div class="modal-content">
                     <div class="modal-header">

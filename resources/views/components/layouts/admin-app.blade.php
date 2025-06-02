@@ -174,6 +174,7 @@
                 Livewire.navigate(url);
             });
             Livewire.on('openModal', ({ modal_id }) => {
+                console.log(modal_id);
                 var myModal = new bootstrap.Modal(document.getElementById(modal_id));
                 myModal.show();
             }); 
