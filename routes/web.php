@@ -150,7 +150,7 @@ use App\Livewire\Admin\Profile\Profile;
 // admin routes
 Route::middleware([IsUnauthenticated::class])->group(function () {
     Route::get('/', function () {
-        return view('welcome');
+       return redirect(route('login'));
     });
     Route::get('/login',Login::class)->name('login');
     Route::get('/signup',Signup::class)->name('signup');
