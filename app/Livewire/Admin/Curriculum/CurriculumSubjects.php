@@ -347,8 +347,22 @@ class CurriculumSubjects extends Component
     public function addSchedule($modal_id){
         
         // added with same sy,college,department,yl,semester, schedule
+        if(
+            DB::table('curriculums')
+                ->where('school_year_id' ,'=', DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$this->detail['school_year'])->first()->id)
+                ->where('college_id' ,'=', DB::table('colleges')->where('code','=',$this->detail['college'])->first()->id)
+                ->where('department_id' ,'=', DB::table('departments')->where('code','=',$this->detail['department'])->first()->id)
+                ->where('year_level_id' ,'=', DB::table('year_levels')->where('year_level','=',$this->detail['year_level'])->first()->id)
+                ->where('semester_id' ,'=', DB::table('semesters')->where('semester','=',$this->detail['semester'])->first()->id)
+                ->where('schedule_id' ,'=', $this->detail['schedule_id'])
+                ->first()
+        ){
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'detail.schedule_id' => 'Schedule already exists.',
+            ]);
+        }
 
-        $inserted = DB::table('curriculums')->insert([
+        $curriculum_id = DB::table('curriculums')->insertGetId([
             'school_year_id' => DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$this->detail['school_year'])->first()->id,
             'college_id' => DB::table('colleges')->where('code','=',$this->detail['college'])->first()->id,
             'department_id' => DB::table('departments')->where('code','=',$this->detail['department'])->first()->id,
@@ -365,7 +379,46 @@ class CurriculumSubjects extends Component
             'is_lec' => $this->detail['is_lec'],
         ]);
 
-        if ($inserted) {
+        // defaults
+        if($this->detail['with_default']){
+
+            // terms
+            $midterm_id = DB::table('terms')
+            ->insertGetId([
+                'id' => NULL,
+                'curriculum_id' => $curriculum_id,
+                'term_name' => 'Midterm',
+                'weight' => 40.0,
+                'order' => 1,
+            ]);
+
+            DB::table('terms')
+            ->insertGetId([
+                'id' => NULL,
+                'curriculum_id' => $curriculum_id,
+                'term_name' => 'Finalterm',
+                'weight' => 60.0,
+                'order' => 12,
+            ]);
+            
+            // lab lec
+
+            DB::table('lab_lec')
+            ->insertGetId([
+                'id' => NULL,
+                'curriculum_id' => NULL,
+                'term_id' => $midterm_id,
+                'sub_weight' => 50.0,
+                'is_lecture' => true,
+            ]);
+    
+            // school works
+    
+            // individual school works
+        }
+
+
+        if ($curriculum_id) {
             // You can dispatch success notification or redirect here
             $this->dispatch('notifySuccess', 
             'Added successfully!',

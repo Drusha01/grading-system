@@ -65,7 +65,8 @@ class FacultyLists extends Component
                 'ft.name as faculty_type',
                 'ft.code as faculty_type_code',
                 'release_time',
-                'hours_per_week'
+                'hours_per_week',
+                'admin_type'
             )
             ->leftJoin('users as u','u.id','f.user_id')
             ->leftJoin('colleges as c','c.id','f.college_id')

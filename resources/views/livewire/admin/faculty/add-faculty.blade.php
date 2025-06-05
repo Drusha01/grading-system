@@ -11,12 +11,21 @@
 
         <form wire:submit.prevent="save()">
             <div class="row">
-                <div class="col-md-12 mb-3">
+                <div class="col-md-6 mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" id="email" wire:model.defer="detail.email" placeholder="Email" class="form-control @error('detail.email') is-invalid @enderror">
                     @error('detail.email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
+                </div>
+                <div class="col-md-6 mb-3 d-flex align-items-end">
+                    <div class="form-check mt-4 ">
+                        <input type="checkbox" id="is_admin" wire:model.defer="detail.is_admin" class="form-check-input @error('detail.is_admin') is-invalid @enderror">
+                        <label for="is_admin" class="form-check-label">Is Admin?</label>
+                        @error('detail.is_admin')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="code" class="form-label">ID</label>

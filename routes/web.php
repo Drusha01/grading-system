@@ -141,11 +141,11 @@ use App\Livewire\Admin\EnrolledStudent\DeleteEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\ActivateEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\EnrolledStudentLists;
 
-
-
-
 use App\Livewire\Admin\Profile\Profile;
 
+// faculty
+use App\Livewire\Faculty\EnrolledStudent\EnrolledStudentLists as FacultyEnrolledStudentLists;
+use App\Livewire\Faculty\MySchedules\MyScheduleLists;
 
 // admin routes
 Route::middleware([IsUnauthenticated::class])->group(function () {
@@ -189,8 +189,6 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
             Route::get('/edit-{id}',EditDepartment::class)->name('department-edit');
             Route::get('/delete-{id}',DeleteDepartment::class)->name('department-delete');
             Route::get('/activate-{id}',ActivateDepartment::class)->name('department-activate');
-            Route::get('/view-{id}',ViewDepartment::class)->name('department-view');
-
             Route::get('/view-{id}',ViewDepartment::class)->name('department-view');
         });
 
@@ -254,10 +252,6 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
             Route::get('/delete-{id}',DeleteAdmin::class)->name('admin-delete');
             Route::get('/view-{id}',ViewAdmin::class)->name('admin-view');
         });
-        Route::prefix('profile')->group(function () {
-            Route::get('/',Profile::class)->name('admin-profile');
-        });
-
         Route::prefix('academic')->group(function () {
             Route::prefix('faculty')->group(function () {
                 Route::get('/',FacultyLists::class)->name('faculty-lists');
@@ -328,14 +322,24 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
             Route::get('/view-{id}',ViewSchedule::class)->name('schedule-view');
         });
         
-
-        
     });
 
 
     Route::prefix('faculty')->middleware([IsFaculty::class])->group(function () {
-        Route::get('/',function(){
-            return 'faculty dashboard here0';
-        })->name('Admin-listsss');
+        Route::get('/',function (){return redirect (route('my-schedule-lists'));})->name('my-schedule-default');
+        Route::get('/my-schedules',MyScheduleLists::class)->name('my-schedule-lists');
+        Route::get('/enrolled-students-{curriculum_id}',FacultyEnrolledStudentLists::class)->name('my-enrolled-students');
+
+        Route::get('rooms/view-{id}',ViewRoom::class)->name('my-room-view');
+        Route::get('subjects/view-{id}',ViewSubject::class)->name('my-subject-view');
+        Route::get('year-levels/view-{id}',ViewYearLevel::class)->name('my-year-level-view');
+        Route::get('semesters/view-{id}',ViewSemester::class)->name('my-semester-view');
+        Route::get('school-years/view-{id}',ViewSchoolYear::class)->name('my-school-year-view');
+        Route::get('departments/view-{id}',ViewDepartment::class)->name('my-department-view');
+        Route::get('colleges/view-{id}',ViewCollege::class)->name('my-college-view');
+    });
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/',Profile::class)->name('admin-profile');
     });
 });

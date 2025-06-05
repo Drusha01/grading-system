@@ -45,7 +45,7 @@ class EditSubject extends Component
             ],
             'detail.subject_id' => 'required|unique:subjects,subject_id,'.$this->detail['id'],
             'detail.subject_code' => 'required|unique:subjects,subject_code,'.$this->detail['id'],
-            'detail.lecture_unit' => 'integer|min:0',
+            'detail.lecture_unit' => 'integer|min:1',
             'detail.laboratory_unit' => 'integer|min:0',
         ];
     }
@@ -76,6 +76,7 @@ class EditSubject extends Component
             
             'detail.laboratory_unit.integer' => 'Laboratory unit must be an integer.',
             'detail.lecture.integer' => 'Laboratory unit must be an integer.',
+            'detail.lecture_unit.min' => 'Laboratory unit must greater than 0.',
         ];
     }
 

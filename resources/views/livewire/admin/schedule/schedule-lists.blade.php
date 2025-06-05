@@ -91,7 +91,6 @@
                     <th scope="col" class="px-4 ">Days</th>
                     <th scope="col" class="px-4 ">is Lecture?</th>
                     <th scope="col" class="px-4 ">Unit</th>
-                    <th scope="col" class="px-4 ">Laboratory</th>
                     <th scope="col" class="text-center px-4 ">Actions</th> 
                 </tr>
             </thead>

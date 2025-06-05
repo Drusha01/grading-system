@@ -25,7 +25,14 @@ class IsFaculty
                 ->where('id','=',$userId)
                 ->where('is_active','=',1)
                 ->where('admin_type','=',1)->first();
-            if($user){
+
+            $curriculums = DB::table('users as u')
+                ->join('faculty as f','f.user_id','u.id')
+                ->join('curriculums as cl','cl.faculty_id','f.id')
+                ->where('f.user_id','=',$userId)
+                ->get()
+                ->toArray();
+            if(count($curriculums) == 0){
                 return redirect(route('admin-dashboard'));
             }
         }

@@ -37,7 +37,7 @@ class AddSubject extends Component
             'detail.prerequisite_subject_id' => 'nullable|exists:subjects,id',
             'detail.subject_id' => 'required|unique:subjects,subject_id',
             'detail.subject_code' => 'required|unique:subjects,subject_code,',
-            'detail.lecture_unit' => 'integer|min:0',
+            'detail.lecture_unit' => 'integer|min:1',
             'detail.laboratory_unit' => 'integer|min:0',
         ];
     }
@@ -64,6 +64,8 @@ class AddSubject extends Component
             
             'detail.laboratory_unit.integer' => 'Laboratory unit must be an integer.',
             'detail.lecture.integer' => 'Laboratory unit must be an integer.',
+            'detail.lecture_unit.min' => 'Lecture unit must greater than 0.',
+
         ];
     }
 

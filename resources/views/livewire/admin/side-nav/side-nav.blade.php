@@ -6,6 +6,7 @@
         </a>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
+            @if(isset($admin))
             <li class="nav-item">
                 <a href="{{ route("dashboard") }}" wire:navigate class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('admin/dashboard*')) {{ 'active' }} @endif""
                     aria-current="page">
@@ -48,13 +49,6 @@
                     <span class="fs-6 ms-2 text-start">Schedules</span>
                 </a>
             </li>
-            <!-- <li class="nav-item">
-                <a href="{{ route("subject-lists") }}" wire:navigate
-                    class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('admin/subject*')) {{ 'active' }} @endif">
-                    <svg viewBox="0 0 48 48" id="a" height="25px" width="25px"  xmlns="http://www.w3.org/2000/svg" fill="currentColor" stroke="currentColor" stroke-width="1.8240000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <defs> <style>.b{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;}</style> </defs> <g> <path class="b" d="m14.2722,5.5246h-1.98c-.9469,0-1.7217.8527-1.7217,1.8949v33.1611c0,1.0422.7748,1.8949,1.7217,1.8949h1.98"></path> <path class="b" d="m14.2722,5.5246v36.9509h21.4354c.9469,0,1.7217-.8527,1.7217-1.8949V7.4195c0-1.0422-.7748-1.8949-1.7217-1.8949H14.2722Z"></path> </g> <g> <path class="b" d="m26.5487,5.8464v7.2056l3.6902-2.1302,3.7233,2.1492v-7.4582"></path> <path class="b" d="m20.1848,28.2985h12.8259v-2.9163h-12.8259c.0002.9721,0,1.9442,0,2.9163Z"></path> <path class="b" d="m20.1848,34.1672h9.5194v-2.8357h-9.5194c.0002.9721,0,1.8636,0,2.8357Z"></path> </g> </g></svg>
-                    <span class="fs-6 ms-2 text-start">Grades</span>
-                </a>
-            </li> -->
             <li class="nav-item">
                 <a href="{{ route("curriculum-lists") }}" wire:navigate
                     class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('admin/curriculum*')) {{ 'active' }} @endif">
@@ -171,49 +165,16 @@
                     </ul>
                 </div>
             </li>
-            <!-- <li class="nav-item">
-                <div class="btn btn-toggle link-dark align-items-center mb-2 nav-link d-flex justify-content-between 
-                    "
-                    data-bs-target="#dd3"
-                    aria-expanded="
-                    ">
-                    <div>
-                        <svg viewBox="0 0 24 24" height="30px" width="30px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5528 1.10557C11.8343 0.964809 12.1657 0.964809 12.4472 1.10557L22.4472 6.10557C22.862 6.31298 23.0798 6.77838 22.9732 7.22975C22.8667 7.68112 22.4638 8 22 8H1.99998C1.5362 8 1.13328 7.68112 1.02673 7.22975C0.920172 6.77838 1.13795 6.31298 1.55276 6.10557L11.5528 1.10557ZM6.23604 6H17.7639L12 3.11803L6.23604 6ZM5.99998 9C6.55226 9 6.99998 9.44772 6.99998 10V15C6.99998 15.5523 6.55226 16 5.99998 16C5.44769 16 4.99998 15.5523 4.99998 15V10C4.99998 9.44772 5.44769 9 5.99998 9ZM9.99998 9C10.5523 9 11 9.44772 11 10V15C11 15.5523 10.5523 16 9.99998 16C9.44769 16 8.99998 15.5523 8.99998 15V10C8.99998 9.44772 9.44769 9 9.99998 9ZM14 9C14.5523 9 15 9.44772 15 10V15C15 15.5523 14.5523 16 14 16C13.4477 16 13 15.5523 13 15V10C13 9.44772 13.4477 9 14 9ZM18 9C18.5523 9 19 9.44772 19 10V15C19 15.5523 18.5523 16 18 16C17.4477 16 17 15.5523 17 15V10C17 9.44772 17.4477 9 18 9ZM2.99998 18C2.99998 17.4477 3.44769 17 3.99998 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H3.99998C3.44769 19 2.99998 18.5523 2.99998 18ZM0.999976 21C0.999976 20.4477 1.44769 20 1.99998 20H22C22.5523 20 23 20.4477 23 21C23 21.5523 22.5523 22 22 22H1.99998C1.44769 22 0.999976 21.5523 0.999976 21Z" fill="currentColor"></path> </g></svg>
-                        <span class="fs-6 ms-2 text-start">Academic</span>
-                    </div>
-                    <i class='bx bx-chevron-down fs-3'></i>
-                </div>
-                <div class="collapse
-                    " id="dd3">
-                    <ul class="btn-toggle-nav ms-4 list-unstyled fw-normal pb-1 small">
-                        <li class="mb-1 nav-item">
-                            <a href="{{ route("school-year-lists") }}"
-                                class="nav-link link-dark d-flex align-items-center @if (request()->is('admin/school-year*')) {{ 'active ' }} @endif">
-                                <svg viewBox="0 0 24 24" height="30px" width="30px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5528 1.10557C11.8343 0.964809 12.1657 0.964809 12.4472 1.10557L22.4472 6.10557C22.862 6.31298 23.0798 6.77838 22.9732 7.22975C22.8667 7.68112 22.4638 8 22 8H1.99998C1.5362 8 1.13328 7.68112 1.02673 7.22975C0.920172 6.77838 1.13795 6.31298 1.55276 6.10557L11.5528 1.10557ZM6.23604 6H17.7639L12 3.11803L6.23604 6ZM5.99998 9C6.55226 9 6.99998 9.44772 6.99998 10V15C6.99998 15.5523 6.55226 16 5.99998 16C5.44769 16 4.99998 15.5523 4.99998 15V10C4.99998 9.44772 5.44769 9 5.99998 9ZM9.99998 9C10.5523 9 11 9.44772 11 10V15C11 15.5523 10.5523 16 9.99998 16C9.44769 16 8.99998 15.5523 8.99998 15V10C8.99998 9.44772 9.44769 9 9.99998 9ZM14 9C14.5523 9 15 9.44772 15 10V15C15 15.5523 14.5523 16 14 16C13.4477 16 13 15.5523 13 15V10C13 9.44772 13.4477 9 14 9ZM18 9C18.5523 9 19 9.44772 19 10V15C19 15.5523 18.5523 16 18 16C17.4477 16 17 15.5523 17 15V10C17 9.44772 17.4477 9 18 9ZM2.99998 18C2.99998 17.4477 3.44769 17 3.99998 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H3.99998C3.44769 19 2.99998 18.5523 2.99998 18ZM0.999976 21C0.999976 20.4477 1.44769 20 1.99998 20H22C22.5523 20 23 20.4477 23 21C23 21.5523 22.5523 22 22 22H1.99998C1.44769 22 0.999976 21.5523 0.999976 21Z" fill="currentColor"></path> </g></svg>
-                                <span class="fs-6 ms-2 text-start">Curriculums</span>
-                            </a>
-                        </li>
-                        <li class="mb-1 nav-item">
-                            <a href="{{ route("school-year-lists") }}"
-                                class="nav-link link-dark d-flex align-items-center @if (request()->is('admin/school-year*')) {{ 'active ' }} @endif">
-                                <svg viewBox="0 0 24 24" height="30px" width="30px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5528 1.10557C11.8343 0.964809 12.1657 0.964809 12.4472 1.10557L22.4472 6.10557C22.862 6.31298 23.0798 6.77838 22.9732 7.22975C22.8667 7.68112 22.4638 8 22 8H1.99998C1.5362 8 1.13328 7.68112 1.02673 7.22975C0.920172 6.77838 1.13795 6.31298 1.55276 6.10557L11.5528 1.10557ZM6.23604 6H17.7639L12 3.11803L6.23604 6ZM5.99998 9C6.55226 9 6.99998 9.44772 6.99998 10V15C6.99998 15.5523 6.55226 16 5.99998 16C5.44769 16 4.99998 15.5523 4.99998 15V10C4.99998 9.44772 5.44769 9 5.99998 9ZM9.99998 9C10.5523 9 11 9.44772 11 10V15C11 15.5523 10.5523 16 9.99998 16C9.44769 16 8.99998 15.5523 8.99998 15V10C8.99998 9.44772 9.44769 9 9.99998 9ZM14 9C14.5523 9 15 9.44772 15 10V15C15 15.5523 14.5523 16 14 16C13.4477 16 13 15.5523 13 15V10C13 9.44772 13.4477 9 14 9ZM18 9C18.5523 9 19 9.44772 19 10V15C19 15.5523 18.5523 16 18 16C17.4477 16 17 15.5523 17 15V10C17 9.44772 17.4477 9 18 9ZM2.99998 18C2.99998 17.4477 3.44769 17 3.99998 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H3.99998C3.44769 19 2.99998 18.5523 2.99998 18ZM0.999976 21C0.999976 20.4477 1.44769 20 1.99998 20H22C22.5523 20 23 20.4477 23 21C23 21.5523 22.5523 22 22 22H1.99998C1.44769 22 0.999976 21.5523 0.999976 21Z" fill="currentColor"></path> </g></svg>
-                                <span class="fs-6 ms-2 text-start">Schedules</span>
-                            </a>
-                        </li>
-                        <li class="mb-1 nav-item">
-                            <a href="{{ route("school-year-lists") }}"
-                                class="nav-link link-dark d-flex align-items-center @if (request()->is('admin/school-year*')) {{ 'active ' }} @endif">
-                                <svg viewBox="0 0 24 24" height="30px" width="30px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5528 1.10557C11.8343 0.964809 12.1657 0.964809 12.4472 1.10557L22.4472 6.10557C22.862 6.31298 23.0798 6.77838 22.9732 7.22975C22.8667 7.68112 22.4638 8 22 8H1.99998C1.5362 8 1.13328 7.68112 1.02673 7.22975C0.920172 6.77838 1.13795 6.31298 1.55276 6.10557L11.5528 1.10557ZM6.23604 6H17.7639L12 3.11803L6.23604 6ZM5.99998 9C6.55226 9 6.99998 9.44772 6.99998 10V15C6.99998 15.5523 6.55226 16 5.99998 16C5.44769 16 4.99998 15.5523 4.99998 15V10C4.99998 9.44772 5.44769 9 5.99998 9ZM9.99998 9C10.5523 9 11 9.44772 11 10V15C11 15.5523 10.5523 16 9.99998 16C9.44769 16 8.99998 15.5523 8.99998 15V10C8.99998 9.44772 9.44769 9 9.99998 9ZM14 9C14.5523 9 15 9.44772 15 10V15C15 15.5523 14.5523 16 14 16C13.4477 16 13 15.5523 13 15V10C13 9.44772 13.4477 9 14 9ZM18 9C18.5523 9 19 9.44772 19 10V15C19 15.5523 18.5523 16 18 16C17.4477 16 17 15.5523 17 15V10C17 9.44772 17.4477 9 18 9ZM2.99998 18C2.99998 17.4477 3.44769 17 3.99998 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H3.99998C3.44769 19 2.99998 18.5523 2.99998 18ZM0.999976 21C0.999976 20.4477 1.44769 20 1.99998 20H22C22.5523 20 23 20.4477 23 21C23 21.5523 22.5523 22 22 22H1.99998C1.44769 22 0.999976 21.5523 0.999976 21Z" fill="currentColor"></path> </g></svg>
-                                <span class="fs-6 ms-2 text-start">Curriculums</span>
-                            </a>
-                        </li>
-                        
-                        List Curriculums
-                        enrolled Students
-                    </ul>
-                    <hr>
-                </div>
-            </li> -->
+            @endif
+            @if(count($curriculums))
+            <li class="nav-item">
+                <a href="{{ route(name: "my-schedule-lists") }}" wire:navigate
+                class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('faculty/*')) {{ 'active' }} @endif">
+                <svg fill="currentColor" height="25px" width="25px" version="1.1" id="XMLID_98_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="schedule-clone"> <g> <path d="M24,24H6v-4H0V2h4V0h2v2h6V0h2v2h4v4h6V24z M8,22h14V12h-4v8H8V22z M2,18h14V4H2v2h14v2H2V18z M18,10h4V8h-4V10z M14,16H8 v-2h6V16z M6,16H4v-2h2V16z M14,12H8v-2h6V12z M6,12H4v-2h2V12z"></path> </g> </g> </g></svg>
+                    <span class="fs-6 ms-2 text-start">My Schedules</span>
+                </a>
+            </li>
+            @endif
             <hr>
             <li class="nav-item">
                 <a href="{{ route(name: "admin-profile") }}" wire:navigate
@@ -223,70 +184,6 @@
                 </a>
             </li>
             <div class="my-3"></div>
-            <!-- <li class="nav-item">
-                <a href="./grade" class="nav-link link-dark d-flex align-items-center mb-2  ">
-                    <i class='bx bx-bar-chart-alt-2 fs-4'></i>
-                    <span class="fs-6 ms-2">Grades</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <div class="btn btn-toggle link-dark d-flex align-items-center mb-2 nav-link d-flex justify-between"
-                    data-bs-toggle="collapse" data-bs-target="#dd2"
-                    aria-expanded="">
-                        <div>
-                            <i class='bx bxs-group fs-4'></i>
-                            <span class="fs-6 ms-2 text-start">Colleges</span>
-                        </div>
-                        <i class='bx bx-chevron-down'></i>
-                </div>
-                <div class="collapse" id="dd2">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li class="mb-1">
-                            <a href="./manage_acc.php"
-                            class="link-dark nav-link d-flex align-items-center">
-                            <i class='bx bx-chevron-right'></i>
-                            CCS
-                            </a>
-                        </li>
-                        <li class="mb-1">
-                            <a href="./profiling.php"
-                            class="link-dark nav-link d-flex align-items-center">
-                            <i class='bx bx-chevron-right'></i>
-                            Profiling
-                            </a>
-                        </li>
-                    </ul>
-                    <hr>
-                </div>
-            </li>
-            <li class="nav-item">
-                <button class="btn btn-toggle link-dark d-flex align-items-center mb-2 nav-link"
-                    data-bs-toggle="collapse" data-bs-target="#userfaculty_toggle"
-                    aria-expanded="">
-                    <i class='bx bxs-group fs-4'></i>
-                    <span class="fs-6 ms-2 text-start">Users & Profiling</span>
-                    <i class='bx bx-chevron-down'></i>
-                </button>
-                <div class="collapse" id="userfaculty_toggle">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li class="mb-1">
-                            <a href="./manage_acc.php"
-                            class="link-dark nav-link d-flex align-items-center">
-                            <i class='bx bx-chevron-right'></i>
-                            <span>Manage User Accounts</span>
-                            </a>
-                        </li>
-                        <li class="mb-1">
-                            <a href="./profiling.php"
-                            class="link-dark nav-link d-flex align-items-center">
-                            <i class='bx bx-chevron-right'></i>
-                            Profiling
-                            </a>
-                        </li>
-                    </ul>
-                    <hr>
-                </div>
-            </li> -->
         </ul>
         <div class=" dropdown mt-auto py-3" style="position:sticky;bottom:0px;left:0px;background:#fff;width:100%;">
             <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">

@@ -37,6 +37,7 @@ class EditFaculty extends Component
         'is_active' => 1,
         'release_time' => 'With Release Time',
         'hours_per_week' => NULL,
+        'is_admin'=> false,
     ];
 
     public function rules(){
@@ -136,7 +137,8 @@ class EditFaculty extends Component
                 'ft.name as faculty_type',
                 'ft.code as faculty_type_code',
                 'release_time',
-                'hours_per_week'
+                'hours_per_week',
+                'u.admin_type',
             )
             ->leftJoin('users as u','u.id','f.user_id')
             ->leftJoin('colleges as c','c.id','f.college_id')
@@ -164,6 +166,7 @@ class EditFaculty extends Component
             'is_active' => $detail->is_active,
             'release_time' => $detail->release_time,
             'hours_per_week' => $detail->hours_per_week,
+            'is_admin'=> ($detail->admin_type == 1 ? true : false),
         ];
     }
 
@@ -178,6 +181,7 @@ class EditFaculty extends Component
                 'last_name'=> $this->detail['last_name'],
                 'suffix'=> $this->detail['suffix'],
                 'email'=> $this->detail['email'],
+                'admin_type'=> ($this->detail['is_admin'] ? 1 : 2),
             ]);
         if(DB::table('faculty as f')
             ->where('f.id','=',$this->detail['id'])

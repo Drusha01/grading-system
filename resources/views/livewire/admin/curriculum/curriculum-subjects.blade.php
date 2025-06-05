@@ -99,6 +99,7 @@
                     <th scope="col" class="px-4 ">Room</th>
                     <th scope="col" class="px-4 ">Start period</th>
                     <th scope="col" class="px-4 ">End period</th>
+                    <th scope="col" class="px-4 ">Type</th>
                     <th scope="col" class="px-4 ">Days</th>
                     <th scope="col" class="text-center px-4 ">Actions</th> 
                 </tr>
@@ -128,6 +129,9 @@
                             </td>
                             <td class="px-4">{{$value->schedule_from}}</td>
                             <td class="px-4">{{$value->schedule_to}}</td>
+                            <td class="px-4">
+                                {{ ($value->is_lec? "LECTURE": "LABORATORY") }}
+                            </td>
                             <td class="px-4">{{implode(', ', json_decode($value->day, true))}}</td>
                             <td class="px-4">
                                 <div class="d-flex justify-content-center gap-2">
@@ -187,10 +191,10 @@
                             <select name="schedule_id" id="schedule_id" wire:model.defer="detail.schedule_id" wire:change="selectSubject()" class="form-select @error('detail.schedule_id') is-invalid @enderror">  
                                 <option value="">Select Subject</option>
                                 @foreach ($subjects as $key => $value )
-                                     <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code.' '.$value->room_code.' '.
+                                     <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code.' '.
                                         $value->schedule_from.' - '.
-                                        $value->schedule_to.' ('.
-                                        implode(', ', json_decode($value->day, true)).')'
+                                        $value->schedule_to.' ( '.
+                                        implode(', ', json_decode($value->day, true)).' )'.' '.$value->room_code.($value->is_lec? "-LECTURE": "-LABORATORY")
                                      }}</option>
                                 @endforeach
                             </select>

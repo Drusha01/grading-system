@@ -99,6 +99,7 @@
                     <th scope="col" class="px-4 ">Faculty Type</th>
                     <th scope="col" class="px-4 ">Email</th>
                     <th scope="col" class="px-4 ">Is Active?</th>
+                    <th scope="col" class="px-4 ">Is Admin?</th>
                     <th scope="col" class="text-center px-4 ">Actions</th> 
                 </tr>
             </thead>
@@ -139,6 +140,13 @@
                                     <span class="badge bg-success">Active</span>
                                 @else
                                     <span class="badge bg-danger">Inactive</span>
+                                @endif
+                            </td>
+                            <td class="px-4">
+                                @if($value->admin_type == 1)
+                                    <span class="badge bg-success">Yes</span>
+                                @else
+                                    <span class="badge bg-danger">No</span>
                                 @endif
                             </td>
                             <td class="px-4">

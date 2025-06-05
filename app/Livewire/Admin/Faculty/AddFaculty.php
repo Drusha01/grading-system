@@ -40,6 +40,7 @@ class AddFaculty extends Component
         'hours_per_week' => NULL,
         'password'=>NULL,
         'confirm_password'=> NULL,
+        'is_admin'=> false,
     ];
 
     public function rules(){
@@ -146,6 +147,7 @@ class AddFaculty extends Component
                 'suffix'=> $this->detail['suffix'],
                 'email'=> $this->detail['email'],
                 'password'=> Hash::make($this->detail['password']),
+                'admin_type'=> ($this->detail['is_admin'] ? 1 : 2),
             ]);
         
         if($res){
