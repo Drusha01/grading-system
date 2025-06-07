@@ -99,11 +99,11 @@ class EnrolledStudentLists extends Component
             ->where('es.curriculum_id','=',$this->detail['curriculum_id']);
         
 
-        if (!empty($this->studentFilter['search'])) {
+        if (!empty($this->filters['search'])) {
             $table_data
-            ->where('s.code','like','%'.$this->studentFilter['search'] .'%')
-            ->orwhere('s.email','like','%'.$this->studentFilter['search'] .'%')
-            ->orwhere(DB::raw('CONCAT_WS(" ", s.first_name, s.middle_name, s.last_name, s.suffix)'), 'like','%'.$this->studentFilter['search'] .'%');
+            ->where('s.code','like','%'.$this->filters['search'] .'%')
+            ->orwhere('s.email','like','%'.$this->filters['search'] .'%')
+            ->orwhere(DB::raw('CONCAT_WS(" ", s.first_name, s.middle_name, s.last_name, s.suffix)'), 'like','%'.$this->filters['search'] .'%');
         }
       
         $table_data = $table_data
@@ -211,6 +211,63 @@ class EnrolledStudentLists extends Component
             '');
             $this->dispatch('closeModal',modal_id : $modal_id);
         }
-        
+    }
+
+    public function viewDetails(){
+
+        $detail = DB::table('curriculums as cl')
+            ->select(
+                'cl.id' ,
+                's.college_id' ,
+                's.department_id' ,
+                's.subject_code' ,
+                's.description',
+                's.prerequisite_subject_id' ,
+                's.lecture_unit',
+                's.laboratory_unit' ,
+                'c.name as college',
+                'd.name as department',
+                'c.code as college_code',
+                'd.code as department_code',
+                'pr.subject_id as prerequisite_subject_id',
+                'pr.subject_code as prerequisite_subject_code',
+                DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS faculty_fullname'),
+                DB::raw('CONCAT(s.subject_id," - ",s.subject_code) as subject'),
+                'r.code as room_code',
+                'r.name as room_name',
+                's.is_active',
+                DB::raw("DATE_FORMAT(cl.schedule_from, '%h:%i %p') as schedule_from"),
+                DB::raw("DATE_FORMAT(cl.schedule_to, '%h:%i %p') as schedule_to"),
+                'sh.day' ,
+                'sh.is_lec' ,
+
+                'cl.school_year_id' ,
+                'cl.college_id',
+                'cl.department_id' ,
+                'cl.year_level_id',
+                'cl.semester_id' ,
+                'cl.schedule_id',
+
+                'cl.subject_id' ,
+                'cl.faculty_id' ,
+                'cl.room_id' ,
+                'cl.schedule_from' ,
+                'cl.schedule_to' ,
+                'cl.day' ,
+                'cl.is_lec' ,
+            )
+            ->leftJoin('subjects as s','s.id','cl.subject_id')
+            ->leftJoin('rooms as r','r.id','cl.room_id')
+            ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
+            ->leftJoin('faculty as f','f.id','cl.faculty_id')
+            ->leftJoin('users as u','u.id','f.user_id')
+            ->leftJoin('colleges as c','c.id','s.college_id')
+            ->leftJoin('departments as d','d.id','s.department_id')
+            ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id')
+
+            ->where('cl.id','=',$this->detail['curriculum_id'])
+            ->first();
+
+        dd($detail);
     }
 }

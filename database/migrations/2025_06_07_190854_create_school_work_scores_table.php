@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE TABLE school_works(
+         DB::statement('CREATE TABLE school_work_scores(
             id INT PRIMARY KEY AUTO_INCREMENT,
             curriculum_id INT,
-            -- student_id INT,
+            student_id INT,
             term_id INT,
-            school_work_name VARCHAR(255),
-            school_work_type_id INT,
-            -- score DOUBLE,
+            school_work_id INT,
+            score DOUBLE,
             max_score DOUBLE,
-            schedule_date DATETIME,
-            number_order INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('school_works');
+        Schema::dropIfExists('school_work_scores');
     }
 };

@@ -16,7 +16,7 @@ return new class extends Migration
             curriculum_id INT,
             term_name VARCHAR(255),
             weight DOUBLE,
-            order INT,
+            term_order INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');

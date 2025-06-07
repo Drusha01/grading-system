@@ -64,7 +64,7 @@
                 </a>
             </div>
         </div>
-        <table class="table table-striped border" >
+        <table class="table table-striped table-bordered" >
             <thead style="background:#952323;color:white;">
                 <tr class="align-middle">
                     <th scope="col" class="px-4">#</th>

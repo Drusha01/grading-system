@@ -141,6 +141,9 @@ use App\Livewire\Admin\EnrolledStudent\DeleteEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\ActivateEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\EnrolledStudentLists;
 
+use App\Livewire\Admin\Evaluation\EvaluationLists;
+
+
 use App\Livewire\Admin\Profile\Profile;
 
 // faculty
@@ -290,6 +293,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         Route::prefix('curriculums')->group(function () {
             Route::get('/',CurriculumLists::class)->name('curriculum-lists');
 
+            Route::get('/evaluation-{curriculum_id}',EvaluationLists::class)->name('evaluation-lists');
             Route::get('/enrolled-{curriculum_id}',EnrolledStudentLists::class)->name('enrolled-student-lists');
             Route::get('/enrolled-{curriculum_id}/add',AddEnrolledStudent::class)->name('enrolled-student-add');
             Route::get('/enrolled-{curriculum_id}/edit-{id}',EditEnrolledStudent::class)->name('enrolled-student-edit');

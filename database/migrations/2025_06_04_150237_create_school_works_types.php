@@ -14,9 +14,11 @@ return new class extends Migration
         DB::statement('CREATE TABLE school_works_types(
             id INT PRIMARY KEY AUTO_INCREMENT,
             curriculum_id INT,
+            term_id INT,
             lab_lec_id INT,
             school_work_type VARCHAR(255),
             weight DOUBLE,
+            number_order INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');

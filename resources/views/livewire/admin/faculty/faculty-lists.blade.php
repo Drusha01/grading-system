@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <table class="table table-striped border position-relative" >
+        <table class="table table-striped table-bordered position-relative" >
             <div wire:target="filters.search perPage, nextPage, previousPage, gotoPage"
                     wire:loading.flex>
                     <div class="form-loader">

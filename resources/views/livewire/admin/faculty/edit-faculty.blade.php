@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="hours_per_week" class="form-label">No. of hours per week</label>
-                    <input type="number" min="1"  id="hours_per_week" wire:model.defer="detail.hours_per_week" placeholder="First name" class="form-control @error('detail.hours_per_week') is-invalid @enderror">
+                    <input type="number" min="1"  id="hours_per_week" wire:model.defer="detail.hours_per_week" placeholder="Number of hours per week" class="form-control @error('detail.hours_per_week') is-invalid @enderror">
                     @error('detail.hours_per_week')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

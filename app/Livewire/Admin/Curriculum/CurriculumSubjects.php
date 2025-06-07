@@ -39,6 +39,7 @@ class CurriculumSubjects extends Component
         'schedule_to' => NULL,
         'day' => NULL,
         'is_lec' => NULL,
+        'with_default'=>false,
     ];
     
 
@@ -379,39 +380,39 @@ class CurriculumSubjects extends Component
             'is_lec' => $this->detail['is_lec'],
         ]);
 
-        // defaults
-        if($this->detail['with_default']){
+        // subject details
 
-            // terms
-            $midterm_id = DB::table('terms')
-            ->insertGetId([
-                'id' => NULL,
-                'curriculum_id' => $curriculum_id,
-                'term_name' => 'Midterm',
-                'weight' => 40.0,
-                'order' => 1,
-            ]);
+        // terms
+        $midterm_id = DB::table('terms')
+        ->insertGetId([
+            'id' => NULL,
+            'curriculum_id' => $curriculum_id,
+            'term_name' => 'Midterm',
+            'weight' => 40.0,
+            'term_order' => 1,
+        ]);
 
-            DB::table('terms')
-            ->insertGetId([
-                'id' => NULL,
-                'curriculum_id' => $curriculum_id,
-                'term_name' => 'Finalterm',
-                'weight' => 60.0,
-                'order' => 12,
-            ]);
+        DB::table('terms')
+        ->insertGetId([
+            'id' => NULL,
+            'curriculum_id' => $curriculum_id,
+            'term_name' => 'Finalterm',
+            'weight' => 60.0,
+            'term_order' => 2,
+        ]);
             
-            // lab lec
-
-            DB::table('lab_lec')
-            ->insertGetId([
-                'id' => NULL,
-                'curriculum_id' => NULL,
-                'term_id' => $midterm_id,
-                'sub_weight' => 50.0,
-                'is_lecture' => true,
-            ]);
+        // lab lec
+        DB::table(table: 'lab_lec')
+        ->insertGetId([
+            'id' => NULL,
+            'curriculum_id' => $curriculum_id,
+            'term_id' => $midterm_id,
+            'sub_weight' => 50.0,
+            'is_lecture' => $this->detail['is_lec'],
+        ]);
     
+            // defaults
+        if($this->detail['with_default']){
             // school works
     
             // individual school works

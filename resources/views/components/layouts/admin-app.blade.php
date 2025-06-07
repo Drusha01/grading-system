@@ -163,6 +163,32 @@
                     }, 1500); // delay in milliseconds, e.g. 2000 = 2 seconds
                 }
             });
+            Livewire.on('notifyWarning', message => {
+                const notyf = new Notyf({
+                    position: {
+                        x: 'center',
+                        y: 'center',
+                    },
+                    types: [
+                        {
+                            type: 'success',
+                            background: 'red',
+                            icon: false
+                        },
+                        {
+                            type: 'success',
+                            background: 'red',
+                            icon: false
+                        }
+                    ]
+                });
+                notyf.success(message[0]);
+                if (message[1]) {
+                    setTimeout(() => {
+                        window.location.href = message[1];
+                    }, 1500); // delay in milliseconds, e.g. 2000 = 2 seconds
+                }
+            });
             @if (request()->is('admin/schedule*')) 
                 document.addEventListener('DOMContentLoaded', function () {
                     setTimeout(()=>{
