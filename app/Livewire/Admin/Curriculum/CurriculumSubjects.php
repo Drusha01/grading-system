@@ -194,6 +194,8 @@ class CurriculumSubjects extends Component
         self::filterFaculty();
         self::selectSubject();
         $this->dispatch('openModal',modal_id : $modal_id);
+        $this->dispatch('select2');
+        
     }
 
     public function filterSubject(){
@@ -392,7 +394,7 @@ class CurriculumSubjects extends Component
             'term_order' => 1,
         ]);
 
-        DB::table('terms')
+        $finalterm_id = DB::table('terms')
         ->insertGetId([
             'id' => NULL,
             'curriculum_id' => $curriculum_id,
@@ -410,11 +412,42 @@ class CurriculumSubjects extends Component
             'sub_weight' => 50.0,
             'is_lecture' => $this->detail['is_lec'],
         ]);
+
+        DB::table(table: 'lab_lec')
+        ->insertGetId([
+            'id' => NULL,
+            'curriculum_id' => $curriculum_id,
+            'term_id' => $finalterm_id,
+            'sub_weight' => 50.0,
+            'is_lecture' => $this->detail['is_lec'],
+        ]);
+
+
+        DB::table('school_works_types')
+            ->insert([
+                'id'  => NULL,
+                'curriculum_id'  => $curriculum_id,
+                'term_id'  => $midterm_id,
+                'lab_lec_id'  => NULL,
+                'school_work_type'  => 'Attendance',
+                'weight' => 0,
+                'number_order' => 1,
+            ]);
+        DB::table('school_works_types')
+            ->insert([
+                'id'  => NULL,
+                'curriculum_id' => $curriculum_id,
+                'term_id' => $finalterm_id,
+                'lab_lec_id' => NULL,
+                'school_work_type' => 'Attendance',
+                'weight' => 0,
+                'number_order' => 1,
+            ]);
     
             // defaults
         if($this->detail['with_default']){
             // school works
-    
+            
             // individual school works
         }
 

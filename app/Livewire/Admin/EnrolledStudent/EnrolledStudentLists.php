@@ -34,6 +34,7 @@ class EnrolledStudentLists extends Component
 
     public $year_levels = []; 
 
+    public $curriculum = NULL;
     public $studentFilter = [
         'college_id'=> NULL,
         'studentFilter'=> NULL
@@ -164,6 +165,7 @@ class EnrolledStudentLists extends Component
             ->orwhere(DB::raw('CONCAT_WS(" ", s.first_name, s.middle_name, s.last_name, s.suffix)'), 'like','%'.$this->studentFilter['search'] .'%');
         }
         $this->students = $this->students
+            ->where('s.is_active','=',1)
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'desc')
             ->get()
@@ -213,49 +215,50 @@ class EnrolledStudentLists extends Component
         }
     }
 
-    public function viewDetails(){
-
-        $detail = DB::table('curriculums as cl')
+    public function viewDetails($modal_id){
+        self::getDetails();
+        $this->dispatch('openModal',modal_id:$modal_id);
+    }
+    
+    public function getDetails(){
+        $this->curriculum = DB::table('curriculums as cl')
             ->select(
-                'cl.id' ,
+                'cl.id',
                 's.college_id' ,
                 's.department_id' ,
-                's.subject_code' ,
                 's.description',
                 's.prerequisite_subject_id' ,
-                's.lecture_unit',
-                's.laboratory_unit' ,
-                'c.name as college',
-                'd.name as department',
+                'c.name as college_name',
+                'd.name as department_name',
                 'c.code as college_code',
                 'd.code as department_code',
                 'pr.subject_id as prerequisite_subject_id',
                 'pr.subject_code as prerequisite_subject_code',
-                DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS faculty_fullname'),
-                DB::raw('CONCAT(s.subject_id," - ",s.subject_code) as subject'),
                 'r.code as room_code',
                 'r.name as room_name',
                 's.is_active',
-                DB::raw("DATE_FORMAT(cl.schedule_from, '%h:%i %p') as schedule_from"),
-                DB::raw("DATE_FORMAT(cl.schedule_to, '%h:%i %p') as schedule_to"),
+                'sh.schedule_from',
+                'sh.schedule_to',
                 'sh.day' ,
                 'sh.is_lec' ,
-
-                'cl.school_year_id' ,
-                'cl.college_id',
-                'cl.department_id' ,
-                'cl.year_level_id',
-                'cl.semester_id' ,
+                'cl.subject_id',
+                'cl.room_id',
                 'cl.schedule_id',
+                'cl.faculty_id',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year'),
+                DB::raw('CONCAT(c.code," ",c.name) as college'),
+                DB::raw('CONCAT(d.code," ",d.name) as department'),
+                DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS faculty_fullname'),
+                DB::raw('sm.semester'), 
+                DB::raw('yl.year_level'),
+                DB::raw('CONCAT(s.subject_id," - ",s.subject_code) as subject'),
+                DB::raw("CONCAT(DATE_FORMAT(sh.schedule_from, '%h:%i %p'), ' ', DATE_FORMAT(sh.schedule_to, '%h:%i %p')) as schedule"),
+                's.lecture_unit',
+                's.laboratory_unit' ,
+                DB::raw('CONCAT(r.code," ",r.name) as room'),
 
-                'cl.subject_id' ,
-                'cl.faculty_id' ,
-                'cl.room_id' ,
-                'cl.schedule_from' ,
-                'cl.schedule_to' ,
-                'cl.day' ,
-                'cl.is_lec' ,
             )
+            ->leftJoin('school_years as sy','sy.id','cl.school_year_id')
             ->leftJoin('subjects as s','s.id','cl.subject_id')
             ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
@@ -264,10 +267,9 @@ class EnrolledStudentLists extends Component
             ->leftJoin('colleges as c','c.id','s.college_id')
             ->leftJoin('departments as d','d.id','s.department_id')
             ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id')
-
+            ->leftjoin('semesters as sm','sm.id','cl.semester_id')
+            ->leftjoin('year_levels as yl','yl.id','cl.year_level_id')
             ->where('cl.id','=',$this->detail['curriculum_id'])
             ->first();
-
-        dd($detail);
     }
 }

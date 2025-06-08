@@ -95,6 +95,7 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+        <!-- In your Blade layout file -->
         <link rel="stylesheet" href="{{ asset("assets/vendor/libs/flatpickr/flatpickr.css")}}" />
         <script src="{{ asset("assets/vendor/libs/flatpickr/flatpickr.js")}}"></script>
         <!-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
@@ -209,6 +210,27 @@
                 myModal.click();
             }); 
         </script>
+        <!-- <script>
+            function initSelect2() {
+                $('#schedule_id').select2({
+                    placeholder: 'Select Subject',
+                    allowClear: true,
+                    width: '100%',
+                });
+                // Update Livewire when select2 changes
+                    $('#schedule_id').on('change', function () {
+                    let component = Livewire.find(document.querySelector('[wire\\:id]').getAttribute('wire:id'));
+                    component.set('detail.schedule_id', $(this).val());
+                    component.call('selectSubject');
+                });
+            }
 
+            Livewire.on('select2', () => {
+                initSelect2();
+            }); 
+            Livewire.hook('message.processed', (message, component) => {
+                initSelect2();
+            });
+        </script> -->
     </body>
 </html>

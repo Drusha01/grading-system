@@ -15,7 +15,7 @@ return new class extends Migration
             id INT PRIMARY KEY AUTO_INCREMENT,
             curriculum_id INT,
             term_id INT,
-            sub_weight VARCHAR(255),
+            sub_weight DOUBLE,
             is_lecture BOOLEAN,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

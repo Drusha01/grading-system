@@ -134,12 +134,21 @@ use App\Livewire\Admin\Schedule\ActivateSchedule;
 use App\Livewire\Admin\Schedule\ScheduleLists;
 
 
+use App\Livewire\Admin\GradeEquivalent\AddGradeEquivalent;
+use App\Livewire\Admin\GradeEquivalent\EditGradeEquivalent;
+use App\Livewire\Admin\GradeEquivalent\ViewGradeEquivalent;
+use App\Livewire\Admin\GradeEquivalent\DeleteGradeEquivalent;
+use App\Livewire\Admin\GradeEquivalent\ActivateGradeEquivalent;
+use App\Livewire\Admin\GradeEquivalent\GradeEquivalentLists;
+
 use App\Livewire\Admin\EnrolledStudent\AddEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\EditEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\ViewEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\DeleteEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\ActivateEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\EnrolledStudentLists;
+
+
 
 use App\Livewire\Admin\Evaluation\EvaluationLists;
 
@@ -317,7 +326,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
             // Route::get('/activate-{id}',ActivateCurriculum::class)->name('curriculum-activate');
             // Route::get('/view-{id}',ViewCurriculum::class)->name('curriculum-view');
         });
-         Route::prefix('schedules')->group(function () {
+        Route::prefix('schedules')->group(function () {
             Route::get('/',ScheduleLists::class)->name('schedule-lists');
             Route::get('/add',AddSchedule::class)->name('schedule-add');
             Route::get('/edit-{id}',EditSchedule::class)->name('schedule-edit');
@@ -325,6 +334,16 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
             Route::get('/activate-{id}',ActivateSchedule::class)->name('schedule-activate');
             Route::get('/view-{id}',ViewSchedule::class)->name('schedule-view');
         });
+        
+         Route::prefix('grade-equivalent')->group(function () {
+            Route::get('/',GradeEquivalentLists::class)->name('grade-equivalent-lists');
+            Route::get('/add',AddGradeEquivalent::class)->name('grade-equivalent-add');
+            Route::get('/edit-{id}',EditGradeEquivalent::class)->name('grade-equivalent-edit');
+            Route::get('/delete-{id}',DeleteGradeEquivalent::class)->name('grade-equivalent-delete');
+            Route::get('/activate-{id}',ActivateGradeEquivalent::class)->name('grade-equivalent-activate');
+            Route::get('/view-{id}',ViewGradeEquivalent::class)->name('grade-equivalent-view');
+        });
+
         
     });
 

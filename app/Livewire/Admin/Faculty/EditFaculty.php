@@ -51,7 +51,12 @@ class EditFaculty extends Component
             'detail.code' => 'required|string|unique:faculty,code,'.$this->detail['id'],
             'detail.first_name' => 'required|string',
             'detail.last_name' => 'required|string',
-            'detail.email' => 'required|email|unique:users,email,'.$this->detail['user_id'],
+            'detail.email' => [
+                'required',
+                'email',
+                'unique:users,email,'.$this->detail['user_id'],
+                'regex:/^[a-zA-Z0-9._%+-]+@wmsu\.edu\.ph$/'
+            ],
         ];
     }
 
@@ -80,6 +85,8 @@ class EditFaculty extends Component
         'detail.email.email' => 'The email must be a valid email address.',
         'detail.email.required' => 'The email is required.',
         'detail.email.unique' => 'The email has already been taken.',
+        'detail.email.regex' => 'The email must be @wmsu.edu.ph domain.',
+
     ];
 
 

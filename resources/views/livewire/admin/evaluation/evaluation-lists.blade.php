@@ -7,7 +7,7 @@
 
         <!-- Top Right Filters -->
         <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-2">
-            <button class="btn btn-info" wire:click="viewDetails()">
+            <button class="btn btn-info" wire:click="viewDetails('detailModal')">
                 View Details
             </button>
             <button class="btn btn-info" wire:click="viewDetails()">
@@ -27,7 +27,7 @@
                 <input type="search" wire:model.live="filters.search" name="" id="" placeholder="Search ... " class="form-control">
             </div>
             <div class="col-2 d-flex justify-items-start gap-1 ">
-                <label for="" class="">Term</label>
+                <label for="" class="mt-2">Term </label>
                 <select name="" id="" class="form-control" wire:model.live="detail.term_id">
                     @foreach ($terms as $key =>$value )
                         <option value="{{ $value->id }}">{{ $value->term_name }}</option>
@@ -75,6 +75,9 @@
                         </li>
                     </ul>
                 </div> -->
+                <button class="btn btn-outline-primary" wire:click="open_term_weight('weightModal')">
+                    <svg viewBox="0 0 24 24" height="20px" width="20px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.99923 21H19.9992M11.9992 21V7M11.9992 7C13.1038 7 13.9992 6.10457 13.9992 5M11.9992 7C10.8947 7 9.99923 6.10457 9.99923 5M13.9992 5C13.9992 3.89543 13.1038 3 11.9992 3C10.8947 3 9.99923 3.89543 9.99923 5M13.9992 5H19.9992M9.99923 5H3.99923M5.99923 17C7.51177 17 8.76287 16.1584 8.96934 14.7513C8.98242 14.6621 8.98897 14.6175 8.98385 14.5186C8.98031 14.4503 8.95717 14.3256 8.93599 14.2605C8.90531 14.1664 8.86812 14.1003 8.79375 13.968L5.99923 9L3.2047 13.968C3.13575 14.0906 3.10128 14.1519 3.06939 14.2584C3.04977 14.3239 3.02706 14.4811 3.02735 14.5494C3.02781 14.6606 3.03453 14.6899 3.04799 14.7486C3.30295 15.86 4.5273 17 5.99923 17ZM17.9992 17C19.5118 17 20.7629 16.1584 20.9693 14.7513C20.9824 14.6621 20.989 14.6175 20.9838 14.5186C20.9803 14.4503 20.9572 14.3256 20.936 14.2605C20.9053 14.1664 20.8681 14.1003 20.7937 13.968L17.9992 9L15.2047 13.968C15.1358 14.0906 15.1013 14.1519 15.0694 14.2584C15.0498 14.3239 15.0271 14.4811 15.0273 14.5494C15.0278 14.6606 15.0345 14.6899 15.048 14.7486C15.303 15.86 16.5273 17 17.9992 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                </button>
                 <button class="btn btn-outline-primary" wire:click="open_school_work_modal('addSchoolWorkModal')">
                     <svg height="20px" width="20px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="currentCoolor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:currentColor;} </style> <g> <polygon class="st0" points="374.107,448.835 34.01,448.835 34.01,194.102 164.947,194.102 164.947,63.165 374.107,63.165 374.107,96.698 408.117,64.049 408.117,29.155 164.947,29.155 34.01,160.092 0,194.102 0,482.845 408.117,482.845 408.117,282.596 374.107,318.034 "></polygon> <path class="st0" d="M508.609,118.774l-51.325-51.325c-4.521-4.522-11.852-4.522-16.372,0L224.216,275.561 c-1.344,1.344-2.336,2.998-2.889,4.815l-26.21,86.117c-2.697,8.861,5.586,17.144,14.447,14.447l88.886-27.052l210.159-218.741 C513.13,130.626,513.13,123.295,508.609,118.774z M243.986,349.323l-16.877-18.447l11.698-38.447l29.139,15.678l15.682,29.145 L243.986,349.323z M476.036,110.577L291.414,296.372l-11.728-11.728l185.804-184.631l10.547,10.546 C476.036,110.567,476.036,110.571,476.036,110.577z"></path> </g> </g></svg>
                 </button>
@@ -132,9 +135,9 @@
                             @endphp
                             @if(count($school_works_var))
                                 @foreach ($school_works_var as $v_key => $v_value )
-                                    <th class="text-center">{{ $v_value->school_work_name }}</th>
+                                    <th class="text-center">{{ $v_value->school_work_name }} : {{ $v_value->max_score }}</th>
                                 @endforeach
-                                <th class="text-center">Avg - Percent</th>
+                                <th class="text-center">Avg - {{ $value->weight }}%</th>
                                 <!-- <th class="text-center"></th> -->
                             @else 
                                 <th class="text-center">No Data</th>
@@ -158,37 +161,85 @@
                                     </a>
                                 </td>
                                 @php
-                                    $score_key = NULL;
+                                    $score_key = 0;
+                                    $average = 0;
+                                    //dd($student_scores,$value);
+                                    $temp_sub_total_score = 0;
+                                    $temp_sub_total_max_score = 0;
+                                    $school_work_type_id = 0;
+                                    $sub_total_score = 0;
+                                    $sub_total_max_score = 0;
+                                    $school_work_type_count = 0;
+                                    $school_work_type_count_prev = 0;
+                                    $school_work_type_weight = 0;
+
+                                    $sub_average = 0;
+                                    $multiplier = 55;
+                                    $offset = 45;
+                                    $total_grade = 0;
                                 @endphp
                                 @foreach ($student_scores[$key] as $v_key =>$v_value )
-                                    @if ($score_key != $v_value['key'])
-                                        @php
-                                            $score_key = $v_value['key'];
-                                        @endphp
-                                        <td class="">
-                                            %
-                                        </td>
-                                    @endif
-                                    <td class="">
-                                        <div class="d-flex align-middle">
-                                            @if($v_value['school_work_id'])
-                                                <input type="number" name="" id="" class="form-control" 
-                                                    wire:change="updateScore(
-                                                        {{ ($v_value['score_id'] ? $v_value['score_id'] : 0) }},
-                                                        {{ $v_value['curriculum_id'] }},
-                                                        {{ $v_value['student_id'] }},
-                                                        {{ $v_value['term_id'] }},
-                                                        {{ $v_value['school_work_id']}},
-                                                        $event.target.value,
-                                                        {{ $v_value['max_score'] }})">
-                                                <span class="d-flex align-middle text-center">
-                                                    /{{ $v_value['max_score'] }}
-                                                </span>
+                                    @php
+                                        if($v_value['school_work_type_id'] == NULL ){
+                                            $sub_total_score = $temp_sub_total_score;
+                                            $sub_total_max_score = $temp_sub_total_max_score;
+                                            $temp_sub_total_score = 0;
+                                            $temp_sub_total_max_score = 0;
+                                            $school_work_type_count_prev = $school_work_type_count;
+                                            $school_work_type_count = 0;
+                                        }else{
+                                            $school_work_type_id = $v_value['school_work_type_id'];
+                                            $temp_sub_total_max_score += $v_value['max_score'];
+                                            $temp_sub_total_score += $v_value['score'];
+                                            $school_work_type_count += 1;
+                                            $school_work_type_weight = $v_value['weight'];
                                             
-                                            @endif
+                                            $sub_average += ($v_value['score']/$v_value['max_score'] * $multiplier) + $offset;
+                                            
+                                        }
+                                    @endphp
+                                    @if($v_value['school_work_id'])
+                                       <td class="">
+                                        <div class="d-flex align-middle">
+                                            <input type="number" name="" id="" value="{{ $v_value['score'] }}" class="form-control" style=" width: 100%;" 
+                                                wire:change="updateScore(
+                                                    {{ ($v_value['score_id'] ? $v_value['score_id'] : 0) }},
+                                                    {{ $v_value['curriculum_id'] }},
+                                                    {{ $v_value['student_id'] }},
+                                                    {{ $v_value['term_id'] }},
+                                                    {{ $v_value['school_work_id']}},
+                                                    $event.target.value,
+                                                    {{ $v_value['max_score'] }})">
                                         </div>
                                     </td>
+                                    @else
+                                        <td class="">
+                                            <span>
+                                                @if($sub_total_score)
+                                                    <!-- {{ $sub_total_score}} / {{$sub_total_max_score }} -->
+                                                      
+                                                    @php
+                                                        $sub_total = $sub_average / $school_work_type_count_prev
+                                                    @endphp
+                                                    {{ number_format( $sub_total, 3, '.', '')    }}
+                                                    {{  number_format(( $sub_total * $school_work_type_weight/100), 3, '.', '')}}
+                                                   @php
+                                                        $total_grade +=  $sub_total * $school_work_type_weight/100;
+                                                        $sub_average = 0;
+                                                   @endphp
+                                                @else 
+                                                 ---- 
+                                                @endif
+                                            </span>
+                                        </td>
+                                    @endif
                                 @endforeach
+                                <td>
+                                    {{ ($total_grade ? $total_grade : NULL) }}
+                                </td>
+                                @php
+                                    $total_grade = 0;
+                                @endphp
                             </tr>
                         @empty
                             <tr class="align-middle">
@@ -292,7 +343,7 @@
             </div>
         </div>
 
-         <div class="modal fade" id="addSchoolWorkModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="addSchoolWorkModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                 <form wire:submit.prevent="add_school_work('addSchoolWorkModal')" class="w-100">
                     <div class="modal-content">
@@ -404,7 +455,96 @@
                 </form>
             </div>
         </div>
+        
+        <div class="modal fade" id="detailModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                <form class="w-100">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="detailModalTitle">Details</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" id="detailModalclose" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row">
+                            @if($curriculum)
+                                <ul class="list-group">
+                                    <li class="list-group-item"><span><strong> School year:</strong> {{ $curriculum->school_year }}</span></li>
+                                    <li class="list-group-item"><span><strong> College:</strong> {{ $curriculum->college }}</span></li>
+                                    <li class="list-group-item"><span><strong> Department:</strong> {{ $curriculum->department }}</span></li>
+                                    <li class="list-group-item"><span><strong> Faculty name:</strong> {{ $curriculum->faculty_fullname }}</span></li>
+                                    <li class="list-group-item"><span><strong> Semester:</strong> {{ $curriculum->semester }}</span></li>
+                                    <li class="list-group-item"><span><strong> Year Level:</strong> {{ $curriculum->year_level }}</span></li>
+                                    <li class="list-group-item"><span><strong> Subject:</strong> {{ $curriculum->subject }}</span></li>
+                                    <li class="list-group-item"><span><strong> Schedule:</strong> {{ $curriculum->schedule }}</span></li>
+                                    <li class="list-group-item"><span><strong> Lecture Unit:</strong> {{ $curriculum->lecture_unit }}</span></li>
+                                    <li class="list-group-item"><span><strong> Laboratory Unit:</strong> {{ $curriculum->laboratory_unit }}</span></li>
+                                    <li class="list-group-item"><span><strong> Room :</strong> {{ $curriculum->room }}</span></li>
+                                </ul>
+                            @endif
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
+        <div class="modal fade" id="weightModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                <form class="w-100" wire:submit.prevent="updateWeight('weightModal')">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="weightModalTitle">Term Weight</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" id="weightModalclose" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row">
+                            <div class="col-md-6 mb-3">
+                                <label for="term_id" class="form-label">Term</label>
+                                <select name="term_id" id="term_id" class="form-control" wire:model.live="term_weight.term_id">
+                                    @foreach ($terms as $key =>$value )
+                                        <option value="{{ $value->id }}">{{ $value->term_name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('term_weight.term_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="weight" class="form-label">Term weight</label>
+                                <input type="number" min="1" step="0.1" id="weight" wire:model.defer="term_weight.weight" placeholder="Term Weight" 
+                                    class="form-control @error('term_weight.weight') is-invalid @enderror">
+                                @error('term_weight.weight')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lecture_weight" class="form-label">Lecture weight</label>
+                                <input type="number" min="1" step="0.1" id="lecture_weight" wire:model.defer="term_weight.lecture_weight" placeholder="Lecture weight" 
+                                    class="form-control @error('term_weight.lecture_weight') is-invalid @enderror">
+                                @error('term_weight.lecture_weight')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="laboratory_weight" class="form-label">Laboratory weight</label>
+                                <input type="number" min="1" step="0.1" id="laboratory_weight" wire:model.defer="term_weight.laboratory_weight" placeholder="Laboratory weight" 
+                                    class="form-control @error('term_weight.laboratory_weight') is-invalid @enderror">
+                                @error('term_weight.laboratory_weight')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+       
     </div>
 
 </div>

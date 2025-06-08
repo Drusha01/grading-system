@@ -54,8 +54,12 @@ class AddFaculty extends Component
             'detail.code' => 'required|string|unique:faculty,code',
             'detail.first_name' => 'required|string',
             'detail.last_name' => 'required|string',
-
-            'detail.email' => 'required|email|unique:users,email',
+            'detail.email' => [
+                'required',
+                'email',
+                'unique:users,email',
+                'regex:/^[a-zA-Z0-9._%+-]+@wmsu\.edu\.ph$/'
+            ],
             'detail.password' => [
                 'required',
                 Password::min(8)
@@ -94,6 +98,8 @@ class AddFaculty extends Component
         'detail.email.email' => 'The email must be a valid email address.',
         'detail.email.required' => 'The email is required.',
         'detail.email.unique' => 'The email has already been taken.',
+        'detail.email.regex' => 'The email must be @wmsu.edu.ph domain.',
+        
         'detail.password.required' => 'The password field is required.',
         'detail.password.min' => 'The password must be at least 8 characters.',
         'detail.password.mixed_case' => 'The password must contain both uppercase and lowercase letters.',

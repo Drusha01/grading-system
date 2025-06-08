@@ -176,22 +176,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="AddSubjectModalclose" aria-label="Close"></button>
                     </div>
                     <div class="modal-body row">
-                        <div class="col-md-6 mb-3">
-                            <label for="search" class="form-label">Search subject schedule</label>
-                            <input type="text" id="search" wire:model.live="subjectFilter.search" placeholder="Search subject ..." class="form-control">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="college_id" class="form-label">Filter College</label>
-                            <select name="college_id" id="college_id" wire:model.live="subjectFilter.college_id" class="form-select">  
-                                <option value="">Select College</option>
-                                @foreach ($colleges as $key => $value )
-                                    <option value="{{ $value->id }}" >{{ $value->code.' - '.$value->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="col-md-12 mb-3">
                             <label for="schedule_id" class="form-label">Select Subject</label>
-                            <select name="schedule_id" id="schedule_id" wire:model.defer="detail.schedule_id" wire:change="selectSubject()" class="form-select @error('detail.schedule_id') is-invalid @enderror">  
+                            <select name="schedule_id" id="schedule_id" wire:model.defer="detail.schedule_id" wire:change="selectSubject()" class="form-select select2 @error('detail.schedule_id') is-invalid @enderror">  
                                 <option value="">Select Subject</option>
                                 @foreach ($subjects as $key => $value )
                                      <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code.' '.
@@ -205,19 +192,6 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror  
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="search" class="form-label">Search faculty</label>
-                            <input type="text" id="search" wire:model.live="facultyFilter.search" placeholder="Search subject ..." class="form-control">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="college_id" class="form-label">Filter College</label>
-                            <select name="college_id" id="college_id" wire:model.live="facultyFilter.college_id" class="form-select ">  
-                                <option value="">Select College</option>
-                                @foreach ($colleges as $key => $value )
-                                    <option value="{{ $value->id }}" >{{ $value->code.' - '.$value->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="col-md-12 mb-3">
                             <label for="faculty_id" class="form-label">Select Faculty</label>
                             <select name="faculty_id" id="faculty_id" wire:model.defer="detail.faculty_id" class="form-select @error('detail.faculty_id') is-invalid @enderror">  
@@ -226,7 +200,7 @@
                                      <option value="{{ $value->id }}" >{{ $value->first_name.' - '.$value->middle_name.' '.$value->last_name.' '.$value->suffix }}</option>
                                 @endforeach
                             </select>
-                            @error('detail.schedule_id')
+                            @error('detail.faculty_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror  
                         </div>
@@ -322,7 +296,7 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <label for="schedule_id" class="form-label">Select Subject</label>
-                            <select name="schedule_id" id="schedule_id" wire:model="detail.schedule_id" wire:change="selectSubject()" class="form-select @error('detail.schedule_id') is-invalid @enderror">  
+                            <select name="schedule_id" id="edit-schedule_id" wire:model="detail.schedule_id" wire:change="selectSubject()" class="form-select @error('detail.schedule_id') is-invalid @enderror">  
                                 <option value="">Select Subject</option>
                                 @foreach ($subjects as $key => $value )
                                      <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code.' '.$value->room_code.' '.

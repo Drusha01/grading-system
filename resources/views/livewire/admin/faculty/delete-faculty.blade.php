@@ -151,7 +151,7 @@
             </div>  
             <div class="row">
                 <p class="text-danger d-flex justify-content-center">
-                    Are you sure you want to activate this ?
+                    Are you sure you want to delete this ?
                 </p>
             </div>
             <div class="row my-4">

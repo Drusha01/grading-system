@@ -151,6 +151,9 @@
                             </td>
                             <td class="px-4">
                                 <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-outline-secondary" wire:click="change_password({{ $value->user_id }},'changePasswordModal')">
+                                        <svg fill="currentColor" width="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M17,9V7c0-2.8-2.2-5-5-5S7,4.2,7,7v2c-1.7,0-3,1.3-3,3v7c0,1.7,1.3,3,3,3h10c1.7,0,3-1.3,3-3v-7C20,10.3,18.7,9,17,9z M9,7c0-1.7,1.3-3,3-3s3,1.3,3,3v2H9V7z M13.1,15.5c0,0-0.1,0.1-0.1,0.1V17c0,0.6-0.4,1-1,1s-1-0.4-1-1v-1.4c-0.6-0.6-0.7-1.5-0.1-2.1c0.6-0.6,1.5-0.7,2.1-0.1C13.6,13.9,13.7,14.9,13.1,15.5z"></path></g></svg>
+                                    </button>
                                     <a href="{{ route($route.'-view',$value->id) }}" type="button" wire:wire:navigate  class="btn btn-outline-secondary d-flex justify-content-center items-center">
                                         <svg viewBox="0 0 24 24"  width="20px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9ZM11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.83 11.2807C19.542 7.15186 15.8122 5 12 5C8.18777 5 4.45796 7.15186 2.17003 11.2807C1.94637 11.6844 1.94361 12.1821 2.16029 12.5876C4.41183 16.8013 8.1628 19 12 19C15.8372 19 19.5882 16.8013 21.8397 12.5876C22.0564 12.1821 22.0536 11.6844 21.83 11.2807ZM12 17C9.06097 17 6.04052 15.3724 4.09173 11.9487C6.06862 8.59614 9.07319 7 12 7C14.9268 7 17.9314 8.59614 19.9083 11.9487C17.9595 15.3724 14.939 17 12 17Z" fill="currentColor"></path> </g></svg>
                                     </a>
@@ -183,6 +186,39 @@
         </table>
         <div class="row d-flex justify-content-end">
             {{ $table_data->links('pagination::bootstrap-5') }}
+        </div>
+
+        <div class="modal fade" id="changePasswordModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                <form wire:submit.prevent="save_password('changePasswordModal')" class="w-100">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="changePasswordModalTitle">Change password</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" id="changePasswordModalclose" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row">
+                            <div class="col-md-6 mb-3">
+                                <label for="new_password" class="form-label">New password</label>
+                                <input type="password" id="new_password" wire:model.defer="detail.new_password" placeholder="New password" class="form-control @error('detail.new_password') is-invalid @enderror">
+                                @error('detail.new_password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="confirm_password" class="form-label">Confirm password</label>
+                                <input type="password" id="confirm_password" wire:model.defer="detail.confirm_password" placeholder="Confirm password" class="form-control @error('detail.confirm_password') is-invalid @enderror">
+                                @error('detail.confirm_password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" type="submit">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

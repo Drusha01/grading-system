@@ -47,7 +47,7 @@ class Login extends Component
         Session::put('user_id', $user->id);
 
         $this->dispatch('notifySuccess', 
-            'Updated successfully!',
+            'Logged in successfully!',
                 '');
         return redirect()->intended('admin/dashboard'); 
     }

@@ -32,9 +32,6 @@ class IsFaculty
                 ->where('f.user_id','=',$userId)
                 ->get()
                 ->toArray();
-            if(count($curriculums) == 0){
-                return redirect(route('admin-dashboard'));
-            }
         }
         return $next($request);
     }

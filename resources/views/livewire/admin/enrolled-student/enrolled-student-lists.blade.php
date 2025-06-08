@@ -7,7 +7,7 @@
 
         <!-- Top Right Filters -->
         <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-2">
-            <button class="btn btn-info" wire:click="viewDetails()">
+             <button class="btn btn-info" wire:click="viewDetails('detailModal')">
                 View Details
             </button>
             
@@ -216,6 +216,40 @@
                 </form>
             </div>
         </div>
+
+        <div class="modal fade" id="detailModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                <form class="w-100">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="detailModalTitle">Details</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" id="detailModalclose" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row">
+                            @if($curriculum)
+                                <ul class="list-group">
+                                    <li class="list-group-item"><span><strong> School year:</strong> {{ $curriculum->school_year }}</span></li>
+                                    <li class="list-group-item"><span><strong> College:</strong> {{ $curriculum->college }}</span></li>
+                                    <li class="list-group-item"><span><strong> Department:</strong> {{ $curriculum->department }}</span></li>
+                                    <li class="list-group-item"><span><strong> Faculty name:</strong> {{ $curriculum->faculty_fullname }}</span></li>
+                                    <li class="list-group-item"><span><strong> Semester:</strong> {{ $curriculum->semester }}</span></li>
+                                    <li class="list-group-item"><span><strong> Year Level:</strong> {{ $curriculum->year_level }}</span></li>
+                                    <li class="list-group-item"><span><strong> Subject:</strong> {{ $curriculum->subject }}</span></li>
+                                    <li class="list-group-item"><span><strong> Schedule:</strong> {{ $curriculum->schedule }}</span></li>
+                                    <li class="list-group-item"><span><strong> Lecture Unit:</strong> {{ $curriculum->lecture_unit }}</span></li>
+                                    <li class="list-group-item"><span><strong> Laboratory Unit:</strong> {{ $curriculum->laboratory_unit }}</span></li>
+                                    <li class="list-group-item"><span><strong> Room :</strong> {{ $curriculum->room }}</span></li>
+                                </ul>
+                            @endif
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+       
     </div>
 
 
