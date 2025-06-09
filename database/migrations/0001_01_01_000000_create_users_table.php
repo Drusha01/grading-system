@@ -42,7 +42,7 @@ return new class extends Migration
         });
 
         DB::statement('
-            INSERT INTO `users`( `first_name`, `middle_name`, `last_name`, `suffix`, `email`, `password`, `admin_type`, `is_active`) VALUES ("Sairyl", NULL, "Zendaya",NULL, "sairylzendaya@wmsu.edu.ph", "$2y$12$bhn5OsWUjzGmgs.0b3cW9.gPv2493VPtOcJqLnfmXmVizf1eTLibu",1,1)
+            INSERT INTO `users`( `first_name`, `middle_name`, `last_name`, `suffix`, `email`, `password`, `admin_type`, `is_active`) VALUES ("Sairyl", NULL, "Zendaya",NULL, "sairylzendaya@wmsu.edu.ph", "$2y$10$AoiaViQZbb61ZmCqlGhou.TgLAMc.g/uA7BJg9j7eLLlzVeYxt1fq",1,1)
         ');
     }
 
