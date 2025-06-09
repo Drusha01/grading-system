@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Evaluation;
+namespace App\Livewire\Faculty\FacultyEvaluation;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class EvaluationLists extends Component
+class FacultyEvaluationLists extends Component
 {
+    use WithPagination;
 
     public $title = "Evaluation";
 
@@ -212,7 +213,7 @@ class EvaluationLists extends Component
         
         self::student_scores($student_id);
 
-        return view('livewire.admin.evaluation.evaluation-lists',[
+        return view('livewire.faculty.faculty-evaluation.faculty-evaluation-lists',[
             'table_data'=>$table_data
         ])
         ->layout('components.layouts.admin-app',[

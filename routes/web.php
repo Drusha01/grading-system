@@ -158,6 +158,7 @@ use App\Livewire\Admin\Profile\Profile;
 // faculty
 use App\Livewire\Faculty\EnrolledStudent\EnrolledStudentLists as FacultyEnrolledStudentLists;
 use App\Livewire\Faculty\MySchedules\MyScheduleLists;
+use App\Livewire\Faculty\FacultyEvaluation\FacultyEvaluationLists;
 
 // admin routes
 Route::middleware([IsUnauthenticated::class])->group(function () {
@@ -352,6 +353,8 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         Route::get('/',function (){return redirect (route('my-schedule-lists'));})->name('my-schedule-default');
         Route::get('/my-schedules',MyScheduleLists::class)->name('my-schedule-lists');
         Route::get('/enrolled-students-{curriculum_id}',FacultyEnrolledStudentLists::class)->name('my-enrolled-students');
+        Route::get('/evaluation-{curriculum_id}',FacultyEvaluationLists::class)->name('my-evaluation-lists');
+
 
         Route::get('rooms/view-{id}',ViewRoom::class)->name('my-room-view');
         Route::get('subjects/view-{id}',ViewSubject::class)->name('my-subject-view');

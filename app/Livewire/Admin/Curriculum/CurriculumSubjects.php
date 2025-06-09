@@ -201,7 +201,7 @@ class CurriculumSubjects extends Component
     public function filterSubject(){
         $this->subjects = DB::table('schedules as sh')
                 ->select(
-                    's.id' ,
+                    'sh.id' ,
                     's.college_id' ,
                     's.department_id' ,
                     's.subject_id' ,
@@ -351,7 +351,7 @@ class CurriculumSubjects extends Component
         
         // added with same sy,college,department,yl,semester, schedule
         if(
-            DB::table('curriculums')
+           $res = DB::table('curriculums')
                 ->where('school_year_id' ,'=', DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$this->detail['school_year'])->first()->id)
                 ->where('college_id' ,'=', DB::table('colleges')->where('code','=',$this->detail['college'])->first()->id)
                 ->where('department_id' ,'=', DB::table('departments')->where('code','=',$this->detail['department'])->first()->id)

@@ -255,12 +255,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 mb-3 d-flex align-items-end">
+                            <!-- <div class="col-6 mb-3 d-flex align-items-end">
                                 <div>
                                     <input class="form-check-input" type="checkbox" name="radioDefault" disabled id="radioDefault1" value="1" wire:model="detail.with_default">
                                     With Defaults??
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
