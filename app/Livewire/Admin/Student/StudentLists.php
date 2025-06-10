@@ -19,6 +19,8 @@ class StudentLists extends Component
     public $colleges = [];
     public $departments = [];
     public $year_levels = [];
+
+    public $grades = [];
     public $filters = [
         'search'=> NULL,
         'college_id' =>NULL,
@@ -100,5 +102,40 @@ class StudentLists extends Component
         ->layout('components.layouts.admin-app',[
             'title'=>$this->title
         ]);
+    }
+
+
+    public function gradeLists($id,$modal_id){
+        $this->grades = DB::table('lab_lec_grades as llg')
+            ->selectRaw('
+                COUNT(cl.subject_id) as subject_count,
+                ((SUM(llg.grade / llg.sub_weight) * 100) / COUNT(cl.subject_id)) as calculated_grade,
+                llg.other,
+                s.lecture_unit,
+                s.laboratory_unit,
+                sm.semester,
+                s.subject_id, 
+                s.subject_code,
+                cl.date_created
+            ')
+            ->join('curriculums as cl', 'cl.id', '=', 'llg.curriculum_id')
+            ->join('subjects as s', 's.id', '=', 'cl.subject_id')
+            ->join('school_years as sy', 'sy.id', '=', 'cl.school_year_id')
+            ->join('semesters as sm', 'sm.id', '=', 'cl.semester_id')
+            ->where('llg.student_id', $id)
+            ->groupBy('cl.subject_id', 
+                'llg.other', 
+                's.lecture_unit', 
+                's.laboratory_unit',
+                'sm.semester',
+                's.subject_id', 
+                's.subject_code',
+                'cl.date_created'
+                )
+            ->orderBy('cl.date_created', 'asc')
+            ->get()
+            ->toArray();
+        $this->dispatch('openModal',modal_id : $modal_id);
+        
     }
 }

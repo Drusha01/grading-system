@@ -181,7 +181,7 @@
             <li class="nav-item">
                 <a href="{{ route(name: "my-schedule-lists") }}" wire:navigate
                 class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('faculty/*')) {{ 'active' }} @endif">
-                <svg fill="currentColor" height="25px" width="25px" version="1.1" id="XMLID_98_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="schedule-clone"> <g> <path d="M24,24H6v-4H0V2h4V0h2v2h6V0h2v2h4v4h6V24z M8,22h14V12h-4v8H8V22z M2,18h14V4H2v2h14v2H2V18z M18,10h4V8h-4V10z M14,16H8 v-2h6V16z M6,16H4v-2h2V16z M14,12H8v-2h6V12z M6,12H4v-2h2V12z"></path> </g> </g> </g></svg>
+                    <svg fill="currentColor" height="25px" width="25px" version="1.1" id="XMLID_98_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="schedule-clone"> <g> <path d="M24,24H6v-4H0V2h4V0h2v2h6V0h2v2h4v4h6V24z M8,22h14V12h-4v8H8V22z M2,18h14V4H2v2h14v2H2V18z M18,10h4V8h-4V10z M14,16H8 v-2h6V16z M6,16H4v-2h2V16z M14,12H8v-2h6V12z M6,12H4v-2h2V12z"></path> </g> </g> </g></svg>
                     <span class="fs-6 ms-2 text-start">My Schedules</span>
                 </a>
             </li>
