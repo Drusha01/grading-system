@@ -90,281 +90,283 @@
             </div>
         </div>
         <div class="row mx-1" style="min-width:800px;">
-            <table class="table table-striped table-bordered text-center align-middle " >
-                <div wire:target="filters.search perPage, nextPage, previousPage, gotoPage"
-                        wire:loading.flex>
-                        <div class="form-loader">
-                            Loading...
-                            <div class="sk-wave sk-primary mt-4">
-                                <div class="sk-wave-rect"></div>
-                                <div class="sk-wave-rect"></div>
-                                <div class="sk-wave-rect"></div>
-                                <div class="sk-wave-rect"></div>
-                                <div class="sk-wave-rect"></div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered text-center align-middle " >
+                    <div wire:target="filters.search perPage, nextPage, previousPage, gotoPage"
+                            wire:loading.flex>
+                            <div class="form-loader">
+                                Loading...
+                                <div class="sk-wave sk-primary mt-4">
+                                    <div class="sk-wave-rect"></div>
+                                    <div class="sk-wave-rect"></div>
+                                    <div class="sk-wave-rect"></div>
+                                    <div class="sk-wave-rect"></div>
+                                    <div class="sk-wave-rect"></div>
+                                </div>
                             </div>
+        
                         </div>
-    
-                    </div>
-                <thead style="background:#952323;color:white;">
-                    <tr class="align-middle">
-                        <th class="sticky-col"></th>
-                        <th class="sticky-col"></th>
-                        @forelse ($school_work_types as $key => $value )
-                            @php
-                                $school_works_var = DB::table('school_works')
-                                    ->select(DB::raw('count(*) as total'))
-                                    ->where('school_work_type_id','=',$value->id)
-                                    ->first();
-                            @endphp
-                            <th colspan="{{ ( $school_works_var->total >0 ? intval($school_works_var->total) + 1: 1) }}" class="text-center">{{$value->school_work_type}} {{ $value->weight }}%</th>
-                        @empty
-                            <th colspan="1" class="text-center">No School Work Type</th>
-                        @endforelse
-                        <th class="">Total</th>
-                        <th class="">Weighted Grade</th>
-                        <th class="">Grade</th>
-                    </tr>
-                    <tr class="align-middle">
-                        <th scope="col" class="sticky-col">#</th>
-                        <th scope="col" class="sticky-col-2">Student</th>
-                         @forelse ($school_work_types as $key => $value )
-                            @php
-                                $school_works_var = DB::table('school_works')
-                                    ->where('school_work_type_id','=',$value->id)
-                                    ->get()
-                                    ->toArray();
-                            @endphp
-                            @if(count($school_works_var))
-                                @foreach ($school_works_var as $v_key => $v_value )
-                                    <th class="text-center">{{ $v_value->school_work_name }} : {{ $v_value->max_score }}</th>
-                                @endforeach
-                                <th class="text-center">Avg - {{ $value->weight }}%</th>
-                                <!-- <th class="text-center"></th> -->
-                            @else 
-                                <th class="text-center">No Data</th>
-                            @endif
-                        @empty
-                            <th colspan="1" class="text-center">No School Work Type</th>
-                        @endforelse
-                        <th scope="col" class=""></th>
-                        <th scope="col" class="">{{ $term_weight['weight'] }}</th>
-                        <th scope="col" class="">{{ 100 }}</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                     @forelse($table_data as $key =>$value)
-                            <tr class="align-middle">
-                                <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
-                                <td class="text-start">
-                                    <a href="/admin/students/view-{{ $value->id }}" target="_blank">
-                                        <span>
-                                            {{$value->code.' - '.$value->fullname}}
-                                        </span>
-                                    </a>
-                                </td>
+                    <thead style="background:#952323;color:white;">
+                        <tr class="align-middle">
+                            <th class="sticky-col"></th>
+                            <th class="sticky-col"></th>
+                            @forelse ($school_work_types as $key => $value )
                                 @php
-                                    $score_key = 0;
-                                    $average = 0;
-                                    //dd($student_scores,$value);
-                                    $temp_sub_total_score = 0;
-                                    $temp_sub_total_max_score = 0;
-                                    $school_work_type_id = 0;
-                                    $sub_total_score = 0;
-                                    $sub_total_max_score = 0;
-                                    $school_work_type_count = 0;
-                                    $school_work_type_count_prev = 0;
-                                    $school_work_type_weight = 0;
-
-                                    $sub_average = 0;
-                                    $multiplier = 55;
-                                    $offset = 45;
-                                    $total_grade = 0;
-                                    $inc = false;
-                                @endphp
-                                @foreach ($student_scores[$key] as $v_key =>$v_value )
-                                    @php
-                                        if($v_value['school_work_type_id'] == NULL ){
-                                            $sub_total_score = $temp_sub_total_score;
-                                            $sub_total_max_score = $temp_sub_total_max_score;
-                                            $temp_sub_total_score = 0;
-                                            $temp_sub_total_max_score = 0;
-                                            $school_work_type_count_prev = $school_work_type_count;
-                                            $school_work_type_count = 0;
-                                        }else{
-                                            $school_work_type_id = $v_value['school_work_type_id'];
-                                            $temp_sub_total_max_score += $v_value['max_score'];
-                                            $temp_sub_total_score += $v_value['score'];
-                                            $school_work_type_count += 1;
-                                            $school_work_type_weight = $v_value['weight'];
-                                            $sub_average += ($v_value['score']/$v_value['max_score'] * $multiplier) + $offset;
-                                            if(is_null($v_value['score'])){
-                                                $inc = true;
-                                            }
-                                        }
-                                    @endphp
-                                    @if($v_value['school_work_id'])
-                                       <td class="" wire:key="{{ $value->id.'-'.$v_value['school_work_type_id'].'-'.$v_value['score']}}">
-                                            <div class="d-flex align-middle">
-                                                <input type="number" name="" id="" value="{{ $v_value['score'] }}" class="form-control" style=" width: 100%;" 
-                                                    wire:change="updateScore(
-                                                    {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
-                                                    {{ $v_value['curriculum_id'] }},
-                                                    {{ $v_value['student_id'] }},
-                                                    {{ $v_value['term_id'] }},
-                                                    {{ $v_value['school_work_id']}},
-                                                    $event.target.value,
-                                                    {{ $v_value['max_score'] }})">
-                                            </div>
-                                        </td>
-                                    @else
-                                        <td class="">
-                                            <span>
-                                                @if($sub_total_score)
-                                                    <!-- {{ $sub_total_score}} / {{$sub_total_max_score }} -->
-                                                      
-                                                    @php
-                                                        $sub_total = $sub_average / $school_work_type_count_prev
-                                                    @endphp
-                                                    {{ number_format( $sub_total, 3, '.', '')    }}
-                                                    {{  number_format(( $sub_total * $school_work_type_weight/100), 3, '.', '')}}
-                                                   @php
-                                                        $total_grade +=  ($sub_total * $school_work_type_weight/100);
-                                                        $sub_average = 0;
-                                                   @endphp
-                                                @else 
-                                                 ---- 
-                                                @endif
-                                            </span>
-                                        </td>
-                                    @endif
-                                @endforeach
-                                <td>
-                                    {{ ($total_grade ? $total_grade : NULL) }}
-                                </td>
-                                <td>
-                                    @php
-                                        if($total_grade >= 0 && $inc ){
-                                            if(DB::table('term_grades')
-                                            ->where('curriculum_id','=',$detail['curriculum_id'])
-                                            ->where('term_id','=',$detail['term_id'])
-                                            ->where('student_id','=',$value->id)
-                                            ->first()
-                                            ){
-                                                DB::table('term_grades')
-                                                ->where('curriculum_id','=',$detail['curriculum_id'])
-                                                ->where('term_id','=',$detail['term_id'])
-                                                ->where('student_id','=',$value->id)
-                                                ->update([
-                                                    'grade' => NULL,
-                                                    'other' => 'INC',
-                                                ]);
-                                            }else{
-                                                DB::table('term_grades')
-                                                ->insert([
-                                                    'curriculum_id' => $detail['curriculum_id'],
-                                                    'term_id' => $detail['term_id'],
-                                                    'student_id' => $value->id,
-                                                    'grade' => NULL,
-                                                    'other' => 'INC',
-                                                ]);
-                                            }
-                                        }else{
-                                            if(DB::table('term_grades')
-                                            ->where('curriculum_id','=',$detail['curriculum_id'])
-                                            ->where('term_id','=',$detail['term_id'])
-                                            ->where('student_id','=',$value->id)
-                                            ->first()
-                                            ){
-                                                DB::table('term_grades')
-                                                ->where('curriculum_id','=',$detail['curriculum_id'])
-                                                ->where('term_id','=',$detail['term_id'])
-                                                ->where('student_id','=',$value->id)
-                                                ->update([
-                                                    'grade' => $total_grade * $term_weight['weight']/100,
-                                                    'other' => NULL,
-                                                ]);
-                                            }else{
-                                                DB::table('term_grades')
-                                                ->insert([
-                                                    'curriculum_id' => $detail['curriculum_id'],
-                                                    'term_id' => $detail['term_id'],
-                                                    'student_id' => $value->id,
-                                                    'grade' => $total_grade * $term_weight['weight']/100,
-                                                    'other' => NULL,
-                                                ]);
-                                            }
-                                        }
-                                    @endphp
-                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : $total_grade * $term_weight['weight'] / 100) }}
-                                </td>
-                                <td>
-                                    @php
-                                    if(DB::table('term_grades')
-                                        ->where('curriculum_id','=',$detail['curriculum_id'])
-                                        ->where('student_id','=',$value->id)
-                                        ->where('other','=','INC')
-                                        ->first()){
-                                        $grade = 'INC';
-                                    }else{
-                                        $term_grades = DB::table('term_grades')
-                                                ->select(
-                                                DB::raw('sum(grade) as grade'))
-                                                ->where('curriculum_id','=',$detail['curriculum_id'])
-                                                ->where('student_id','=',$value->id)
-                                                ->first();
-                                        if($term_grades){
-                                            $grade = $term_grades->grade;
-                                        }else{
-                                            $grade = 'INC';
-                                        }
-                                    }
-
-                                    $lab_lec = DB::table('lab_lec')
-                                        ->where('curriculum_id','=',$detail['curriculum_id'])
-                                        ->where('term_id','=',$detail['term_id'])
+                                    $school_works_var = DB::table('school_works')
+                                        ->select(DB::raw('count(*) as total'))
+                                        ->where('school_work_type_id','=',$value->id)
                                         ->first();
-                                    if($lab_lec_grades = DB::table('lab_lec_grades')
-                                        ->where('curriculum_id','=',$detail['curriculum_id'])
-                                        ->where('student_id','=',$value->id)
-                                        ->first()
-                                        ){
-                                        DB::table('lab_lec_grades')
-                                        ->where('id','=',$lab_lec_grades->id)
-                                        ->update([
-                                            'curriculum_id' => $detail['curriculum_id'],
-                                            'student_id' => $value->id,
-                                            'sub_weight' => $lab_lec->sub_weight,
-                                            'grade' => (floatval($grade) ? $grade*$lab_lec->sub_weight/100 : NULL),
-                                            'other' => (floatval($grade) ? NULL : 'INC'),
-                                        ]);
-                                    }else{
-                                        DB::table('lab_lec_grades')
-                                        ->insert([
-                                            'curriculum_id' => $detail['curriculum_id'],
-                                            'student_id' => $value->id,
-                                            'sub_weight' => $lab_lec->sub_weight,
-                                            'grade' => (floatval($grade) ? $grade*$lab_lec->sub_weight/100 : NULL),
-                                            'other' => (floatval($grade) ? NULL : 'INC'),
-                                        ]);
-                                    }
-
-                                    @endphp
-                                    {{ $grade }}
-                                </td>
-                                @php
-                                    $total_grade = 0;
                                 @endphp
-                            </tr>
-                        @empty
-                            <tr class="align-middle">
-                                <td colspan="42">
-                                    <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
-                                </td>
-                            </tr>
-                        @endforelse
-                </tbody>
-            </table>
+                                <th colspan="{{ ( $school_works_var->total >0 ? intval($school_works_var->total) + 1: 1) }}" class="text-center">{{$value->school_work_type}} {{ $value->weight }}%</th>
+                            @empty
+                                <th colspan="1" class="text-center">No School Work Type</th>
+                            @endforelse
+                            <th class="">Total</th>
+                            <th class="">Weighted Grade</th>
+                            <th class="">Grade</th>
+                        </tr>
+                        <tr class="align-middle">
+                            <th scope="col" class="sticky-col">#</th>
+                            <th scope="col" class="sticky-col-2">Student</th>
+                            @forelse ($school_work_types as $key => $value )
+                                @php
+                                    $school_works_var = DB::table('school_works')
+                                        ->where('school_work_type_id','=',$value->id)
+                                        ->get()
+                                        ->toArray();
+                                @endphp
+                                @if(count($school_works_var))
+                                    @foreach ($school_works_var as $v_key => $v_value )
+                                        <th class="text-center">{{ $v_value->school_work_name }} : {{ $v_value->max_score }}</th>
+                                    @endforeach
+                                    <th class="text-center">Avg - {{ $value->weight }}%</th>
+                                    <!-- <th class="text-center"></th> -->
+                                @else 
+                                    <th class="text-center">No Data</th>
+                                @endif
+                            @empty
+                                <th colspan="1" class="text-center">No School Work Type</th>
+                            @endforelse
+                            <th scope="col" class=""></th>
+                            <th scope="col" class="">{{ $term_weight['weight'] }}</th>
+                            <th scope="col" class="">{{ 100 }}</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($table_data as $key =>$value)
+                                <tr class="align-middle">
+                                    <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
+                                    <td class="text-start">
+                                        <a href="/admin/students/view-{{ $value->id }}" target="_blank">
+                                            <span>
+                                                {{$value->code.' - '.$value->fullname}}
+                                            </span>
+                                        </a>
+                                    </td>
+                                    @php
+                                        $score_key = 0;
+                                        $average = 0;
+                                        //dd($student_scores,$value);
+                                        $temp_sub_total_score = 0;
+                                        $temp_sub_total_max_score = 0;
+                                        $school_work_type_id = 0;
+                                        $sub_total_score = 0;
+                                        $sub_total_max_score = 0;
+                                        $school_work_type_count = 0;
+                                        $school_work_type_count_prev = 0;
+                                        $school_work_type_weight = 0;
+
+                                        $sub_average = 0;
+                                        $multiplier = 55;
+                                        $offset = 45;
+                                        $total_grade = 0;
+                                        $inc = false;
+                                    @endphp
+                                    @foreach ($student_scores[$key] as $v_key =>$v_value )
+                                        @php
+                                            if($v_value['school_work_type_id'] == NULL ){
+                                                $sub_total_score = $temp_sub_total_score;
+                                                $sub_total_max_score = $temp_sub_total_max_score;
+                                                $temp_sub_total_score = 0;
+                                                $temp_sub_total_max_score = 0;
+                                                $school_work_type_count_prev = $school_work_type_count;
+                                                $school_work_type_count = 0;
+                                            }else{
+                                                $school_work_type_id = $v_value['school_work_type_id'];
+                                                $temp_sub_total_max_score += $v_value['max_score'];
+                                                $temp_sub_total_score += $v_value['score'];
+                                                $school_work_type_count += 1;
+                                                $school_work_type_weight = $v_value['weight'];
+                                                $sub_average += ($v_value['score']/$v_value['max_score'] * $multiplier) + $offset;
+                                                if(is_null($v_value['score'])){
+                                                    $inc = true;
+                                                }
+                                            }
+                                        @endphp
+                                        @if($v_value['school_work_id'])
+                                        <td class="" wire:key="{{ $value->id.'-'.$v_value['school_work_type_id'].'-'.$v_value['score']}}">
+                                                <div class="d-flex align-middle">
+                                                    <input type="number" name="" id="" value="{{ $v_value['score'] }}" class="form-control" style=" width: 100%;" 
+                                                        wire:change="updateScore(
+                                                        {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
+                                                        {{ $v_value['curriculum_id'] }},
+                                                        {{ $v_value['student_id'] }},
+                                                        {{ $v_value['term_id'] }},
+                                                        {{ $v_value['school_work_id']}},
+                                                        $event.target.value,
+                                                        {{ $v_value['max_score'] }})">
+                                                </div>
+                                            </td>
+                                        @else
+                                            <td class="">
+                                                <span>
+                                                    @if($sub_total_score)
+                                                        <!-- {{ $sub_total_score}} / {{$sub_total_max_score }} -->
+                                                        
+                                                        @php
+                                                            $sub_total = $sub_average / $school_work_type_count_prev
+                                                        @endphp
+                                                        {{ number_format( $sub_total, 3, '.', '')    }}
+                                                        {{  number_format(( $sub_total * $school_work_type_weight/100), 3, '.', '')}}
+                                                    @php
+                                                            $total_grade +=  ($sub_total * $school_work_type_weight/100);
+                                                            $sub_average = 0;
+                                                    @endphp
+                                                    @else 
+                                                    ---- 
+                                                    @endif
+                                                </span>
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                    <td>
+                                        {{ ($total_grade ? $total_grade : NULL) }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            if($total_grade >= 0 && $inc ){
+                                                if(DB::table('term_grades')
+                                                ->where('curriculum_id','=',$detail['curriculum_id'])
+                                                ->where('term_id','=',$detail['term_id'])
+                                                ->where('student_id','=',$value->id)
+                                                ->first()
+                                                ){
+                                                    DB::table('term_grades')
+                                                    ->where('curriculum_id','=',$detail['curriculum_id'])
+                                                    ->where('term_id','=',$detail['term_id'])
+                                                    ->where('student_id','=',$value->id)
+                                                    ->update([
+                                                        'grade' => NULL,
+                                                        'other' => 'INC',
+                                                    ]);
+                                                }else{
+                                                    DB::table('term_grades')
+                                                    ->insert([
+                                                        'curriculum_id' => $detail['curriculum_id'],
+                                                        'term_id' => $detail['term_id'],
+                                                        'student_id' => $value->id,
+                                                        'grade' => NULL,
+                                                        'other' => 'INC',
+                                                    ]);
+                                                }
+                                            }else{
+                                                if(DB::table('term_grades')
+                                                ->where('curriculum_id','=',$detail['curriculum_id'])
+                                                ->where('term_id','=',$detail['term_id'])
+                                                ->where('student_id','=',$value->id)
+                                                ->first()
+                                                ){
+                                                    DB::table('term_grades')
+                                                    ->where('curriculum_id','=',$detail['curriculum_id'])
+                                                    ->where('term_id','=',$detail['term_id'])
+                                                    ->where('student_id','=',$value->id)
+                                                    ->update([
+                                                        'grade' => $total_grade * $term_weight['weight']/100,
+                                                        'other' => NULL,
+                                                    ]);
+                                                }else{
+                                                    DB::table('term_grades')
+                                                    ->insert([
+                                                        'curriculum_id' => $detail['curriculum_id'],
+                                                        'term_id' => $detail['term_id'],
+                                                        'student_id' => $value->id,
+                                                        'grade' => $total_grade * $term_weight['weight']/100,
+                                                        'other' => NULL,
+                                                    ]);
+                                                }
+                                            }
+                                        @endphp
+                                        {{ (($total_grade >= 0 && $inc) ? 'INC' : $total_grade * $term_weight['weight'] / 100) }}
+                                    </td>
+                                    <td>
+                                        @php
+                                        if(DB::table('term_grades')
+                                            ->where('curriculum_id','=',$detail['curriculum_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->where('other','=','INC')
+                                            ->first()){
+                                            $grade = 'INC';
+                                        }else{
+                                            $term_grades = DB::table('term_grades')
+                                                    ->select(
+                                                    DB::raw('sum(grade) as grade'))
+                                                    ->where('curriculum_id','=',$detail['curriculum_id'])
+                                                    ->where('student_id','=',$value->id)
+                                                    ->first();
+                                            if($term_grades){
+                                                $grade = $term_grades->grade;
+                                            }else{
+                                                $grade = 'INC';
+                                            }
+                                        }
+
+                                        $lab_lec = DB::table('lab_lec')
+                                            ->where('curriculum_id','=',$detail['curriculum_id'])
+                                            ->where('term_id','=',$detail['term_id'])
+                                            ->first();
+                                        if($lab_lec_grades = DB::table('lab_lec_grades')
+                                            ->where('curriculum_id','=',$detail['curriculum_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->first()
+                                            ){
+                                            DB::table('lab_lec_grades')
+                                            ->where('id','=',$lab_lec_grades->id)
+                                            ->update([
+                                                'curriculum_id' => $detail['curriculum_id'],
+                                                'student_id' => $value->id,
+                                                'sub_weight' => $lab_lec->sub_weight,
+                                                'grade' => (floatval($grade) ? $grade*$lab_lec->sub_weight/100 : NULL),
+                                                'other' => (floatval($grade) ? NULL : 'INC'),
+                                            ]);
+                                        }else{
+                                            DB::table('lab_lec_grades')
+                                            ->insert([
+                                                'curriculum_id' => $detail['curriculum_id'],
+                                                'student_id' => $value->id,
+                                                'sub_weight' => $lab_lec->sub_weight,
+                                                'grade' => (floatval($grade) ? $grade*$lab_lec->sub_weight/100 : NULL),
+                                                'other' => (floatval($grade) ? NULL : 'INC'),
+                                            ]);
+                                        }
+
+                                        @endphp
+                                        {{ $grade }}
+                                    </td>
+                                    @php
+                                        $total_grade = 0;
+                                    @endphp
+                                </tr>
+                            @empty
+                                <tr class="align-middle">
+                                    <td colspan="42">
+                                        <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="row d-flex justify-content-end">
             {{ $table_data->links('pagination::bootstrap-5') }}

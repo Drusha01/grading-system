@@ -147,6 +147,15 @@ class AddSchoolYear extends Component
             ]);
         }
 
+        if (DB::table('school_years')
+            ->where('year_start', '=',$this->school_year['year_start'])
+            ->where('year_end', '=', $this->school_year['year_end'])
+            ->first()) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'school_year.date_start_date' => 'School year added.',
+            ]);
+        }
+
         if(DB::table('school_years')
             ->insert([
                 'year_start'=>$this->school_year['year_start'],

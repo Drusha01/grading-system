@@ -73,64 +73,68 @@
                 </a>
             </div>
         </div>
-        <table class="table table-striped table-bordered position-relative" >
-            <div wire:target="filters.search perPage, nextPage, previousPage, gotoPage"
-                    wire:loading.flex>
-                    <div class="form-loader">
-                        Loading...
-                        <div class="sk-wave sk-primary mt-4">
-                            <div class="sk-wave-rect"></div>
-                            <div class="sk-wave-rect"></div>
-                            <div class="sk-wave-rect"></div>
-                            <div class="sk-wave-rect"></div>
-                            <div class="sk-wave-rect"></div>
-                        </div>
-                    </div>
+        <div class="row ">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered position-relative" >
+                    <div wire:target="filters.search perPage, nextPage, previousPage, gotoPage"
+                            wire:loading.flex>
+                            <div class="form-loader">
+                                Loading...
+                                <div class="sk-wave sk-primary mt-4">
+                                    <div class="sk-wave-rect"></div>
+                                    <div class="sk-wave-rect"></div>
+                                    <div class="sk-wave-rect"></div>
+                                    <div class="sk-wave-rect"></div>
+                                    <div class="sk-wave-rect"></div>
+                                </div>
+                            </div>
 
-                </div>
-            <thead style="background:#952323;color:white;">
-                <tr class="align-middle">
-                    <th scope="col" class="px-4">#</th>
-                     <th scope="col" class="px-4 ">ID</th>
-                    <th scope="col" class="px-4 ">FullName</th>
-                    <th scope="col" class="px-4 ">College</th>
-                    <th scope="col" class="px-4 ">Department</th>
-                    <th scope="col" class="px-4 ">Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                 @forelse($table_data as $key =>$value)
-                    <tr class="align-middle">
-                        <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
-                             <td class="px-4">
-                                <a href="/admin/students/view-{{ $value->id }}" target="_blank">
-                                    {{$value->code}}
-                                </a>
-                            </td>
-                            <td class="px-4">
-                                {{$value->fullname}}
-                            </td>
-                            <td class="px-4">
-                                <a href="/admin/colleges/view-{{ $value->college_id }}" target="_blank">
-                                    {{$value->college_code}}
-                                </a>
-                            </td>
-                            <td class="px-4">
-                                <a href="/admin/departments/view-{{ $value->department_id }}"  target="_blank">
-                                    {{$value->department_code}}
-                                </a>
-                            </td>
-                            <td class="px-4">{{$value->email}}</td>
-                        </tr>
-                    @empty
+                        </div>
+                    <thead style="background:#952323;color:white;">
                         <tr class="align-middle">
-                            <td colspan="42">
-                                <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
-                            </td>
+                            <th scope="col" class="px-4">#</th>
+                            <th scope="col" class="px-4 ">ID</th>
+                            <th scope="col" class="px-4 ">FullName</th>
+                            <th scope="col" class="px-4 ">College</th>
+                            <th scope="col" class="px-4 ">Department</th>
+                            <th scope="col" class="px-4 ">Email</th>
                         </tr>
-                    @endforelse
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        @forelse($table_data as $key =>$value)
+                            <tr class="align-middle">
+                                <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
+                                    <td class="px-4">
+                                        <a href="/admin/students/view-{{ $value->id }}" target="_blank">
+                                            {{$value->code}}
+                                        </a>
+                                    </td>
+                                    <td class="px-4">
+                                        {{$value->fullname}}
+                                    </td>
+                                    <td class="px-4">
+                                        <a href="/admin/colleges/view-{{ $value->college_id }}" target="_blank">
+                                            {{$value->college_code}}
+                                        </a>
+                                    </td>
+                                    <td class="px-4">
+                                        <a href="/admin/departments/view-{{ $value->department_id }}"  target="_blank">
+                                            {{$value->department_code}}
+                                        </a>
+                                    </td>
+                                    <td class="px-4">{{$value->email}}</td>
+                                </tr>
+                            @empty
+                                <tr class="align-middle">
+                                    <td colspan="42">
+                                        <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="row d-flex justify-content-end">
             {{ $table_data->links('pagination::bootstrap-5') }}
         </div>
