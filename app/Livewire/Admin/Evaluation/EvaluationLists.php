@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+
 
 class EvaluationLists extends Component
 {
@@ -72,6 +75,27 @@ class EvaluationLists extends Component
         'number_order' => NULL,
     ];
 
+    public $current_school_work_type = [];
+
+    public $dayMap = [
+        'M' => Carbon::MONDAY,
+        'T' => Carbon::TUESDAY,
+        'W' => Carbon::WEDNESDAY,
+        'R' => Carbon::THURSDAY, // Common for Thursday
+        'F' => Carbon::FRIDAY,
+        'S' => Carbon::SATURDAY,
+        'U' => Carbon::SUNDAY,   // or 'N' if you're using ISO-8601 (1–7)
+    ];
+    public $customDayMap = [
+        'Sun' => 0,
+        'M'   => 1,
+        'T'   => 2,
+        'W'   => 3,
+        'TH'  => 4,
+        'F'   => 5,
+        'S'   => 6,
+    ];
+
     public $student_scores = [];
 
     public function mount($curriculum_id){
@@ -95,6 +119,94 @@ class EvaluationLists extends Component
         self::getDetails();
         $this->term_weight['term_id'] = $this->detail['term_id'];
         self::fetch_terms();
+
+        self::initilize_attendance();
+        
+    
+    }
+
+    public function initilize_attendance(){
+        $curriculum_detail = DB::table('curriculums as cl')
+            ->select(
+                'sh.id as schedule_id' ,
+                'sh.faculty_id' ,
+                'sh.room_id' ,
+                'sh.code' ,
+                'sh.schedule_from' ,
+                'sh.schedule_to' ,
+                'sh.day' ,
+                'sh.is_lec' ,
+                'sm.semester' ,
+                'sm.date_start_date' ,
+                'sm.date_start_month' ,
+                'sm.date_end_date' ,
+                'sm.date_end_month' ,
+                'sy.year_start' ,
+                'sy.year_end' ,
+            )
+            ->join('schedules as sh','sh.id','cl.subject_id')
+            ->join('semesters as sm','sm.id','cl.semester_id')
+            ->join('school_years as sy','sy.id','cl.school_year_id')
+            ->first();
+
+        $start_semester_date = date('Y-m-d',strtotime($curriculum_detail->date_start_date.'-'.$curriculum_detail->date_start_month.'-'.$curriculum_detail->year_start));
+        $end_semester_date = date('Y-m-d',strtotime($curriculum_detail->date_end_date.'-'.$curriculum_detail->date_end_month.'-'.$curriculum_detail->year_end));
+        $selectedDays = json_decode($curriculum_detail->day);
+
+        $start = Carbon::parse($start_semester_date);
+        $end = Carbon::parse($end_semester_date);
+        $targetWeekdays = collect($selectedDays)
+            ->map(fn($code) => $this->customDayMap[$code])
+            ->filter(); // Remove any invalid mappings
+
+        // Generate matching dates
+        $matchingDates = collect();
+        $current = $start->copy();
+
+        
+        while ($current <= $end) {
+            if ($targetWeekdays->contains($current->dayOfWeek)) {
+                $matchingDates->push($current->toDateString());
+            }
+            $current->addDay();
+        }
+        
+        $this->current_school_work_type = DB::table('school_works_types')  
+            ->where('school_work_type','=','Attendance')  
+            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('term_id','=',$this->detail['term_id'])
+            ->first();
+
+        $attendance_dates = DB::table('school_works')  
+            ->where('school_work_type_id','=',$this->current_school_work_type->id)  
+            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('term_id','=',$this->detail['term_id'])
+            ->get()
+            ->toArray();
+        if(count($attendance_dates)){
+
+            foreach ($matchingDates as $key => $value) {
+                $attendance_name = 'Attendance for '.Carbon::parse($value)->format('F, d Y');
+                if(!DB::table('school_works')  
+                    ->where('school_work_name','=',$attendance_name)  
+                    ->where('curriculum_id','=',$this->detail['curriculum_id'])
+                    ->where('term_id','=',$this->detail['term_id'])
+                    ->first()){
+                    DB::table('school_works')
+                        ->insert([
+                            'id' => NULL,
+                            'curriculum_id' => $this->detail['curriculum_id'],
+                            'term_id' => $this->detail['term_id'],
+                            'school_work_name' => $attendance_name,
+                            'school_work_type_id' => $this->current_school_work_type->id,
+                            'max_score' => 1,
+                            'schedule_date' => $value,
+                            'number_order' => NULL,
+                        ]);
+                }
+            }
+        }
+      
     }
 
     public function UpdatedDetailTermId($term_id){
@@ -408,7 +520,7 @@ class EvaluationLists extends Component
             ->where('id','<>',$id)
             ->first();
 
-        if($total_weight->total_weight + $weight >100 ){
+        if($total_weight->total_weight + intval($weight) > 100 ){
              $this->dispatch('notifyWarning', 
             'The weight exceeds '.(100 - $total_weight->total_weight),
                 '');
@@ -419,7 +531,7 @@ class EvaluationLists extends Component
         $res = DB::table('school_works_types')
             ->where('id','=',$id)
             ->update([
-                'weight'=> $weight
+                'weight'=> intval($weight)
             ]);
         if($res){
             $this->dispatch('notifySuccess', 
@@ -582,7 +694,7 @@ class EvaluationLists extends Component
                         'curriculum_id' => $this->detail['curriculum_id'],
                         'term_id' => $this->detail['term_id'],
                         'student_id'=>$v_value,
-                        'weight'=> NULL,
+                        'weight'=> $s_value->weight,
                         'school_work_id' => NULL,
                         'school_work_type_id' => NULL,
                         'key' => $key ,
@@ -708,5 +820,10 @@ class EvaluationLists extends Component
         $this->dispatch('notifySuccess', 
             'Updated successfully!',
                 '');
+    }
+
+    public function viewAttendance($modal_id){
+        $this->dispatch('openModal',modal_id:$modal_id);
+        
     }
 }

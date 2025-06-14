@@ -21,6 +21,8 @@ class StudentLists extends Component
     public $year_levels = [];
 
     public $grades = [];
+
+    public $equivalent_grade = [];
     public $filters = [
         'search'=> NULL,
         'college_id' =>NULL,
@@ -133,6 +135,10 @@ class StudentLists extends Component
                 'cl.date_created'
                 )
             ->orderBy('cl.date_created', 'asc')
+            ->get()
+            ->toArray();
+
+        $this->equivalent_grade = DB::table('point_grade_equivalent')
             ->get()
             ->toArray();
         $this->dispatch('openModal',modal_id : $modal_id);

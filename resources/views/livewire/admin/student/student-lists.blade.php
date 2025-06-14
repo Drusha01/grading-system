@@ -196,6 +196,7 @@
                                             <th scope="col" class="px-4">#</th>
                                             <th scope="col" class="px-4 ">Subject</th>
                                             <th scope="col" class="text-center px-4 ">Grade</th> 
+                                            <th scope="col" class="text-center px-4 ">Grade Equivalent</th> 
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -208,6 +209,17 @@
                                                 <td class="px-4">
                                                     @if($value->calculated_grade)
                                                         {{ $value->calculated_grade }}
+                                                    @else 
+                                                        {{ $value->other }}
+                                                    @endif
+                                                </td>
+                                                <td class="px-4">
+                                                    @if($value->calculated_grade)
+                                                        @foreach ($equivalent_grade as $eg_key =>$eg_value)
+                                                            @if($value->calculated_grade >= $eg_value->minimum && $value->calculated_grade <= $eg_value->maximum)
+                                                                {{ $eg_value->grade }}
+                                                            @endif
+                                                        @endforeach
                                                     @else 
                                                         {{ $value->other }}
                                                     @endif

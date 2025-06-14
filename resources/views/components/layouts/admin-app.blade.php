@@ -74,6 +74,13 @@
         <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+
+
         <!-- bootstrap-5 -->
          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
@@ -201,7 +208,6 @@
                 Livewire.navigate(url);
             });
             Livewire.on('openModal', ({ modal_id }) => {
-                console.log(modal_id);
                 var myModal = new bootstrap.Modal(document.getElementById(modal_id));
                 myModal.show();
             }); 
@@ -209,6 +215,32 @@
                 var myModal = document.getElementById(modal_id+'close');
                 myModal.click();
             }); 
+
+            $('#attendanceModal').on('shown.bs.modal', function () {
+                var calendarEl = document.getElementById('flatpickr-calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    initialDate: new Date(),
+                    height: 400,
+                    events: 
+                        [{
+                            start: '2025-06-15',
+                            display: 'background',
+                            color: 'green'
+                        },
+                        {
+                            start: '2025-06-18',
+                            display: 'background',
+                            color: 'green'
+                        }
+                    ], 
+                    dateClick: function(info) {
+                        alert('Date clicked: ' + info.dateStr);
+                    }
+                });
+                calendar.render();
+            });
+
         </script>
         <!-- <script>
             function initSelect2() {
