@@ -463,7 +463,9 @@
                                                     wire:change="updateSchoolWorktype('{{$value->id }}', $event.target.value)" class="form-control" placeholder="weight" min="0.0" step="0.1" >
                                             </td>
                                             <td class="px-4">
-                                                {{number_format($value->weight / $weight->total_weight *100 , 2, '.', '') }}%
+                                                @if($weight->total_weight)
+                                                    {{number_format($value->weight / $weight->total_weight *100 , 2, '.', '') }}%
+                                                @endif
                                             </td>
                                             @if($value->school_work_type != 'Attendance')
                                                 <td class="d-flex justify-content-center text-center">
