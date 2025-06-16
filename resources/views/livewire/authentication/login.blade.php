@@ -20,9 +20,6 @@
                 <a href="/forgot-password" wire:navigate id="forgot-pass" class="form-text" name="login" id="login">Forgot your password?</a>
             </div>
             <button type="submit" name="login" class="btn d-flex p-2 p-sm-3 justify-content-center">LOGIN</button>
-            <div id="emailHelp" class="form-text d-flex justify-content-center">
-                <p>Don't have an account?<a href="signup.php" style="color: #7797f7;"> Sign up</a></p>
-            </div>
         </form>
     </div>
     </div>

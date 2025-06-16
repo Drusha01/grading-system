@@ -77,20 +77,23 @@ class DeleteStudent extends Component
                 'year_level' ,
                 DB::raw('CONCAT_WS(" ", s.first_name, s.middle_name, s.last_name, s.suffix) AS fullname'),
                 's.code' ,
-                'first_name' ,
-                'middle_name' ,
-                'last_name' ,
-                'suffix' ,
-                'email' ,
+                's.first_name' ,
+                's.middle_name' ,
+                's.last_name' ,
+                's.suffix' ,
+                's.email' ,
                 's.is_active' ,
                 'c.name as college',
                 'd.name as department',
                 'yl.year_level',
-                's.year_level_id'
+                's.year_level_id',
+                's.user_id'
             )
             ->leftJoin('colleges as c','c.id','s.college_id')
             ->leftJoin('departments as d','d.id','s.department_id')
             ->leftJoin('year_levels as yl','yl.id','s.year_level_id')
+            ->leftJoin('users as u','u.id','s.user_id')
+            ->where('s.id','=',$id)
             ->first();
 
         $this->detail = [
@@ -105,6 +108,7 @@ class DeleteStudent extends Component
             'last_name'=> $detail->last_name,
             'suffix'=> $detail->suffix,
             'is_active'=> $detail->is_active,
+            'user_id'=> $detail->user_id,
 
         ];
 
@@ -129,6 +133,11 @@ class DeleteStudent extends Component
             )
             ->update([
                 'is_active' => !$this->detail['is_active'],
+            ]);
+        DB::table('users')
+            ->where('id','=',$this->detail['user_id'])
+            ->update([
+            'is_active'=> !$this->detail['is_active'],
             ]);
         $this->dispatch('notifySuccess', 
         'Updated successfully!',

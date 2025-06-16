@@ -177,12 +177,28 @@
                 </div>
             </li>
             @endif
-            @if(count($curriculums) >= 0)
+            @if(count($curriculums) > 0)
             <li class="nav-item">
                 <a href="{{ route(name: "my-schedule-lists") }}" wire:navigate
                 class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('faculty/*')) {{ 'active' }} @endif">
                     <svg fill="currentColor" height="25px" width="25px" version="1.1" id="XMLID_98_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="schedule-clone"> <g> <path d="M24,24H6v-4H0V2h4V0h2v2h6V0h2v2h4v4h6V24z M8,22h14V12h-4v8H8V22z M2,18h14V4H2v2h14v2H2V18z M18,10h4V8h-4V10z M14,16H8 v-2h6V16z M6,16H4v-2h2V16z M14,12H8v-2h6V12z M6,12H4v-2h2V12z"></path> </g> </g> </g></svg>
+                    <span class="fs-6 ms-2 text-start">Schedules</span>
+                </a>
+            </li>
+            @endif
+            @if($student)
+            <li class="nav-item">
+                <a href="{{ route(name: "my-schedules") }}" wire:navigate
+                class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('student/my-schedules*')) {{ 'active' }} @endif">
+                    <svg fill="currentColor" height="25px" width="25px" version="1.1" id="XMLID_98_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="schedule-clone"> <g> <path d="M24,24H6v-4H0V2h4V0h2v2h6V0h2v2h4v4h6V24z M8,22h14V12h-4v8H8V22z M2,18h14V4H2v2h14v2H2V18z M18,10h4V8h-4V10z M14,16H8 v-2h6V16z M6,16H4v-2h2V16z M14,12H8v-2h6V12z M6,12H4v-2h2V12z"></path> </g> </g> </g></svg>
                     <span class="fs-6 ms-2 text-start">My Schedules</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route(name: "my-grades") }}" wire:navigate
+                class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('student/my-grades*')) {{ 'active' }} @endif">
+                    <svg viewBox="0 0 1024 1024" height="25px" width="25px" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M981.333333 960h-21.333333V576a21.333333 21.333333 0 0 0-42.666667 0v384h-128V213.333333a42.666667 42.666667 0 0 1 42.666667-42.666666h42.666667a42.666667 42.666667 0 0 1 42.666666 42.666666v21.333334a21.333333 21.333333 0 0 0 42.666667 0v-21.333334a85.333333 85.333333 0 0 0-85.333333-85.333333h-42.666667a85.333333 85.333333 0 0 0-85.333333 85.333333v746.666667h-85.333334V426.666667a85.333333 85.333333 0 0 0-85.333333-85.333334h-42.666667a85.333333 85.333333 0 0 0-85.333333 85.333334v533.333333h-85.333333V640a85.333333 85.333333 0 0 0-85.333334-85.333333h-42.666666a85.333333 85.333333 0 0 0-85.333334 85.333333v320H64V42.666667a21.333333 21.333333 0 0 0-42.666667 0v938.666666a21.333333 21.333333 0 0 0 21.333334 21.333334h938.666666a21.333333 21.333333 0 0 0 0-42.666667z m-661.333333 0H192V640a42.666667 42.666667 0 0 1 42.666667-42.666667h42.666666a42.666667 42.666667 0 0 1 42.666667 42.666667z m298.666667 0h-128V426.666667a42.666667 42.666667 0 0 1 42.666666-42.666667h42.666667a42.666667 42.666667 0 0 1 42.666667 42.666667z" fill="currentColor"></path><path d="M938.666667 384a21.333333 21.333333 0 0 0-21.333334 21.333333v85.333334a21.333333 21.333333 0 0 0 42.666667 0v-85.333334a21.333333 21.333333 0 0 0-21.333333-21.333333zM958.293333 311.893333a24.533333 24.533333 0 0 0-4.48-7.04l-3.2-2.56a16.213333 16.213333 0 0 0-3.84-1.92L942.933333 298.666667a21.333333 21.333333 0 0 0-12.373333 1.28 19.2 19.2 0 0 0-11.52 11.52 21.333333 21.333333 0 0 0-1.706667 8.533333 21.333333 21.333333 0 0 0 6.186667 15.146667 21.333333 21.333333 0 0 0 7.04 4.48A21.333333 21.333333 0 0 0 938.666667 341.333333a21.333333 21.333333 0 0 0 15.146666-6.186666A22.4 22.4 0 0 0 960 320a21.333333 21.333333 0 0 0-1.706667-8.106667z" fill="currentColor"></path></g></svg>
+                    <span class="fs-6 ms-2 text-start">My Grades</span>
                 </a>
             </li>
             @endif

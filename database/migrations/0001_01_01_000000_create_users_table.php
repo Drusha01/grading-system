@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('suffix')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->integer('admin_type')->default(2)->comment('1-admin,2-faculty');
+            $table->integer('admin_type')->default(2)->comment('1-admin,2-faculty,3-student');
             $table->boolean('is_active')->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

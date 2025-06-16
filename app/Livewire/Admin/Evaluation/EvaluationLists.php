@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 class EvaluationLists extends Component
 {
 
+    use WithPagination;
     public $title = "Evaluation";
 
     public $route = "evaluation";
@@ -183,7 +184,7 @@ class EvaluationLists extends Component
             ->where('term_id','=',$this->detail['term_id'])
             ->get()
             ->toArray();
-        if(count($attendance_dates)){
+        if(count($attendance_dates) <=0){
 
             foreach ($matchingDates as $key => $value) {
                 $attendance_name = 'Attendance for '.Carbon::parse($value)->format('F, d Y');
@@ -811,7 +812,7 @@ class EvaluationLists extends Component
                 'term_weight.weight' => 'Weight exceeds '.(100 - $total->total).'!' ,
             ]);
         }
-        $res = DB::table('terms')
+        $res = DB::table('t erms')
             ->where('curriculum_id','=',$this->detail['curriculum_id'])
             ->where('id','=',$this->term_weight['term_id'])
             ->update([
@@ -824,6 +825,11 @@ class EvaluationLists extends Component
 
     public function viewAttendance($modal_id){
         $this->dispatch('openModal',modal_id:$modal_id);
-        
+        $this->dispatch('openAttendanceModal', [
+            'obj' => [
+                'curriculum_id' => $this->detail['curriculum_id'],
+                'term_id' => $this->detail['term_id'],
+            ]
+        ]);
     }
 }

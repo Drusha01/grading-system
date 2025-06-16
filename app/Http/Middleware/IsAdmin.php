@@ -21,12 +21,24 @@ class IsAdmin
 
         if(isset($userId)){
 
-            $user = DB::table('users')
+            $admin = DB::table('users')
+                ->where('id','=',$userId)
+                ->where('is_active','=',1)
+                ->where('admin_type','=',1)->first();
+
+            $faculty = DB::table('users')
                 ->where('id','=',$userId)
                 ->where('is_active','=',1)
                 ->where('admin_type','=',2)->first();
-            if($user){
+            $student = DB::table('users')
+                ->where('id','=',$userId)
+                ->where('is_active','=',1)
+                ->where('admin_type','=',3)->first();
+            if($faculty){
                 return redirect('/faculty');
+            }
+            if($student){
+                return redirect('/student');
             }
         }
         

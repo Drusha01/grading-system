@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Hash;
 
 class StudentLists extends Component
 {
@@ -29,6 +31,13 @@ class StudentLists extends Component
         'department_id' =>NULL,
         'year_level_id' =>NULL,
     ];
+
+    public $detail = [
+        'user_id'=> NULL,
+        'new_password' => NULL,
+        'confirm_password' => NULL,
+    ];
+
 
     public function mount(){
         $this->colleges = DB::table('colleges')
@@ -143,5 +152,59 @@ class StudentLists extends Component
             ->toArray();
         $this->dispatch('openModal',modal_id : $modal_id);
         
+    }
+
+    public function rules(){
+        return [
+        'detail.new_password' => [
+        'required',
+            Password::min(8)
+                ->mixedCase()
+                ->letters()
+                ->numbers()
+                ->symbols()
+                ->uncompromised(),
+            ],
+        'detail.confirm_password' => 'required|same:detail.new_password',
+        ];
+    }
+    protected $messages = [
+        'detail.new_password.required' => 'The new password field is required.',
+        'detail.new_password.min' => 'The new password must be at least 8 characters.',
+        'detail.new_password.mixed_case' => 'The new password must contain both uppercase and lowercase letters.',
+        'detail.new_password.letters' => 'The new password must include at least one letter.',
+        'detail.new_password.numbers' => 'The new password must include at least one number.',
+        'detail.new_password.symbols' => 'The new password must include at least one special character.',
+        'detail.new_password.uncompromised' => 'This new password has appeared in a data leak. Please choose a different password.',
+        
+        'detail.confirm_password.required_with' => 'Please confirm your password.',
+        'detail.confirm_password.required' => 'The confirm password field is required.',
+        'detail.confirm_password.same' => 'The password confirmation does not match.',
+    ];
+
+    public function change_password($id,$modal_id){
+        $this->detail = [
+            'user_id'=> $id,
+            'new_password' => NULL,
+            'confirm_password' => NULL,
+        ];
+        $this->dispatch('openModal',modal_id:$modal_id);
+    }
+
+    public function save_password($modal_id){
+        $this->validate();
+
+        $res = DB::table('users')
+            ->where('id','=',$this->detail['user_id'])
+            ->update([
+                'password' => Hash::make($this->detail['new_password'])
+            ]);
+
+        if($res){
+            $this->dispatch('notifySuccess', 
+            'Updated successfully!',
+                '');
+        }
+         $this->dispatch('closeModal',modal_id:$modal_id);
     }
 }

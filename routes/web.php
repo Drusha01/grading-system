@@ -10,6 +10,7 @@ use App\Http\Middleware\IsAuthenticated;
 use App\Http\Middleware\IsFaculty;
 use App\Http\Middleware\IsUnauthenticated;
 use App\Http\Middleware\IsValid;
+use App\Http\Middleware\IsStudent;
 
 // authentication
 use App\Livewire\Authentication\Login;
@@ -148,10 +149,10 @@ use App\Livewire\Admin\EnrolledStudent\DeleteEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\ActivateEnrolledStudent;
 use App\Livewire\Admin\EnrolledStudent\EnrolledStudentLists;
 
-
+use App\Http\Controllers\AttendanceController;
 
 use App\Livewire\Admin\Evaluation\EvaluationLists;
-
+use App\Livewire\Admin\Evaluation\AttendanceLists;
 
 use App\Livewire\Admin\Profile\Profile;
 
@@ -159,6 +160,12 @@ use App\Livewire\Admin\Profile\Profile;
 use App\Livewire\Faculty\EnrolledStudent\EnrolledStudentLists as FacultyEnrolledStudentLists;
 use App\Livewire\Faculty\MySchedules\MyScheduleLists;
 use App\Livewire\Faculty\FacultyEvaluation\FacultyEvaluationLists;
+use App\Livewire\Faculty\FacultyEvaluation\AttendanceLists as FacultyAttendanceLists;
+
+
+// student 
+use App\Livewire\Student\MyGrades\MyGrades;
+use App\Livewire\Student\MySchedules\MySchedules;
 
 // admin routes
 Route::middleware([IsUnauthenticated::class])->group(function () {
@@ -302,7 +309,8 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
 
         Route::prefix('curriculums')->group(function () {
             Route::get('/',CurriculumLists::class)->name('curriculum-lists');
-
+            
+            Route::get('/attendance-{curriculum_id}-{id}',AttendanceLists::class)->name('attendance-lists');
             Route::get('/evaluation-{curriculum_id}',EvaluationLists::class)->name('evaluation-lists');
             Route::get('/enrolled-{curriculum_id}',EnrolledStudentLists::class)->name('enrolled-student-lists');
             Route::get('/enrolled-{curriculum_id}/add',AddEnrolledStudent::class)->name('enrolled-student-add');
@@ -351,11 +359,11 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
 
     Route::prefix('faculty')->middleware([IsFaculty::class])->group(function () {
         Route::get('/',function (){return redirect (route('my-schedule-lists'));})->name('my-schedule-default');
+        
         Route::get('/my-schedules',MyScheduleLists::class)->name('my-schedule-lists');
         Route::get('/enrolled-students-{curriculum_id}',FacultyEnrolledStudentLists::class)->name('my-enrolled-students');
         Route::get('/evaluation-{curriculum_id}',FacultyEvaluationLists::class)->name('my-evaluation-lists');
-
-
+        Route::get('/attendance-{curriculum_id}-{id}',FacultyAttendanceLists::class)->name('my-attendance-lists');
         Route::get('rooms/view-{id}',ViewRoom::class)->name('my-room-view');
         Route::get('subjects/view-{id}',ViewSubject::class)->name('my-subject-view');
         Route::get('year-levels/view-{id}',ViewYearLevel::class)->name('my-year-level-view');
@@ -368,4 +376,21 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/',Profile::class)->name('admin-profile');
     });
-});
+
+    Route::prefix('student')->middleware([IsStudent::class])->group(function () {
+        Route::get('/',function (){return redirect (route('my-grades'));})->name('my-grades-default');
+        Route::get('/my-grades',MyGrades::class)->name('my-grades');
+        Route::get('/my-schedules',MySchedules::class)->name('my-schedules');
+    });
+
+
+
+    Route::prefix('api')->group(function () {
+        Route::get('attendance-dates',[AttendanceController::class,'attendance_dates'])->name('attendance-dates');
+        Route::post('attendance-dates/remove',[AttendanceController::class,'remove_attendace_date'])->name('attendance-dates-remove');
+        Route::post('attendance-dates/add',[AttendanceController::class,'add_attendace_date'])->name('attendance-dates-add');
+    });
+}); 
+
+
+

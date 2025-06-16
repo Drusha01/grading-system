@@ -89,7 +89,7 @@
                 </a>
             </div>
         </div>
-        <div class="row mx-1" style="min-width:800px;">
+        <div class="row " style="min-width:800px;">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered text-center align-middle " >
                     <div wire:target="filters.search perPage, nextPage, previousPage, gotoPage"
@@ -691,7 +691,7 @@
 
         <div class="modal fade" id="attendanceModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                <form class="w-100" wire:submit.prevent="updateWeight('attendanceModal')">
+                <form class="w-100">
                     <div class="modal-content" style="min-height:500px;">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="attendanceModalTitle">Attendance Date</h1>

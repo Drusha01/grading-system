@@ -64,6 +64,8 @@
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <title>{{ $title ?? 'Dashboard' }}@if(strtolower($title) != strtolower('Faculty')){{'s'}} @endif | GRADING SYSTEM </title>
 
         <link rel="icon" href="{{asset('image/wmsu_logo.webp')}}">
@@ -216,36 +218,372 @@
                 myModal.click();
             }); 
 
-            $('#attendanceModal').on('shown.bs.modal', function () {
+            Livewire.on('openAttendanceModal', (obj) => {
+                var res = obj[0].obj;
+                var curriculum_id = res.curriculum_id;
+                var term_id = res.term_id;
+                $('#attendanceModal').on('shown.bs.modal', function () {
+                    renderCalendar(res);
+                });
+            });
+
+            const renderCalendar = (res) =>{
                 var calendarEl = document.getElementById('flatpickr-calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
+                calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                     initialDate: new Date(),
                     height: 400,
-                    events: 
-                        [{
-                            start: '2025-06-15',
-                            display: 'background',
-                            color: 'green'
+                    events: {
+                        url: '/api/attendance-dates', // Replace with your actual backend route
+                        method: 'GET',
+                        extraParams: {
+                            curriculum_id: res.curriculum_id,  // Replace with dynamic ID if needed
+                            term_id: res.term_id         // Replace with dynamic ID if needed
                         },
-                        {
-                            start: '2025-06-18',
-                            display: 'background',
-                            color: 'green'
-                        }
-                    ], 
-                    dateClick: function(info) {
-                        alert('Date clicked: ' + info.dateStr);
+                        failure: function() {
+                            alert('There was an error while fetching events!');
+                        },
+                        color: 'green',   // Optional: set default color
+                        textColor: 'white'
+                    },
+                    eventSourceSuccess: function(content, response) {   
+                        setTimeout(() => {
+                            const allDayCells = document.querySelectorAll('.fc-daygrid-day');
+                            // Get all event dates in YYYY-MM-DD format
+                            const eventDates = new Map(
+                                calendar.getEvents().map(e => {
+                                    const date = new Date(e.start);
+                                    const dateStr = date.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+                                    return [dateStr, e.id]; // assuming each event has an `id`
+                                })
+                            );
+
+
+
+                            allDayCells.forEach(cell => {
+                                const dateStr = cell.getAttribute('data-date');
+                                const frame = cell.querySelector('.fc-daygrid-day-frame');
+                                // Add data attribute based on event presence
+                                if (eventDates.has(dateStr)) {
+                                    const eventId = eventDates.get(dateStr);
+                                    frame.querySelectorAll('.fc-custom-add-btn').forEach(btn => btn.remove());
+                                    frame.style.color = 'white';
+                                    const btn = document.createElement('button');
+                                    btn.innerText = '-';
+                                    btn.classList.add('fc-custom-add-btn');
+                                    btn.style.fontSize = '10px';
+                                    btn.style.marginTop = '2px';
+                                    btn.style.background = '#dc2626';
+                                    btn.style.color = 'white';
+                                    btn.style.border = 'none';
+                                    btn.style.borderRadius = '3px';
+                                    btn.style.padding = '1px 10px';
+                                    btn.type = 'button';
+                                    btn.style.cursor = 'pointer'; 
+                                    btn.style.position = 'relative'; 
+                                    btn.style.zIndex = '9999';  
+                                    btn.onclick = () => {
+                                        const payload = {
+                                            curriculum_id: res.curriculum_id,
+                                            term_id: res.term_id,
+                                            date: dateStr,
+                                            id: eventId  // make sure you already got this from the map
+                                        };
+
+                                        fetch('/api/attendance-dates/remove', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Laravel CSRF
+                                            },
+                                            body: JSON.stringify(payload)
+                                        })
+                                        .then(response => {
+                                            if (!response.ok) throw new Error('Request failed');
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            renderCalendar({
+                                                curriculum_id: res.curriculum_id,
+                                                term_id: res.term_id,
+                                            })
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            alert('Something went wrong!');
+                                        });
+                                    };
+
+                                    frame.appendChild(btn);
+
+                                    const btn2 = document.createElement('button');
+
+                                    btn2.innerText = '👁';
+                                    btn2.classList.add('fc-custom-add-btn');
+                                    btn2.style.fontSize = '10px';
+                                    btn2.style.marginTop = '2px';
+                                    btn2.style.marginLeft = '15px';
+                                    btn2.style.background = '#647068';
+                                    btn2.style.color = 'white';
+                                    btn2.style.border = 'none';
+                                    btn2.style.borderRadius = '3px';
+                                    btn2.style.padding = '1px 10px';
+                                    btn2.style.cursor = 'pointer';
+                                    btn2.type = 'button';
+                                    btn2.style.position = 'relative'; 
+                                    btn2.style.zIndex = '9999';  
+
+                                    btn2.onclick = () => {
+                                        const formattedDate = formatDateMMDDYY(dateStr);
+                                        const url = `/admin/curriculums/attendance-${res.curriculum_id}-${eventId}`;
+                                        window.location.href = url;
+                                    };
+                                    frame.appendChild(btn2);
+                                } else {
+                                    frame.querySelectorAll('.fc-custom-add-btn').forEach(btn => btn.remove());
+                                    // ➕ Add button for empty dates
+                                    const btn = document.createElement('button');
+                                    btn.innerText = '+';
+                                    btn.classList.add('fc-custom-add-btn');
+                                    btn.style.fontSize = '10px';
+                                    btn.style.marginTop = '2px';
+                                    btn.style.background = '#20753b';
+                                    btn.style.color = 'white';
+                                    btn.style.border = 'none';
+                                    btn.style.borderRadius = '3px';
+                                    btn.style.padding = '1px 10px';
+                                    btn.style.cursor = 'pointer';
+                                    btn.type = 'button';
+                                    btn.style.cursor = 'pointer'; 
+
+                                    btn.onclick = () => {
+                                            const payload = {
+                                            curriculum_id: res.curriculum_id,
+                                            term_id: res.term_id,
+                                            date: dateStr,
+                                        };
+
+                                        fetch('/api/attendance-dates/add', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Laravel CSRF
+                                            },
+                                            body: JSON.stringify(payload)
+                                        })
+                                        .then(response => {
+                                            if (!response.ok) throw new Error('Request failed');
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            renderCalendar({
+                                                curriculum_id: res.curriculum_id,
+                                                term_id: res.term_id,
+                                            })
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            alert('Something went wrong!');
+                                        });
+                                    };
+
+                                    frame.appendChild(btn);
+                                }
+                            });
+                        }, 0);
                     }
                 });
                 calendar.render();
+            }
+
+            function formatDateMMDDYY(dateStr) {
+                const [year, month, day] = dateStr.split('-');
+                return `${month}.${day}.${year.slice(-2)}`;
+            }
+
+            Livewire.on('openFacultyAttendanceModal', (obj) => {
+                var res = obj[0].obj;
+                var curriculum_id = res.curriculum_id;
+                var term_id = res.term_id;
+                $('#attendanceModal').on('shown.bs.modal', function () {
+                    renderFacultyCalendar(res);
+                });
             });
 
+            const renderFacultyCalendar = (res) =>{
+                var calendarEl = document.getElementById('flatpickr-calendar');
+                calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    initialDate: new Date(),
+                    height: 400,
+                    events: {
+                        url: '/api/attendance-dates', // Replace with your actual backend route
+                        method: 'GET',
+                        extraParams: {
+                            curriculum_id: res.curriculum_id,  // Replace with dynamic ID if needed
+                            term_id: res.term_id         // Replace with dynamic ID if needed
+                        },
+                        failure: function() {
+                            alert('There was an error while fetching events!');
+                        },
+                        color: 'green',   // Optional: set default color
+                        textColor: 'white'
+                    },
+                    eventSourceSuccess: function(content, response) {   
+                        setTimeout(() => {
+                            const allDayCells = document.querySelectorAll('.fc-daygrid-day');
+                            // Get all event dates in YYYY-MM-DD format
+                            const eventDates = new Map(
+                                calendar.getEvents().map(e => {
+                                    const date = new Date(e.start);
+                                    const dateStr = date.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+                                    return [dateStr, e.id]; // assuming each event has an `id`
+                                })
+                            );
+
+
+
+                            allDayCells.forEach(cell => {
+                                const dateStr = cell.getAttribute('data-date');
+                                const frame = cell.querySelector('.fc-daygrid-day-frame');
+                                // Add data attribute based on event presence
+                                if (eventDates.has(dateStr)) {
+                                    const eventId = eventDates.get(dateStr);
+                                    frame.querySelectorAll('.fc-custom-add-btn').forEach(btn => btn.remove());
+                                    frame.style.color = 'white';
+                                    const btn = document.createElement('button');
+                                    btn.innerText = '-';
+                                    btn.classList.add('fc-custom-add-btn');
+                                    btn.style.fontSize = '10px';
+                                    btn.style.marginTop = '2px';
+                                    btn.style.background = '#dc2626';
+                                    btn.style.color = 'white';
+                                    btn.style.border = 'none';
+                                    btn.style.borderRadius = '3px';
+                                    btn.style.padding = '1px 10px';
+                                    btn.type = 'button';
+                                    btn.style.cursor = 'pointer'; 
+                                    btn.style.position = 'relative'; 
+                                    btn.style.zIndex = '9999';  
+                                    btn.onclick = () => {
+                                        const payload = {
+                                            curriculum_id: res.curriculum_id,
+                                            term_id: res.term_id,
+                                            date: dateStr,
+                                            id: eventId  // make sure you already got this from the map
+                                        };
+
+                                        fetch('/api/attendance-dates/remove', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Laravel CSRF
+                                            },
+                                            body: JSON.stringify(payload)
+                                        })
+                                        .then(response => {
+                                            if (!response.ok) throw new Error('Request failed');
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            renderCalendar({
+                                                curriculum_id: res.curriculum_id,
+                                                term_id: res.term_id,
+                                            })
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            alert('Something went wrong!');
+                                        });
+                                    };
+
+                                    frame.appendChild(btn);
+
+                                    const btn2 = document.createElement('button');
+
+                                    btn2.innerText = '👁';
+                                    btn2.classList.add('fc-custom-add-btn');
+                                    btn2.style.fontSize = '10px';
+                                    btn2.style.marginTop = '2px';
+                                    btn2.style.marginLeft = '15px';
+                                    btn2.style.background = '#647068';
+                                    btn2.style.color = 'white';
+                                    btn2.style.border = 'none';
+                                    btn2.style.borderRadius = '3px';
+                                    btn2.style.padding = '1px 10px';
+                                    btn2.style.cursor = 'pointer';
+                                    btn2.type = 'button';
+                                    btn2.style.position = 'relative'; 
+                                    btn2.style.zIndex = '9999';  
+
+                                    btn2.onclick = () => {
+                                        const formattedDate = formatDateMMDDYY(dateStr);
+                                        const url = `/faculty/attendance-${res.curriculum_id}-${eventId}`;
+                                        window.location.href = url;
+                                    };
+                                    frame.appendChild(btn2);
+                                } else {
+                                    frame.querySelectorAll('.fc-custom-add-btn').forEach(btn => btn.remove());
+                                    // ➕ Add button for empty dates
+                                    const btn = document.createElement('button');
+                                    btn.innerText = '+';
+                                    btn.classList.add('fc-custom-add-btn');
+                                    btn.style.fontSize = '10px';
+                                    btn.style.marginTop = '2px';
+                                    btn.style.background = '#20753b';
+                                    btn.style.color = 'white';
+                                    btn.style.border = 'none';
+                                    btn.style.borderRadius = '3px';
+                                    btn.style.padding = '1px 10px';
+                                    btn.style.cursor = 'pointer';
+                                    btn.type = 'button';
+                                    btn.style.cursor = 'pointer'; 
+
+                                    btn.onclick = () => {
+                                            const payload = {
+                                            curriculum_id: res.curriculum_id,
+                                            term_id: res.term_id,
+                                            date: dateStr,
+                                        };
+
+                                        fetch('/api/attendance-dates/add', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Laravel CSRF
+                                            },
+                                            body: JSON.stringify(payload)
+                                        })
+                                        .then(response => {
+                                            if (!response.ok) throw new Error('Request failed');
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            renderCalendar({
+                                                curriculum_id: res.curriculum_id,
+                                                term_id: res.term_id,
+                                            })
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            alert('Something went wrong!');
+                                        });
+                                    };
+
+                                    frame.appendChild(btn);
+                                }
+                            });
+                        }, 0);
+                    }
+                });
+                calendar.render();
+            }
+            
         </script>
         <!-- <script>
             function initSelect2() {
                 $('#schedule_id').select2({
-                    placeholder: 'Select Subject',
+                    placeholder: 'Select Subject',  
                     allowClear: true,
                     width: '100%',
                 });

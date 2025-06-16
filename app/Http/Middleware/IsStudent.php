@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
-class IsFaculty
+class IsStudent
 {
     /**
      * Handle an incoming request.
@@ -30,22 +30,15 @@ class IsFaculty
                 ->where('id','=',$userId)
                 ->where('is_active','=',1)
                 ->where('admin_type','=',2)->first();
-
-            $curriculums = DB::table('users as u')
-                ->join('faculty as f','f.user_id','u.id')
-                ->join('curriculums as cl','cl.faculty_id','f.id')
-                ->where('f.user_id','=',$userId)
-                ->get()
-                ->toArray();
             $student = DB::table('users')
                 ->where('id','=',$userId)
                 ->where('is_active','=',1)
                 ->where('admin_type','=',3)->first();
+            if($faculty){
+                return redirect('/faculty');
+            }
             if($admin){
                 return redirect('/admin');
-            }
-            if($curriculums == 0){
-                return redirect('/student');
             }
         }
         return $next($request);

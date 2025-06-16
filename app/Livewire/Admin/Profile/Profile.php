@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Session;
-
 class Profile extends Component
 {
     public $title = "Profile";
@@ -40,6 +39,7 @@ class Profile extends Component
         'is_admin'=> false,
     ];
 
+    public $student; 
     public function rules(){
         return [
             'detail.college_id' => 'required|exists:colleges,id',
@@ -212,9 +212,16 @@ class Profile extends Component
 
     public function render()
     {
-        return view('livewire.admin.profile.profile')
+        $userId = Session::get('user_id');
+        $student = DB::table('users')
+                ->where('id','=',$userId)
+                ->where('is_active','=',1)
+                ->where('admin_type','=',3)->first();
+        return view('livewire.admin.profile.profile',[
+            'student'=>$student
+        ])
         ->layout('components.layouts.admin-app',[
-            'title'=>$this->title
+            'title'=>$this->title,
         ]);
     }
 }

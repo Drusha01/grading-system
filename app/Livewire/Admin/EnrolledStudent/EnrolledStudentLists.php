@@ -272,4 +272,14 @@ class EnrolledStudentLists extends Component
             ->where('cl.id','=',$this->detail['curriculum_id'])
             ->first();
     }
+
+    public function viewAttendance($modal_id){
+        $this->dispatch('openModal',modal_id:$modal_id);
+        $this->dispatch('openAttendanceModal', [
+            'obj' => [
+                'curriculum_id' => $this->detail['curriculum_id'],
+                'term_id' => $this->detail['term_id'],
+            ]
+        ]);
+    }
 }

@@ -99,6 +99,20 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="col-md-6 mb-3">
+                    <label for="password" class="form-label">Password </label>
+                    <input type="password" id="password" wire:model.defer="detail.password" placeholder="Password" class="form-control @error('detail.password') is-invalid @enderror">
+                    @error('detail.password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                 <div class="col-md-6 mb-3">
+                    <label for="confirm_password" class="form-label">Confirm password </label>
+                    <input type="password" id="confirm_password" wire:model.defer="detail.confirm_password" placeholder="Confirm password" class="form-control @error('detail.confirm_password') is-invalid @enderror">
+                    @error('detail.confirm_password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
             <div class="row my-4">
                 <div class="col-12 d-flex justify-content-center">

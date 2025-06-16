@@ -14,6 +14,7 @@ return new class extends Migration
     {
         DB::statement('CREATE TABLE students(
             id INT PRIMARY KEY AUTO_INCREMENT,
+            user_id INT,
             college_id INT,
             department_id INT,
             year_level_id INT, 
