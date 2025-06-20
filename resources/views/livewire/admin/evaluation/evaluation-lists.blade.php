@@ -136,8 +136,14 @@
                                 <th colspan="1" class="text-center">No School Work Type</th>
                             @endforelse
                             <th class="">Total</th>
-                            <th class="">Weighted Grade</th>
-                            <th class="">Grade</th>
+                            <th class="">
+                                @foreach ($terms as $key =>$value )
+                                @if($value->id == $detail['term_id'])
+                                   {{ $value->term_name }}
+                                @endif
+                                @endforeach 
+                                Weighted Grade</th>
+                            <th class="">Total Grade</th>
                         </tr>
                         <tr class="align-middle">
                             <th scope="col" class="sticky-col">#</th>
@@ -216,7 +222,9 @@
                                             $temp_sub_total_max_score += $v_value['max_score'];
                                             $temp_sub_total_score += $v_value['score'];
                                             $school_work_type_count += 1;
-                                            $school_work_type_weight = $v_value['weight']/ $weight->total_weight * 100;
+                                            if($weight->total_weight){
+                                                $school_work_type_weight = $v_value['weight']/ $weight->total_weight * 100;
+                                            }
                                             if(intval($v_value['score'])){
                                                 $sub_average += ($v_value['score']/$v_value['max_score'] * $multiplier) + $offset;
                                             }
@@ -388,7 +396,11 @@
                                     }
 
                                     @endphp
-                                    {{ number_format($grade, 3, '.', '') }}
+                                    @if(floatval($grade))
+                                        {{ number_format($grade, 3, '.', '') }}
+                                    @else
+                                        {{ $grade }}    
+                                    @endif
                                 </td>
                                 @php
                                     $total_grade = 0;

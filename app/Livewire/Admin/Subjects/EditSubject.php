@@ -151,6 +151,7 @@ class EditSubject extends Component
 
         $this->subjects = DB::table('subjects')
             ->where('is_active','=',1)
+            ->where('id','<>',$id)
             ->get()
             ->toArray();
     }
