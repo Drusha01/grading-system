@@ -176,7 +176,11 @@
                                             $temp_sub_total_max_score += $v_value['max_score'];
                                             $temp_sub_total_score += $v_value['score'];
                                             $school_work_type_count += 1;
-                                            $school_work_type_weight = $v_value['weight']/ $weight->total_weight * 100;
+                                            if($weight->total_weight >0){
+                                                $school_work_type_weight = $v_value['weight']/ $weight->total_weight * 100;
+                                            }else{
+                                                $school_work_type_weight = 0;
+                                            }
                                             if(intval($v_value['score'])){
                                                 $sub_average += ($v_value['score']/$v_value['max_score'] * $multiplier) + $offset;
                                             }
