@@ -526,4 +526,35 @@ class CurriculumSubjects extends Component
         $this->dispatch('closeModal',modal_id : $modal_id);
 
     }
+
+    public function editSchedule($modal_id){
+
+        // if(
+        //    $res = DB::table('curriculums')
+        //         ->where('school_year_id' ,'=', DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$this->detail['school_year'])->first()->id)
+        //         ->where('college_id' ,'=', DB::table('colleges')->where('code','=',$this->detail['college'])->first()->id)
+        //         ->where('department_id' ,'=', DB::table('departments')->where('code','=',$this->detail['department'])->first()->id)
+        //         ->where('year_level_id' ,'=', DB::table('year_levels')->where('year_level','=',$this->detail['year_level'])->first()->id)
+        //         ->where('semester_id' ,'=', DB::table('semesters')->where('semester','=',$this->detail['semester'])->first()->id)
+        //         ->where('schedule_id' ,'=', $this->detail['schedule_id'])
+        //         ->where('id' ,'=', $this->detail['id'])
+        //         ->first()
+        // ){
+        //     throw \Illuminate\Validation\ValidationException::withMessages([
+        //         'detail.schedule_id' => 'Schedule already exists.',
+        //     ]);
+        // }
+
+        $curriculum_id = DB::table('curriculums')
+            ->where('id' ,'=', $this->detail['id'])
+            ->update([
+                'subject_id' => $this->detail['subject_id'],
+                'faculty_id' => ($this->detail['faculty_id'] ? $this->detail['faculty_id'] : NULL),
+        ]);
+        $this->dispatch('notifySuccess', 
+        'Updated successfully!',
+            '');
+        $this->dispatch('closeModal',modal_id : $modal_id);
+
+    }
 }

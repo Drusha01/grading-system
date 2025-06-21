@@ -50,6 +50,7 @@
                     <thead style="background:#952323;color:white;">
                         <tr class="align-middle">
                             <th scope="col" class="px-4">#</th>
+                            <th scope="col" class="px-4 ">Prerequisite</th>
                             <th scope="col" class="px-4 ">Subject ID</th>
                             <th scope="col" class="px-4 ">Subject Code</th>
                             <th scope="col" class="px-4 ">College</th>
@@ -64,6 +65,13 @@
                         @forelse($table_data as $key =>$value)
                             <tr class="align-middle">
                                 <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
+                                    <td class="px-4">
+                                        @if($value->prerequisite_subject_id)
+                                            {{$value->prerequisite_subject_id.' - '. $value->prerequisite_subject_code}}
+                                        @else 
+                                            N/A
+                                        @endif    
+                                    </td>
                                     <td class="px-4">{{$value->subject_id}}</td>
                                     <td class="px-4">{{$value->subject_code}}</td>
                                     <td class="px-4">
@@ -88,9 +96,9 @@
 
                                     <td class="px-4">
                                         <div class="d-flex justify-content-center gap-2">
-                                            <!-- <a href="{{ route($route.'-view',$value->id) }}" type="button" wire:wire:navigate  class="btn btn-outline-secondary d-flex justify-content-center items-center">
+                                            <a href="{{ route($route.'-view',$value->id) }}" type="button" wire:wire:navigate  class="btn btn-outline-secondary d-flex justify-content-center items-center">
                                                 <svg viewBox="0 0 24 24"  width="20px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9ZM11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.83 11.2807C19.542 7.15186 15.8122 5 12 5C8.18777 5 4.45796 7.15186 2.17003 11.2807C1.94637 11.6844 1.94361 12.1821 2.16029 12.5876C4.41183 16.8013 8.1628 19 12 19C15.8372 19 19.5882 16.8013 21.8397 12.5876C22.0564 12.1821 22.0536 11.6844 21.83 11.2807ZM12 17C9.06097 17 6.04052 15.3724 4.09173 11.9487C6.06862 8.59614 9.07319 7 12 7C14.9268 7 17.9314 8.59614 19.9083 11.9487C17.9595 15.3724 14.939 17 12 17Z" fill="currentColor"></path> </g></svg>
-                                            </a> -->
+                                            </a>
                                             <a href="{{ route($route.'-edit',$value->id) }}" type="button" wire:wire:navigate  class="btn btn-outline-success d-flex justify-content-center items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="" width="20px" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
