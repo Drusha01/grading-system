@@ -84,7 +84,7 @@
                 <a class="btn btn-primary" wire:click="open_school_work_types_modal('addSchoolWorkTypeModal')">
                     <svg fill="currentColor" width="20px" viewBox="-8 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>paper</title> <path d="M13.52 5.72h-7.4c-0.36 0-0.56 0.2-0.6 0.24l-5.28 5.28c-0.040 0.040-0.24 0.24-0.24 0.56v12.2c0 1.24 1 2.24 2.24 2.24h11.24c1.24 0 2.24-1 2.24-2.24v-16.040c0.040-1.24-0.96-2.24-2.2-2.24zM5.28 8.56v1.8c0 0.32-0.24 0.56-0.56 0.56h-1.84l2.4-2.36zM14.080 24.040c0 0.32-0.28 0.56-0.56 0.56h-11.28c-0.32 0-0.56-0.28-0.56-0.56v-11.36h3.040c1.24 0 2.24-1 2.24-2.24v-3.040h6.52c0.32 0 0.56 0.24 0.56 0.56l0.040 16.080z"></path> </g></svg>
                 </a>
-                <a href="{{ route('enrolled-student-lists',$detail['curriculum_id']) }}" class="btn btn-outline-secondary d-flex justify-content-center items-center" wire:wire:navigate>
+                <a href="{{ route('enrolled-student-lists',$detail['schedule_id']) }}" class="btn btn-outline-secondary d-flex justify-content-center items-center" wire:wire:navigate>
                     <svg fill="currentColor" viewBox="0 -64 640 640"  width="20px"  xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"></path></g></svg>
                 </a>
             </div>
@@ -113,7 +113,7 @@
                             @php
                                 $weight = DB::table('school_works_types')
                                     ->select(DB::raw('sum(weight) as total_weight'))
-                                    ->where('curriculum_id','=',$this->detail['curriculum_id'])
+                                    ->where('schedule_id','=',$this->detail['schedule_id'])
                                     ->where('term_id','=',$this->detail['term_id'])
                                     ->first();
                             @endphp
@@ -173,7 +173,13 @@
                                 <th colspan="1" class="text-center">No School Work Type</th>
                             @endforelse
                             <th scope="col" class=""></th>
-                            <th scope="col" class="">{{ $term_weight['weight'] }}</th>
+                            @php
+                            $term_total = DB::table('terms')
+                                ->select(DB::raw('sum(weight) as total'))
+                                ->where('schedule_id','=',$detail['schedule_id'])
+                                ->first();
+                            @endphp
+                            <th scope="col" class="">{{  $term_weight['weight'] }} - {{number_format( $term_weight['weight']/$term_total->total*100, 2, '.', '')  }}%</th>
                             <th scope="col" class="">{{ 100 }}</th>
 
                         </tr>
@@ -242,10 +248,10 @@
                                             @if($v_value['school_work_type_id'] != $current_school_work_type->id)
                                                 <td class="" wire:key="{{ $value->id.'-'.$v_value['school_work_type_id'].'-'.$v_value['score']}}">
                                                     <div class="d-flex align-middle">
-                                                        <input type="number" name="" id="" value="{{ $v_value['score'] }}" class="form-control" style=" width: 100%;" 
+                                                        <input type="number" name="" disabled id="" value="{{ $v_value['score'] }}" class="form-control" style=" width: 100%;" 
                                                             wire:change="updateScore(
                                                             {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
-                                                            {{ $v_value['curriculum_id'] }},
+                                                            {{ $v_value['schedule_id'] }},
                                                             {{ $v_value['student_id'] }},
                                                             {{ $v_value['term_id'] }},
                                                             {{ $v_value['school_work_id']}},
@@ -292,13 +298,13 @@
                                     @php
                                         if($total_grade >= 0 && $inc ){
                                             if(DB::table('term_grades')
-                                            ->where('curriculum_id','=',$detail['curriculum_id'])
+                                            ->where('schedule_id','=',$detail['schedule_id'])
                                             ->where('term_id','=',$detail['term_id'])
                                             ->where('student_id','=',$value->id)
                                             ->first()
                                             ){
                                                 DB::table('term_grades')
-                                                ->where('curriculum_id','=',$detail['curriculum_id'])
+                                                ->where('schedule_id','=',$detail['schedule_id'])
                                                 ->where('term_id','=',$detail['term_id'])
                                                 ->where('student_id','=',$value->id)
                                                 ->update([
@@ -308,7 +314,7 @@
                                             }else{
                                                 DB::table('term_grades')
                                                 ->insert([
-                                                    'curriculum_id' => $detail['curriculum_id'],
+                                                    'schedule_id' => $detail['schedule_id'],
                                                     'term_id' => $detail['term_id'],
                                                     'student_id' => $value->id,
                                                     'grade' => NULL,
@@ -317,37 +323,37 @@
                                             }
                                         }else{
                                             if(DB::table('term_grades')
-                                            ->where('curriculum_id','=',$detail['curriculum_id'])
+                                            ->where('schedule_id','=',$detail['schedule_id'])
                                             ->where('term_id','=',$detail['term_id'])
                                             ->where('student_id','=',$value->id)
                                             ->first()
                                             ){
                                                 DB::table('term_grades')
-                                                ->where('curriculum_id','=',$detail['curriculum_id'])
+                                                ->where('schedule_id','=',$detail['schedule_id'])
                                                 ->where('term_id','=',$detail['term_id'])
                                                 ->where('student_id','=',$value->id)
                                                 ->update([
-                                                    'grade' => $total_grade * $term_weight['weight']/100,
+                                                    'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
                                                     'other' => NULL,
                                                 ]);
                                             }else{
                                                 DB::table('term_grades')
                                                 ->insert([
-                                                    'curriculum_id' => $detail['curriculum_id'],
+                                                    'schedule_id' => $detail['schedule_id'],
                                                     'term_id' => $detail['term_id'],
                                                     'student_id' => $value->id,
-                                                    'grade' => $total_grade * $term_weight['weight']/100,
+                                                    'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
                                                     'other' => NULL,
                                                 ]);
                                             }
                                         }
                                     @endphp
-                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade * $term_weight['weight'] / 100), 3, '.', '')) }}
+                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100), 3, '.', '')) }}
                                 </td>
                                 <td>
                                     @php
                                     if(DB::table('term_grades')
-                                        ->where('curriculum_id','=',$detail['curriculum_id'])
+                                        ->where('schedule_id','=',$detail['schedule_id'])
                                         ->where('student_id','=',$value->id)
                                         ->where('other','=','INC')
                                         ->first()){
@@ -356,7 +362,7 @@
                                         $term_grades = DB::table('term_grades')
                                                 ->select(
                                                 DB::raw('sum(grade) as grade'))
-                                                ->where('curriculum_id','=',$detail['curriculum_id'])
+                                                ->where('schedule_id','=',$detail['schedule_id'])
                                                 ->where('student_id','=',$value->id)
                                                 ->first();
                                         if($term_grades){
@@ -367,27 +373,27 @@
                                     }
 
                                     $lab_lec = DB::table('lab_lec')
-                                        ->where('curriculum_id','=',$detail['curriculum_id'])
+                                        ->where('schedule_id','=',$detail['schedule_id'])
                                         ->where('term_id','=',$detail['term_id'])
                                         ->first();
                                     if($lab_lec_grades = DB::table('lab_lec_grades')
-                                        ->where('curriculum_id','=',$detail['curriculum_id'])
+                                        ->where('schedule_id','=',$detail['schedule_id'])
                                         ->where('student_id','=',$value->id)
                                         ->first()
                                         ){
                                         DB::table('lab_lec_grades')
                                         ->where('id','=',$lab_lec_grades->id)
                                         ->update([
-                                            'curriculum_id' => $detail['curriculum_id'],
+                                            'schedule_id' => $detail['schedule_id'],
                                             'student_id' => $value->id,
                                             'sub_weight' => $lab_lec->sub_weight,
-                                            'grade' => (floatval($grade) ? $grade*$lab_lec->sub_weight/100 : NULL),
+                                            'grade' => (floatval($grade) ? $grade * $lab_lec->sub_weight/100 : NULL),
                                             'other' => (floatval($grade) ? NULL : 'INC'),
                                         ]);
                                     }else{
                                         DB::table('lab_lec_grades')
                                         ->insert([
-                                            'curriculum_id' => $detail['curriculum_id'],
+                                            'schedule_id' => $detail['schedule_id'],
                                             'student_id' => $value->id,
                                             'sub_weight' => $lab_lec->sub_weight,
                                             'grade' => (floatval($grade) ? $grade*$lab_lec->sub_weight/100 : NULL),
@@ -425,30 +431,10 @@
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="addSchoolWorkTypeModalTitle">Add School Work Types</h1>
+                        <h1 class="modal-title fs-5" id="addSchoolWorkTypeModalTitle">School Work Types</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="addSchoolWorkTypeModalclose" aria-label="Close"></button>
                     </div>
                     <div class="modal-body row">
-                        <div class="col-md-6 mb-3">
-                            <label for="school_work_type" class="form-label">School Work Type</label>
-                            <input type="text" id="school_work_type" wire:model.defer="school_work_type.school_work_type" placeholder="School work type" class="form-control @error('school_work_type.school_work_type') is-invalid @enderror">
-                            @error('school_work_type.school_work_type')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-5 mb-3">
-                            <label for="weight" class="form-label">School Work Weight</label>
-                            <input type="weight" min="0.0" step="0.1" id="weight" wire:model.defer="school_work_type.weight" class="form-control @error('school_work_type.weight') is-invalid @enderror">
-                            @error('school_work_type.weight')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col align-bottom">
-                            <label for="weight" class="form-label text-white" >asd</label>
-                            <button class="btn btn-primary " wire:click="add_school_work_type({{ $detail['curriculum_id'] }},'addSchoolWorkTypeModal')">
-                                Add
-                            </button>
-                        </div>
                         <div class="col-12">
                             <table class="table table-striped table-bordered text-center align-middle position-relative" >
                                 <thead style="background:#952323;color:white;">
@@ -457,7 +443,7 @@
                                         <th scope="col" class="px-4 ">School Work Type</th>
                                         <th scope="col" class="text-center px-4 ">Weight</th> 
                                         <th scope="col" class="text-center px-4 ">Percent</th> 
-                                        <th scope="col" class="text-center px-4 ">Action</th> 
+                                        <!-- <th scope="col" class="text-center px-4 ">Action</th>  -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -471,7 +457,7 @@
                                                 {{ $value->school_work_type }}
                                             </td>
                                             <td class="px-4">
-                                                <input type="number" name="" id="" value="{{ $value->weight }}" wire:model="school_work_type_value.{{ $key }}.val" 
+                                                <input type="number" disabled name="" id="" value="{{ $value->weight }}" wire:model="school_work_type_value.{{ $key }}.val" 
                                                     wire:change="updateSchoolWorktype('{{$value->id }}', $event.target.value)" class="form-control" placeholder="weight" min="0.0" step="0.1" >
                                             </td>
                                             <td class="px-4">
@@ -480,11 +466,11 @@
                                                 @endif
                                             </td>
                                             @if($value->school_work_type != 'Attendance')
-                                                <td class="d-flex justify-content-center text-center">
+                                                <!-- <td class="d-flex justify-content-center text-center">
                                                     <button wire:click="deleteSchoolWorkType({{$value->id }})" type="button" wire:wire:navigate  class="btn btn-outline-danger d-flex justify-content-center items-center">
                                                         <svg fill="currentColor" width="20px"  viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect id="Icons" x="-64" y="-64" width="1280" height="800" style="fill:none;"></rect> <g id="Icons1" serif:id="Icons"> <g id="Strike"> </g> <g id="H1"> </g> <g id="H2"> </g> <g id="H3"> </g> <g id="list-ul"> </g> <g id="hamburger-1"> </g> <g id="hamburger-2"> </g> <g id="list-ol"> </g> <g id="list-task"> </g> <g id="trash"> <path d="M19.186,16.493l0,-1.992c0.043,-3.346 2.865,-6.296 6.277,-6.427c3.072,-0.04 10.144,-0.04 13.216,0c3.346,0.129 6.233,3.012 6.277,6.427l0,1.992l9.106,0l0,4l-4.442,0l0,29.11c-0.043,3.348 -2.865,6.296 -6.278,6.428c-7.462,0.095 -14.926,0.002 -22.39,0.002c-3.396,-0.044 -6.385,-2.96 -6.429,-6.43l0,-29.11l-4.443,0l0,-4l9.106,0Zm26.434,4l-27.099,0c-0.014,9.72 -0.122,19.441 0.002,29.16c0.049,1.25 1.125,2.33 2.379,2.379c7.446,0.095 14.893,0.095 22.338,0c1.273,-0.049 2.363,-1.163 2.38,-2.455l0,-29.084Zm-4.701,-4c-0.014,-0.83 0,-1.973 0,-1.973c0,0 -0.059,-2.418 -2.343,-2.447c-3.003,-0.039 -10.007,-0.039 -13.01,0c-1.273,0.049 -2.363,1.162 -2.38,2.454l0,1.966l17.733,0Z" style="fill-rule:nonzero;"></path> <rect x="22.58" y="28.099" width="3" height="16.327" style="fill-rule:nonzero;"></rect> <rect x="30.571" y="28.099" width="3" height="16.327" style="fill-rule:nonzero;"></rect> <rect x="38.58" y="28.099" width="3" height="16.327" style="fill-rule:nonzero;"></rect> </g> <g id="vertical-menu"> </g> <g id="horizontal-menu"> </g> <g id="sidebar-2"> </g> <g id="Pen"> </g> <g id="Pen1" serif:id="Pen"> </g> <g id="clock"> </g> <g id="external-link"> </g> <g id="hr"> </g> <g id="info"> </g> <g id="warning"> </g> <g id="plus-circle"> </g> <g id="minus-circle"> </g> <g id="vue"> </g> <g id="cog"> </g> <g id="logo"> </g> <g id="radio-check"> </g> <g id="eye-slash"> </g> <g id="eye"> </g> <g id="toggle-off"> </g> <g id="shredder"> </g> <g id="spinner--loading--dots-" serif:id="spinner [loading, dots]"> </g> <g id="react"> </g> <g id="check-selected"> </g> <g id="turn-off"> </g> <g id="code-block"> </g> <g id="user"> </g> <g id="coffee-bean"> </g> <g id="coffee-beans"> <g id="coffee-bean1" serif:id="coffee-bean"> </g> </g> <g id="coffee-bean-filled"> </g> <g id="coffee-beans-filled"> <g id="coffee-bean2" serif:id="coffee-bean"> </g> </g> <g id="clipboard"> </g> <g id="clipboard-paste"> </g> <g id="clipboard-copy"> </g> <g id="Layer1"> </g> </g> </g></svg>
                                                     </button>
-                                                </td>
+                                                </td> -->
                                             @endif
                                         </tr>
                                         @php
@@ -522,11 +508,11 @@
                 <form wire:submit.prevent="add_school_work('addSchoolWorkModal')" class="w-100">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="addSchoolWorkModalTitle">Add School Work</h1>
+                            <h1 class="modal-title fs-5" id="addSchoolWorkModalTitle">School Works</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" id="addSchoolWorkModalclose" aria-label="Close"></button>
                         </div>
                         <div class="modal-body row">
-                            <div class="col-6 mb-3">
+                            <div class="col-12 mb-3">
                                 <label for="school_work_type_id" class="form-label">School work type</label>
                                 <select name="school_work_type_id" id="school_work_type_id" class="form-control @error('school_work.school_work_type_id') is-invalid @enderror" wire:model.live="school_work.school_work_type_id">
                                     <option value="">Select school work type</option>
@@ -541,33 +527,6 @@
                                 @error('school_work.school_work_type_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <div class="col-6 mb-4">
-                                <label for="schedule_date" class="form-label">School work date</label>
-                                <input type="date" name="schedule_date" id="schedule_date"  wire:model="school_work.schedule_date" class="form-control @error('school_work.schedule_date') is-invalid @enderror">
-                                @error('school_work.schedule_date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="school_work" class="form-label">School work name</label>
-                                <input type="text" id="school_work" wire:model.defer="school_work.school_work_name" placeholder="School work type" class="form-control @error('school_work.school_work_name') is-invalid @enderror">
-                                @error('school_work.school_work_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-5 mb-3">
-                                <label for="max_score" class="form-label">School work total score</label>
-                                <input type="max_score" min="0.0" step="1" id="max_score" wire:model="school_work.max_score" class="form-control @error('school_work.max_score') is-invalid @enderror">
-                                @error('school_work.max_score')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col align-bottom">
-                                <label for="weight" class="form-label text-white">asd</label>
-                                <button class="btn btn-primary">
-                                    Add
-                                </button>
                             </div>
                             <div class="col-12">
                                 <table class="table table-striped table-bordered text-center align-middle position-relative" >
@@ -639,19 +598,19 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" id="detailModalclose" aria-label="Close"></button>
                         </div>
                         <div class="modal-body row">
-                            @if($curriculum)
+                            @if($schedule)
                                 <ul class="list-group">
-                                    <li class="list-group-item"><span><strong> School year:</strong> {{ $curriculum->school_year }}</span></li>
-                                    <li class="list-group-item"><span><strong> College:</strong> {{ $curriculum->college }}</span></li>
-                                    <li class="list-group-item"><span><strong> Department:</strong> {{ $curriculum->department }}</span></li>
-                                    <li class="list-group-item"><span><strong> Faculty name:</strong> {{ $curriculum->faculty_fullname }}</span></li>
-                                    <li class="list-group-item"><span><strong> Semester:</strong> {{ $curriculum->semester }}</span></li>
-                                    <li class="list-group-item"><span><strong> Year Level:</strong> {{ $curriculum->year_level }}</span></li>
-                                    <li class="list-group-item"><span><strong> Subject:</strong> {{ $curriculum->subject }}</span></li>
-                                    <li class="list-group-item"><span><strong> Schedule:</strong> {{ $curriculum->schedule }}</span></li>
-                                    <li class="list-group-item"><span><strong> Lecture Unit:</strong> {{ $curriculum->lecture_unit }}</span></li>
-                                    <li class="list-group-item"><span><strong> Laboratory Unit:</strong> {{ $curriculum->laboratory_unit }}</span></li>
-                                    <li class="list-group-item"><span><strong> Room :</strong> {{ $curriculum->room }}</span></li>
+                                    <li class="list-group-item"><span><strong> School year:</strong> {{ $schedule->school_year }}</span></li>
+                                    <li class="list-group-item"><span><strong> College:</strong> {{ $schedule->college }}</span></li>
+                                    <li class="list-group-item"><span><strong> Department:</strong> {{ $schedule->department }}</span></li>
+                                    <li class="list-group-item"><span><strong> Faculty name:</strong> {{ $schedule->faculty_fullname }}</span></li>
+                                    <li class="list-group-item"><span><strong> Semester:</strong> {{ $schedule->semester }}</span></li>
+                                    <li class="list-group-item"><span><strong> Year Level:</strong> {{ $schedule->year_level }}</span></li>
+                                    <li class="list-group-item"><span><strong> Subject:</strong> {{ $schedule->subject }}</span></li>
+                                    <li class="list-group-item"><span><strong> Schedule:</strong> {{ $schedule->schedule }}</span></li>
+                                    <li class="list-group-item"><span><strong> Lecture Unit:</strong> {{ $schedule->lecture_unit }}</span></li>
+                                    <li class="list-group-item"><span><strong> Laboratory Unit:</strong> {{ $schedule->laboratory_unit }}</span></li>
+                                    <li class="list-group-item"><span><strong> Room :</strong> {{ $schedule->room }}</span></li>
                                 </ul>
                             @endif
                         </div>
@@ -685,7 +644,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="weight" class="form-label">Term weight</label>
-                                <input type="number" min="1" step="0.1" id="weight" wire:model.defer="term_weight.weight" placeholder="Term Weight" 
+                                <input type="number" min="1" step="0.1" id="weight" disabled wire:model.defer="term_weight.weight" placeholder="Term Weight" 
                                     class="form-control @error('term_weight.weight') is-invalid @enderror">
                                 @error('term_weight.weight')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -715,9 +674,6 @@
                             <div id="flatpickr-calendar" wire:ignore></div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-success">
-                                Save
-                            </button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>

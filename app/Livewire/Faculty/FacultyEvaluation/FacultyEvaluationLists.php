@@ -38,11 +38,11 @@ class FacultyEvaluationLists extends Component
 
     public $school_works = [];
 
-    public $curriculum = NULL;
+    public $schedule = NULL;
 
     public $detail = [
         'student_id'=> NULL,
-        'curriculum_id'=> NULL,
+        'schedule_id'=> NULL,
         'term_id'=> NULL,
     ];
 
@@ -56,7 +56,7 @@ class FacultyEvaluationLists extends Component
 
     public $school_work_type = [
         'id' => NULL,
-        'curriculum_id' => NULL,
+        'schedule_id' => NULL,
         'term_id' => NULL,
         'lab_lec_id' => NULL,
         'school_work_type' => NULL,
@@ -66,7 +66,7 @@ class FacultyEvaluationLists extends Component
     
     public $school_work = [
         'id' => NULL,
-        'curriculum_id' => NULL,
+        'schedule_id' => NULL,
         'term_id' => NULL,
         'school_work_name' => NULL,
         'school_work_type_id' => NULL,
@@ -98,9 +98,9 @@ class FacultyEvaluationLists extends Component
 
     public $student_scores = [];
 
-    public function mount($curriculum_id){
+    public function mount($schedule_id){
 
-        $this->detail['curriculum_id'] = $curriculum_id;
+        $this->detail['schedule_id'] = $schedule_id;
         $this->colleges = DB::table('colleges')
             ->where('is_active','=',1)
             ->get()
@@ -111,12 +111,13 @@ class FacultyEvaluationLists extends Component
             ->get()
             ->toArray();
 
-        self::terms($this->detail['curriculum_id']);
+        self::getDetails();
+        self::terms($this->detail['schedule_id']);
         if(count($this->terms)){
             $this->detail['term_id'] = $this->terms[0]->id;
         }
-        self::school_work_types($this->detail['curriculum_id']);
-        self::getDetails();
+        self::school_work_types($this->detail['schedule_id']);
+        
         $this->term_weight['term_id'] = $this->detail['term_id'];
         self::fetch_terms();
 
@@ -126,7 +127,7 @@ class FacultyEvaluationLists extends Component
     }
 
     public function initilize_attendance(){
-        $curriculum_detail = DB::table('curriculums as cl')
+        $curriculum_detail = DB::table('schedulings as cl')
             ->select(
                 'sh.id as schedule_id' ,
                 'sh.faculty_id' ,
@@ -173,13 +174,13 @@ class FacultyEvaluationLists extends Component
         
         $this->current_school_work_type = DB::table('school_works_types')  
             ->where('school_work_type','=','Attendance')  
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->first();
 
         $attendance_dates = DB::table('school_works')  
             ->where('school_work_type_id','=',$this->current_school_work_type->id)  
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->get()
             ->toArray();
@@ -189,13 +190,13 @@ class FacultyEvaluationLists extends Component
                 $attendance_name = 'Attendance for '.Carbon::parse($value)->format('F, d Y');
                 if(!DB::table('school_works')  
                     ->where('school_work_name','=',$attendance_name)  
-                    ->where('curriculum_id','=',$this->detail['curriculum_id'])
+                    ->where('schedule_id','=',$this->detail['schedule_id'])
                     ->where('term_id','=',$this->detail['term_id'])
                     ->first()){
                     DB::table('school_works')
                         ->insert([
                             'id' => NULL,
-                            'curriculum_id' => $this->detail['curriculum_id'],
+                            'schedule_id' => $this->detail['schedule_id'],
                             'term_id' => $this->detail['term_id'],
                             'school_work_name' => $attendance_name,
                             'school_work_type_id' => $this->current_school_work_type->id,
@@ -211,7 +212,7 @@ class FacultyEvaluationLists extends Component
 
     public function UpdatedDetailTermId($term_id){
         $this->detail['term_id'] = $term_id;
-        self::school_work_types($this->detail['curriculum_id']);
+        self::school_work_types($this->detail['schedule_id']);
         $this->term_weight['term_id'] = $this->detail['term_id'];
         self::fetch_terms();
     }
@@ -242,7 +243,7 @@ class FacultyEvaluationLists extends Component
             ->leftJoin('colleges as c','c.id','s.college_id')
             ->leftJoin('departments as d','d.id','s.department_id')
             ->leftJoin('year_levels as yl','yl.id','s.year_level_id')
-            ->where('es.curriculum_id','=',$this->detail['curriculum_id']);
+            ->where('es.schedule_id','=',$this->detail['schedule_id']);
         
 
         if (!empty($this->filters['search'])) {
@@ -271,7 +272,7 @@ class FacultyEvaluationLists extends Component
                     )
                     ->leftjoin('school_works as sw','sw.school_work_type_id','swt.id')
                     ->leftjoin('school_work_scores as sws','sws.school_work_id','sw.id')
-                    ->where('swt.curriculum_id','=',$this->detail['curriculum_id'])
+                    ->where('swt.schedule_id','=',$this->detail['schedule_id'])
                     ->where('swt.term_id','=',$this->detail['term_id'])
                     ->where('swt.id','=', $value->id)
                     ->where('sws.student_id','=', $v_value)
@@ -280,7 +281,7 @@ class FacultyEvaluationLists extends Component
                 $student_school_works = DB::table('school_works as sw')
                     ->select(
                         'sw.id',
-                        'sw.curriculum_id',
+                        'sw.schedule_id',
                         'sw.term_id',
                         'school_work_name',
                         'school_work_type_id',
@@ -292,7 +293,7 @@ class FacultyEvaluationLists extends Component
 
                     )
                     ->leftjoin('school_work_scores as sws','sws.school_work_id','sw.id')
-                    ->where('sw.curriculum_id','=',$this->detail['curriculum_id'])
+                    ->where('sw.schedule_id','=',$this->detail['schedule_id'])
                     ->where('sw.term_id','=',$this->detail['term_id'])
                     ->where('sw.school_work_type_id','=',$value->id)
                     ->get()
@@ -301,7 +302,7 @@ class FacultyEvaluationLists extends Component
                 foreach ($student_school_works as $ssw_key => $ssw_value) {
                     if(
                         !DB::table('school_work_scores as sws')
-                            ->where('sws.curriculum_id','=',$this->detail['curriculum_id'])
+                            ->where('sws.schedule_id','=',$this->detail['schedule_id'])
                             ->where('sws.term_id','=',$this->detail['term_id'])
                             ->where('sws.student_id','=',$v_value)
                             ->where('sws.school_work_id','=',$ssw_value->id)
@@ -310,7 +311,7 @@ class FacultyEvaluationLists extends Component
                          DB::table('school_work_scores')
                             ->insert([
                             'id' => NULL,
-                            'curriculum_id' => $this->detail['curriculum_id'],
+                            'schedule_id' => $this->detail['schedule_id'],
                             'student_id' => $v_value,
                             'term_id' => $this->detail['term_id'],
                             'school_work_id' => $ssw_value->id,
@@ -322,6 +323,7 @@ class FacultyEvaluationLists extends Component
             }
         }
         
+        self::fetch_terms();
         self::student_scores($student_id);
 
         return view('livewire.faculty.faculty-evaluation.faculty-evaluation-lists',[
@@ -332,18 +334,77 @@ class FacultyEvaluationLists extends Component
         ]);
     }
 
-    public function terms($curriculum_id){
+    public function terms($schedule_id){
         $this->terms = DB::table('terms')
-        ->where('curriculum_id','=',$curriculum_id)
+        ->where('schedule_id','=',$schedule_id)
         ->orderBy('term_order','asc')
         ->get()
         ->toArray();
+        if(count($this->terms) <=0){
+            $midterm_id = DB::table('terms')
+                ->insertGetId([
+                    'id' => NULL,
+                    'schedule_id' => $schedule_id,
+                    'term_name' => 'Midterm',
+                    'weight' => 40.0,
+                    'term_order' => 1,
+                ]);
+
+            $finalterm_id = DB::table('terms')
+                ->insertGetId([
+                    'id' => NULL,
+                    'schedule_id' => $schedule_id,
+                    'term_name' => 'Finalterm',
+                    'weight' => 60.0,
+                    'term_order' => 2,
+                ]);
+            // lab lec
+            DB::table(table: 'lab_lec')
+            ->insertGetId([
+                'id' => NULL,
+                'schedule_id' => $schedule_id,
+                'term_id' => $midterm_id,
+                'sub_weight' => 50.0,
+                'is_lecture' => $this->schedule->is_lec,
+            ]);
+    
+            DB::table(table: 'lab_lec')
+            ->insertGetId([
+                'id' => NULL,
+                'schedule_id' => $schedule_id,
+                'term_id' => $finalterm_id,
+                'sub_weight' => 50.0,
+                'is_lecture' => $this->schedule->is_lec,
+            ]);
+        
+        
+            DB::table('school_works_types')
+                ->insert([
+                    'id'  => NULL,
+                    'schedule_id'  => $schedule_id,
+                    'term_id'  => $midterm_id,
+                    'lab_lec_id'  => NULL,
+                    'school_work_type'  => 'Attendance',
+                    'weight' => 0,
+                    'number_order' => 1,
+            ]);
+            DB::table('school_works_types')
+                ->insert([
+                    'id'  => NULL,
+                    'schedule_id' => $schedule_id,
+                    'term_id' => $finalterm_id,
+                    'lab_lec_id' => NULL,
+                    'school_work_type' => 'Attendance',
+                    'weight' => 0,
+                    'number_order' => 1,
+            ]);
+        }
     }
 
     public $school_work_type_value = [];
-    public function school_work_types($curriculum_id){
+    public function school_work_types($schedule_id){
         $this->school_work_types = DB::table('school_works_types')
-            ->where('curriculum_id','=',$curriculum_id)
+            ->where('schedule_id','=',$schedule_id)
             ->where('term_id','=',$this->detail['term_id'])
             ->orderBy('number_order','asc')
             ->get()
@@ -357,17 +418,17 @@ class FacultyEvaluationLists extends Component
 
 
     public function open_school_work_types_modal($modal_id){
-        self::school_work_types($this->detail['curriculum_id']);
+        self::school_work_types($this->detail['schedule_id']);
 
         $total = DB::table('school_works_types')
             ->select(DB::raw('count(*) as total'))
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->first();
 
         $this->school_work_type = [
             'id' => NULL,
-            'curriculum_id' => $this->detail['curriculum_id'],
+            'schedule_id' => $this->detail['schedule_id'],
             'term_id'=> $this->detail['term_id'],
             'lab_lec_id' => NULL,
             'school_work_type' => NULL,
@@ -384,7 +445,7 @@ class FacultyEvaluationLists extends Component
     }
     
     public function getDetails(){
-        $this->curriculum = DB::table('curriculums as cl')
+        $this->schedule = DB::table('schedulings as cl')
             ->select(
                 'cl.id',
                 's.college_id' ,
@@ -432,7 +493,7 @@ class FacultyEvaluationLists extends Component
             ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id')
             ->leftjoin('semesters as sm','sm.id','cl.semester_id')
             ->leftjoin('year_levels as yl','yl.id','cl.year_level_id')
-            ->where('cl.id','=',$this->detail['curriculum_id'])
+            ->where('cl.id','=',$this->detail['schedule_id'])
             ->first();
     }
 
@@ -453,7 +514,7 @@ class FacultyEvaluationLists extends Component
 
         if(DB::table('school_works_types')  
             ->where('school_work_type','=',$this->school_work_type['school_work_type'])  
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->first()){
             throw \Illuminate\Validation\ValidationException::withMessages([
@@ -463,7 +524,7 @@ class FacultyEvaluationLists extends Component
 
         $weight = DB::table('school_works_types')
             ->select(DB::raw('sum(weight) as total_weight'))
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->first();
 
@@ -482,13 +543,13 @@ class FacultyEvaluationLists extends Component
                 '');
             $total = DB::table('school_works_types')
                     ->select(DB::raw('count(*) as total'))
-                    ->where('curriculum_id','=',$this->detail['curriculum_id'])
+                    ->where('schedule_id','=',$this->detail['schedule_id'])
                     ->where('term_id','=',$this->detail['term_id'])
                     ->first();
 
             $this->school_work_type = [
                 'id' => NULL,
-                'curriculum_id' => $this->detail['curriculum_id'],
+                'schedule_id' => $this->detail['schedule_id'],
                 'term_id'=> $this->detail['term_id'],
                 'lab_lec_id' => NULL,
                 'school_work_type' => NULL,
@@ -496,7 +557,7 @@ class FacultyEvaluationLists extends Component
                 'number_order' => (intval($total->total)+1),
             ];
         }
-        self::school_work_types($this->detail['curriculum_id']);
+        self::school_work_types($this->detail['schedule_id']);
     }
 
     public function deleteSchoolWorkType($id){
@@ -508,14 +569,14 @@ class FacultyEvaluationLists extends Component
                 'Deleted successfully!',
                    '');
         }
-        self::school_work_types($this->detail['curriculum_id']);
+        self::school_work_types($this->detail['schedule_id']);
 
     }
 
     public function updateSchoolWorktype($id, $weight){
         $total_weight = DB::table('school_works_types')
             ->select(DB::raw('sum(weight) as total_weight'))
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->where('id','<>',$id)
             ->first();
@@ -524,7 +585,7 @@ class FacultyEvaluationLists extends Component
              $this->dispatch('notifyWarning', 
             'The weight exceeds '.(100 - $total_weight->total_weight),
                 '');
-            self::school_work_types($this->detail['curriculum_id']);
+            self::school_work_types($this->detail['schedule_id']);
             return;
         }
 
@@ -538,7 +599,7 @@ class FacultyEvaluationLists extends Component
                 'Updated successfully!',
                    '');
         }
-        self::school_work_types($this->detail['curriculum_id']);
+        self::school_work_types($this->detail['schedule_id']);
 
     }
 
@@ -546,12 +607,12 @@ class FacultyEvaluationLists extends Component
 
         $total = DB::table('school_works')
             ->select(DB::raw('count(*) as total'))
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->first();
         $this->school_work = [
             'id' => NULL,
-            'curriculum_id' => $this->detail['curriculum_id'],
+            'schedule_id' => $this->detail['schedule_id'],
             'term_id'=> $this->detail['term_id'],
             'school_work_name' => NULL,
             'school_work_type_id' => NULL,
@@ -584,7 +645,7 @@ class FacultyEvaluationLists extends Component
 
         if(DB::table('school_works')  
             ->where('school_work_name','=',$this->school_work['school_work_name'])  
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->first()){
             throw \Illuminate\Validation\ValidationException::withMessages([
@@ -600,12 +661,12 @@ class FacultyEvaluationLists extends Component
                    '');
             $total = DB::table('school_works')
                 ->select(DB::raw('count(*) as total'))
-                ->where('curriculum_id','=',$this->detail['curriculum_id'])
+                ->where('schedule_id','=',$this->detail['schedule_id'])
                 ->where('term_id','=',$this->detail['term_id'])
                 ->first();
             $this->school_work = [
                 'id' => NULL,
-                'curriculum_id' => $this->detail['curriculum_id'],
+                'schedule_id' => $this->detail['schedule_id'],
                 'term_id'=> $this->detail['term_id'],
                 'school_work_name' => NULL,
                 'school_work_type_id' => $this->school_work['school_work_type_id'],
@@ -637,7 +698,7 @@ class FacultyEvaluationLists extends Component
 
     public function school_works(){
         $this->school_works = DB::table('school_works')
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('term_id','=',$this->detail['term_id'])
             ->where('school_work_type_id','=',$this->school_work['school_work_type_id'])
             ->orderBy('number_order','asc')
@@ -661,7 +722,7 @@ class FacultyEvaluationLists extends Component
                     )
                     ->leftjoin('school_works as sw','sw.school_work_type_id','swt.id')
                     ->leftjoin('school_work_scores as sws','sws.school_work_id','sw.id')
-                    ->where('swt.curriculum_id','=',$this->detail['curriculum_id'])
+                    ->where('swt.schedule_id','=',$this->detail['schedule_id'])
                     ->where('swt.term_id','=',$this->detail['term_id'])
                     ->where('swt.id','=', $value->id)
                     ->where(function ($query) use ($v_value) {
@@ -677,7 +738,7 @@ class FacultyEvaluationLists extends Component
                         if($s_value->id){
                             array_push( $scores,[
                                 'score_id' => $s_value->score_id,
-                                'curriculum_id' => $this->detail['curriculum_id'],
+                                'schedule_id' => $this->detail['schedule_id'],
                                 'student_id'=>$v_value,
                                 'term_id' => $this->detail['term_id'],
                                 'school_work_id' => $s_value->id,
@@ -691,7 +752,7 @@ class FacultyEvaluationLists extends Component
                     }
                     array_push($scores,[
                         'score_id' => NULL,
-                        'curriculum_id' => $this->detail['curriculum_id'],
+                        'schedule_id' => $this->detail['schedule_id'],
                         'term_id' => $this->detail['term_id'],
                         'student_id'=>$v_value,
                         'weight'=> $s_value->weight,
@@ -706,19 +767,18 @@ class FacultyEvaluationLists extends Component
             array_push($this->student_scores,$scores);
         }
         $school_work_types = DB::table('school_works_types as swt')
-            ->where('swt.curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('swt.schedule_id','=',$this->detail['schedule_id'])
             ->where('swt.term_id','=',$this->detail['term_id'])
             ->leftjoin('school_works as sw','sw.school_work_type_id','swt.id')
             ->orderBy('swt.number_order','asc')
             ->get()
             ->toArray();
-        // dd($this->student_scores);
             
     }
 
     public function updateScore(
         $score_id,
-        $curriculum_id,
+        $schedule_id,
         $student_id,
         $term_id,
         $school_work_id,
@@ -735,7 +795,7 @@ class FacultyEvaluationLists extends Component
             DB::table('school_work_scores')
                 ->where('id','=',$score_id)
                 ->update([
-                'curriculum_id' => $curriculum_id,
+                'schedule_id' => $schedule_id,
                 'student_id' => $student_id,
                 'term_id' => $term_id,
                 'school_work_id' => $school_work_id,
@@ -746,7 +806,7 @@ class FacultyEvaluationLists extends Component
             DB::table('school_work_scores')
                 ->insert([
                 'id' => NULL,
-                'curriculum_id' => $curriculum_id,
+                'schedule_id' => $schedule_id,
                 'student_id' => $student_id,
                 'term_id' => $term_id,
                 'school_work_id' => $school_work_id,
@@ -772,22 +832,25 @@ class FacultyEvaluationLists extends Component
 
     public function fetch_terms(){
         $detail = DB::table('terms')
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('id','=',$this->term_weight['term_id'])
             ->first();
 
-        // if($this->curriculum->lecture_unit > 0){
+        // dd($detail );
+
+
+        // if($this->schedule->lecture_unit > 0){
         //     $lab_lec = DB::table('lab_lec')
-        //         ->where('curriculum_id','=',$this->detail['curriculum_id'])
+        //         ->where('schedule_id','=',$this->detail['schedule_id'])
         //         ->where('term_id','=',$this->term_weight['term_id'])
         //         ->where('is_lecture','=',1)
         //         ->first();
         //     $this->term_weight['lecture_weight'] = $lab_lec->sub_weight;
         // }
 
-        // if($this->curriculum->lecture_unit > 0){
-        //     $lab_lec = DB::table('lab_lec')
-        //         ->where('curriculum_id','=',$this->detail['curriculum_id'])
+        // if($this->schedule->lecture_unit > 0){
+        //     $lab_lec = DB::table('lab_lec')  
+        //         ->where('schedule_id','=',$this->detail['schedule_id'])
         //         ->where('term_id','=',$this->term_weight['term_id'])
         //         ->where('is_lecture','=',0)
         //         ->first();
@@ -795,7 +858,6 @@ class FacultyEvaluationLists extends Component
         // }
 
         $this->term_weight['weight'] = $detail->weight;
-        // dd($this->term_weight['weight'] );
     }
 
     public function updateWeight($modal_id){
@@ -803,7 +865,7 @@ class FacultyEvaluationLists extends Component
             ->select(
                 DB::raw('sum(weight) as total')
             )
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('id','<>',$this->term_weight['term_id'])
             ->first();
         if($total->total + $this->term_weight['weight'] >100){
@@ -811,8 +873,8 @@ class FacultyEvaluationLists extends Component
                 'term_weight.weight' => 'Weight exceeds '.(100 - $total->total).'!' ,
             ]);
         }
-        $res = DB::table('t erms')
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+        $res = DB::table('terms')
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->where('id','=',$this->term_weight['term_id'])
             ->update([
                 'weight'=> $this->term_weight['weight']
@@ -826,7 +888,7 @@ class FacultyEvaluationLists extends Component
         $this->dispatch('openModal',modal_id:$modal_id);
         $this->dispatch('openFacultyAttendanceModal', [
             'obj' => [
-                'curriculum_id' => $this->detail['curriculum_id'],
+                'schedule_id' => $this->detail['schedule_id'],
                 'term_id' => $this->detail['term_id'],
             ]
         ]);

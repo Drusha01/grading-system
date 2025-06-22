@@ -154,6 +154,12 @@ use App\Http\Controllers\AttendanceController;
 use App\Livewire\Admin\Evaluation\EvaluationLists;
 use App\Livewire\Admin\Evaluation\AttendanceLists;
 
+use App\Livewire\Admin\FacultyAndScheduling\FacultyAndSchedulingColleges;
+use App\Livewire\Admin\FacultyAndScheduling\FacultyAndSchedulingDepartments;
+use App\Livewire\Admin\FacultyAndScheduling\FacultyAndSchedulingEnrolled;
+use App\Livewire\Admin\FacultyAndScheduling\FacultyAndSchedulingLists;
+use App\Livewire\Admin\FacultyAndScheduling\FacultyAndSchedulingSubjects;
+
 use App\Livewire\Admin\Profile\Profile;
 
 // faculty
@@ -218,6 +224,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
             Route::get('/edit-{id}',EditSchoolYear::class)->name('school-year-edit');
             Route::get('/delete-{id}',DeleteSchoolYear::class)->name('school-year-delete');
             Route::get('/view-{id}',ViewSchoolYear::class)->name('school-year-view');
+            
         });
 
         Route::prefix('semesters')->group(function () {
@@ -309,23 +316,30 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
 
         Route::prefix('curriculums')->group(function () {
             Route::get('/',CurriculumLists::class)->name('curriculum-lists');
-            
-            Route::get('/attendance-{curriculum_id}-{id}',AttendanceLists::class)->name('attendance-lists');
-            Route::get('/evaluation-{curriculum_id}',EvaluationLists::class)->name('evaluation-lists');
-            Route::get('/enrolled-{curriculum_id}',EnrolledStudentLists::class)->name('enrolled-student-lists');
-            Route::get('/enrolled-{curriculum_id}/add',AddEnrolledStudent::class)->name('enrolled-student-add');
-            Route::get('/enrolled-{curriculum_id}/edit-{id}',EditEnrolledStudent::class)->name('enrolled-student-edit');
-            Route::get('/enrolled-{curriculum_id}/delete-{id}',DeleteEnrolledStudent::class)->name('enrolled-student-delete');
-            Route::get('/enrolled-{curriculum_id}/activate-{id}',ActivateEnrolledStudent::class)->name('enrolled-student-activate');
-            Route::get('/enrolled-{curriculum_id}/view-{id}',ViewEnrolledStudent::class)->name('enrolled-student-view');
-
-            Route::get('/{school_year}/{college}/{department}/{year_level}/{semester}/',CurriculumSubjects::class)->name('curriculum-subjects-list');
             Route::get('/{school_year}/{college}/{department}',CurriculumEnrolled::class)->name('curriculum-lists-enrolled');
             Route::get('/{school_year}/{college}',CurriculumDepartments::class)->name('curriculum-lists-departments');
             Route::get('/{school_year}',CurriculumColleges::class)->name('curriculum-lists-college');
+        });
+
+        Route::prefix('faculty-and-scheduling')->group(function () {
+            Route::get('/',FacultyAndSchedulingLists::class)->name('scheduling-lists');
+            
+            Route::get('/attendance-{schedule_id}-{id}',AttendanceLists::class)->name('attendance-lists');
+            Route::get('/evaluation-{schedule_id}',EvaluationLists::class)->name('evaluation-lists');
+            Route::get('/enrolled-{schedule_id}',EnrolledStudentLists::class)->name('enrolled-student-lists');
+            Route::get('/enrolled-{schedule_id}/add',AddEnrolledStudent::class)->name('enrolled-student-add');
+            Route::get('/enrolled-{schedule_id}/edit-{id}',EditEnrolledStudent::class)->name('enrolled-student-edit');
+            Route::get('/enrolled-{schedule_id}/delete-{id}',DeleteEnrolledStudent::class)->name('enrolled-student-delete');
+            Route::get('/enrolled-{schedule_id}/activate-{id}',ActivateEnrolledStudent::class)->name('enrolled-student-activate');
+            Route::get('/enrolled-{schedule_id}/view-{id}',ViewEnrolledStudent::class)->name('enrolled-student-view');
+
+            Route::get('/{school_year}/{college}/{department}/{year_level}/{semester}/',FacultyAndSchedulingSubjects::class)->name('curriculum-subjects-list');
+            Route::get('/{school_year}/{college}/{department}',FacultyAndSchedulingEnrolled::class)->name('scheduling-lists-enrolled');
+            Route::get('/{school_year}/{college}',FacultyAndSchedulingDepartments::class)->name('scheduling-lists-departments');
+            Route::get('/{school_year}',FacultyAndSchedulingColleges::class)->name('scheduling-lists-college');
             
         });
-        
+
         Route::prefix('enrolled')->group(function () {
            
 
@@ -361,9 +375,9 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         Route::get('/',function (){return redirect (route('my-schedule-lists'));})->name('my-schedule-default');
         
         Route::get('/my-schedules',MyScheduleLists::class)->name('my-schedule-lists');
-        Route::get('/enrolled-students-{curriculum_id}',FacultyEnrolledStudentLists::class)->name('my-enrolled-students');
-        Route::get('/evaluation-{curriculum_id}',FacultyEvaluationLists::class)->name('my-evaluation-lists');
-        Route::get('/attendance-{curriculum_id}-{id}',FacultyAttendanceLists::class)->name('my-attendance-lists');
+        Route::get('/enrolled-students-{schedule_id}',FacultyEnrolledStudentLists::class)->name('my-enrolled-students');
+        Route::get('/evaluation-{schedule_id}',FacultyEvaluationLists::class)->name('my-evaluation-lists');
+        Route::get('/attendance-{schedule_id}-{id}',FacultyAttendanceLists::class)->name('my-attendance-lists');
         Route::get('rooms/view-{id}',ViewRoom::class)->name('my-room-view');
         Route::get('subjects/view-{id}',ViewSubject::class)->name('my-subject-view');
         Route::get('year-levels/view-{id}',ViewYearLevel::class)->name('my-year-level-view');
@@ -371,6 +385,23 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         Route::get('school-years/view-{id}',ViewSchoolYear::class)->name('my-school-year-view');
         Route::get('departments/view-{id}',ViewDepartment::class)->name('my-department-view');
         Route::get('colleges/view-{id}',ViewCollege::class)->name('my-college-view');
+        Route::get('students/view-{id}',ViewStudent::class)->name('faculty-student-view');
+
+        Route::prefix('academic')->middleware([IsStudent::class])->group(function () {
+            Route::get('designations/view-{id}',ViewDesignation::class)->name('faculty-designation-view');
+            Route::get('ranks/view-{id}',ViewRank::class)->name('faculty-rank-view');
+            Route::get('faculty-types/view-{id}',ViewFacultyType::class)->name('faculty-faculty-type-view');
+            Route::get('faculty/view-{id}',ViewFaculty::class)->name('faculty-faculty-view');
+        });
+        
+        // Route::get('rooms/view-{id}',ViewRoom::class)->name('faculty-room-view');
+        // Route::get('subjects/view-{id}',ViewSubject::class)->name('faculty-subject-view');
+        // Route::get('year-levels/view-{id}',ViewYearLevel::class)->name('faculty-year-level-view');
+        // Route::get('semesters/view-{id}',ViewSemester::class)->name('faculty-semester-view');
+        // Route::get('school-years/view-{id}',ViewSchoolYear::class)->name('faculty-school-year-view');
+        // Route::get('departments/view-{id}',ViewDepartment::class)->name('faculty-department-view');
+        // Route::get('colleges/view-{id}',ViewCollege::class)->name('faculty-college-view');
+
     });
 
     Route::prefix('profile')->group(function () {
@@ -382,6 +413,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         Route::get('/my-grades',MyGrades::class)->name('my-grades');
         Route::get('/my-schedules',MySchedules::class)->name('my-schedules');
     });
+
 
 
 

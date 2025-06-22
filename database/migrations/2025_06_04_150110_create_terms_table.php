@@ -13,7 +13,7 @@ return new class extends Migration
     {
         DB::statement('CREATE TABLE terms(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            curriculum_id INT,
+            schedule_id INT,
             term_name VARCHAR(255),
             weight DOUBLE,
             term_order INT,

@@ -10,12 +10,12 @@ class AttendanceController extends Controller
 {
     public function attendance_dates(Request $request){
 
-        $curriculum_id =  $request->input('curriculum_id');
+        $schedule_id =  $request->input('schedule_id');
         $term_id =  $request->input('term_id');
 
         $current_school_work_type = DB::table('school_works_types')  
             ->where('school_work_type','=','Attendance')  
-            ->where('curriculum_id','=',$curriculum_id)
+            ->where('schedule_id','=',$schedule_id)
             ->where('term_id','=',$term_id)
             ->first();
         $attendance_dates = DB::table('school_works')  
@@ -24,7 +24,7 @@ class AttendanceController extends Controller
                 DB::raw('DATE_FORMAT(schedule_date, "%Y-%m-%d") as schedule_date')
             )
             ->where('school_work_type_id', '=', $current_school_work_type->id)  
-            ->where('curriculum_id', '=', $curriculum_id)
+            ->where('schedule_id', '=', $schedule_id)
             ->where('term_id', '=', $term_id)
             ->get(); // No need for ->toArray()
 
@@ -50,25 +50,25 @@ class AttendanceController extends Controller
 
      public function add_attendace_date(Request $request){
         $date =  $request->input('date');
-        $curriculum_id =  $request->input('curriculum_id');
+        $schedule_id =  $request->input('schedule_id');
         $term_id =  $request->input('term_id');
 
         $current_school_work_type = DB::table('school_works_types')  
             ->where('school_work_type','=','Attendance')  
-            ->where('curriculum_id','=',$curriculum_id)
+            ->where('schedule_id','=',$schedule_id)
             ->where('term_id','=',$term_id)
             ->first();
 
         $attendance_name = 'Attendance for '.Carbon::parse($date)->format('F, d Y');
         if(!DB::table('school_works')  
             ->where('school_work_name','=',$attendance_name)  
-            ->where('curriculum_id', '=', $curriculum_id)
+            ->where('schedule_id', '=', $schedule_id)
             ->where('term_id', '=', $term_id)
             ->first()){
             $res = DB::table('school_works')
                 ->insert([
                     'id' => NULL,
-                    'curriculum_id' => $curriculum_id,
+                    'schedule_id' => $schedule_id,
                     'term_id' => $term_id,
                     'school_work_name' => $attendance_name,
                     'school_work_type_id' => $current_school_work_type->id,

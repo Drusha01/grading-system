@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Curriculum;
+namespace App\Livewire\Admin\FacultyAndScheduling;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class CurriculumDepartments extends Component
+class FacultyAndSchedulingDepartments extends Component
 {
-
+    use WithPagination;
     public $school_year;
     public $college;
 
@@ -46,7 +46,8 @@ class CurriculumDepartments extends Component
             ->orderBy('d.is_active', 'desc')
             ->orderBy('d.id', 'desc')
             ->paginate(10);
-        return view('livewire.admin.curriculum.curriculum-departments',[
+
+        return view('livewire.admin.faculty-and-scheduling.faculty-and-scheduling-departments',[
             'table_data'=>$table_data
         ])
         ->layout('components.layouts.admin-app',[

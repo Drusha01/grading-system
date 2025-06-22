@@ -15,8 +15,8 @@ class CurriculumEnrolled extends Component
     public $college;
     public $department;
 
-    public $title = "Curriculum";
-    public $route = 'Curriculum';
+    public $title = "Faculty and Scheduling";
+    public $route = 'Faculty and Scheduling';
 
     public $filters = [
         'search'=> NULL,
@@ -35,7 +35,7 @@ class CurriculumEnrolled extends Component
             ->orderBy('yl.id', 'asc')
             ->first();
 
-        return redirect('admin/curriculums/'.$school_year.'/'.$college.'/'.$department.'/'.$year_levels->year_level.'/'.$semester->semester);
+        return redirect('admin/faculty-and-scheduling/'.$school_year.'/'.$college.'/'.$department.'/'.$year_levels->year_level.'/'.$semester->semester);
     }
     public function render()
     {

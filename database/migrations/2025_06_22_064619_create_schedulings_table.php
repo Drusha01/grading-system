@@ -11,17 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE TABLE school_works(
+        DB::statement('CREATE TABLE schedulings(
             id INT PRIMARY KEY AUTO_INCREMENT,
+            school_year_id INT,
+            college_id INT,
+            department_id INT,
+            year_level_id INT,
+            semester_id INT,
             schedule_id INT,
-            -- student_id INT,
-            term_id INT,
-            school_work_name VARCHAR(255),
-            school_work_type_id INT,
-            -- score DOUBLE,
-            max_score DOUBLE,
-            schedule_date DATETIME,
-            number_order INT,
+
+            subject_id INT,
+            faculty_id INT,
+            room_id INT ,
+            schedule_from DATETIME,
+	        schedule_to DATETIME,
+            day VARCHAR(255),
+            is_lec BOOLEAN DEFAULT 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
@@ -32,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('school_works');
+        Schema::dropIfExists('schedulings');
     }
 };

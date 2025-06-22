@@ -31,9 +31,9 @@ class IsFaculty
                 ->where('is_active','=',1)
                 ->where('admin_type','=',2)->first();
 
-            $curriculums = DB::table('users as u')
+            $scheduling = DB::table('users as u')
                 ->join('faculty as f','f.user_id','u.id')
-                ->join('curriculums as cl','cl.faculty_id','f.id')
+                ->join('schedulings as cl','cl.faculty_id','f.id')
                 ->where('f.user_id','=',$userId)
                 ->get()
                 ->toArray();
@@ -44,7 +44,7 @@ class IsFaculty
             if($admin){
                 return redirect('/admin');
             }
-            if($curriculums == 0){
+            if($scheduling == 0){
                 return redirect('/student');
             }
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Curriculum;
+namespace App\Livewire\Admin\FacultyAndScheduling;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class CurriculumColleges extends Component
-{
 
-    public $school_year;
+class FacultyAndSchedulingEnrolled extends Component
+{
+    use WithPagination;
+     public $school_year;
+    public $college;
+    public $department;
 
     public $title = "Faculty and Scheduling";
     public $route = 'Faculty and Scheduling';
@@ -19,8 +22,21 @@ class CurriculumColleges extends Component
     public $filters = [
         'search'=> NULL,
     ];
-    public function mount($school_year){
+    public function mount($school_year,$college,$department){
         $this->school_year = $school_year;
+        $this->college = $college;
+        $this->department = $department;
+
+        $semester = DB::table('semesters as s')
+            ->orderBy('s.is_active','desc')
+            ->orderBy('s.id', 'asc')
+            ->first();
+
+        $year_levels = DB::table('year_levels as yl')
+            ->orderBy('yl.id', 'asc')
+            ->first();
+
+        return redirect('admin/faculty-and-scheduling/'.$school_year.'/'.$college.'/'.$department.'/'.$year_levels->year_level.'/'.$semester->semester);
     }
     public function render()
     {
@@ -30,7 +46,7 @@ class CurriculumColleges extends Component
             ->orderBy('c.is_active','desc')
             ->orderBy('c.id', 'desc')
             ->paginate(10);
-        return view('livewire.admin.curriculum.curriculum-colleges',[
+        return view('livewire.admin.faculty-and-scheduling.faculty-and-scheduling-enrolled',[
             'table_data'=>$table_data
         ])
         ->layout('components.layouts.admin-app',[

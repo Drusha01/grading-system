@@ -13,7 +13,7 @@ return new class extends Migration
     {
         DB::statement('CREATE TABLE lab_lec_grades(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            curriculum_id INT,
+            schedule_id INT,
             lab_lec_id INT,
             student_id INT,
             grade DOUBLE,

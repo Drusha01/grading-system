@@ -18,9 +18,9 @@ class SideNav extends Component
             ->where('id','=',$userId)
             ->first();
 
-        $curriculums = DB::table('users as u')
+        $schedules = DB::table('users as u')
             ->join('faculty as f','f.user_id','u.id')
-            ->join('curriculums as cl','cl.faculty_id','f.id')
+            ->join('schedulings as cl','cl.faculty_id','f.id')
             ->where('f.user_id','=',$userId)
             ->get()
             ->toArray();
@@ -37,7 +37,7 @@ class SideNav extends Component
 
         return view('livewire.admin.side-nav.side-nav',[
             'user' => $user,
-            'curriculums' => $curriculums,
+            'schedules' => $schedules,
             'admin' => $admin,
             'student'=> $student
         ]);

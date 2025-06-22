@@ -13,7 +13,7 @@ return new class extends Migration
     {
         DB::statement('CREATE TABLE lab_lec(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            curriculum_id INT,
+            schedule_id INT,
             term_id INT,
             sub_weight DOUBLE,
             is_lecture BOOLEAN,

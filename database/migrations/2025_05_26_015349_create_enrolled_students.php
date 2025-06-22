@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-         DB::statement('CREATE TABLE enrolled_students(
+        DB::statement('CREATE TABLE enrolled_students(
             id INT PRIMARY KEY AUTO_INCREMENT,
             student_id INT,
-            curriculum_id INT,
+            schedule_id INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
 
         DB::statement('CREATE INDEX idx_enrolled_student_id ON enrolled_students(student_id);');
-        DB::statement('CREATE INDEX idx_enrolled_curriculum_id ON enrolled_students(curriculum_id);');
+        DB::statement('CREATE INDEX idx_enrolled_schedule_id ON enrolled_students(schedule_id);');
     }
 
     /**

@@ -35,7 +35,7 @@ class EnrolledStudentLists extends Component
 
     public $year_levels = []; 
 
-    public $curriculum = NULL;
+    public $schedule = NULL;
     public $studentFilter = [
         'college_id'=> NULL,
         'studentFilter'=> NULL
@@ -43,25 +43,25 @@ class EnrolledStudentLists extends Component
 
     public $detail = [
         'student_id'=> NULL,
-        'curriculum_id'=> NULL,
+        'schedule_id'=> NULL,
     ];
 
     protected $rules = [
         'detail.student_id' => 'required|exists:students,id',
-        'detail.curriculum_id' => 'required|exists:curriculums,id',
+        'detail.schedule_id' => 'required|exists:curriculums,id',
     ];
 
     protected $messages = [
         'detail.student_id.required' => 'Student is required.',
         'detail.student_id.exists' => 'The selected student does not exist.',
-        'detail.curriculum_id.required' => 'Curriculum is required.',
-        'detail.curriculum_id.exists' => 'The selected curriculum does not exist.',
+        'detail.schedule_id.required' => 'Curriculum is required.',
+        'detail.schedule_id.exists' => 'The selected schedule does not exist.',
     ];
 
 
 
-    public function mount($curriculum_id){
-        $this->detail['curriculum_id'] = $curriculum_id;
+    public function mount($schedule_id){
+        $this->detail['schedule_id'] = $schedule_id;
         $this->colleges = DB::table('colleges')
             ->where('is_active','=',1)
             ->get()
@@ -98,7 +98,7 @@ class EnrolledStudentLists extends Component
             ->leftJoin('colleges as c','c.id','s.college_id')
             ->leftJoin('departments as d','d.id','s.department_id')
             ->leftJoin('year_levels as yl','yl.id','s.year_level_id')
-            ->where('es.curriculum_id','=',$this->detail['curriculum_id']);
+            ->where('es.schedule_id','=',$this->detail['schedule_id']);
         
 
         if (!empty($this->filters['search'])) {
@@ -178,7 +178,7 @@ class EnrolledStudentLists extends Component
 
         if(DB::table('enrolled_students')
             ->where('student_id','=',$this->detail['student_id'])
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->first()
             ){
             throw \Illuminate\Validation\ValidationException::withMessages([
@@ -206,7 +206,7 @@ class EnrolledStudentLists extends Component
     public function saveDelete($modal_id){
         if(DB::table('enrolled_students')
             ->where('student_id','=',$this->detail['student_id'])
-            ->where('curriculum_id','=',$this->detail['curriculum_id'])
+            ->where('schedule_id','=',$this->detail['schedule_id'])
             ->delete()
             ){
                 $this->dispatch('notifySuccess', 
@@ -222,7 +222,7 @@ class EnrolledStudentLists extends Component
     }
     
     public function getDetails(){
-        $this->curriculum = DB::table('curriculums as cl')
+        $this->schedule = DB::table('curriculums as cl')
             ->select(
                 'cl.id',
                 's.college_id' ,
@@ -270,7 +270,7 @@ class EnrolledStudentLists extends Component
             ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id')
             ->leftjoin('semesters as sm','sm.id','cl.semester_id')
             ->leftjoin('year_levels as yl','yl.id','cl.year_level_id')
-            ->where('cl.id','=',$this->detail['curriculum_id'])
+            ->where('cl.id','=',$this->detail['schedule_id'])
             ->first();
     }
 
@@ -278,7 +278,7 @@ class EnrolledStudentLists extends Component
         $this->dispatch('openModal',modal_id:$modal_id);
         $this->dispatch('openAttendanceModal', [
             'obj' => [
-                'curriculum_id' => $this->detail['curriculum_id'],
+                'schedule_id' => $this->detail['schedule_id'],
                 'term_id' => $this->detail['term_id'],
             ]
         ]);

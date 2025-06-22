@@ -49,7 +49,7 @@ class MyScheduleLists extends Component
                 'cl.faculty_id',
             )
             ->join('faculty as f','f.user_id','u.id')
-            ->join('curriculums as cl','cl.faculty_id','f.id')
+            ->join('schedulings as cl','cl.faculty_id','f.id')
             ->where('f.user_id','=',$userId)
             ->leftJoin('subjects as s','s.id','cl.subject_id')
             ->leftJoin('rooms as r','r.id','cl.room_id')

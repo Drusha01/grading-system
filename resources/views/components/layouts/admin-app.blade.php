@@ -220,7 +220,7 @@
 
             Livewire.on('openAttendanceModal', (obj) => {
                 var res = obj[0].obj;
-                var curriculum_id = res.curriculum_id;
+                var schedule_id = res.schedule_id;
                 var term_id = res.term_id;
                 $('#attendanceModal').on('shown.bs.modal', function () {
                     renderCalendar(res);
@@ -237,7 +237,7 @@
                         url: '/api/attendance-dates', // Replace with your actual backend route
                         method: 'GET',
                         extraParams: {
-                            curriculum_id: res.curriculum_id,  // Replace with dynamic ID if needed
+                            schedule_id: res.schedule_id,  // Replace with dynamic ID if needed
                             term_id: res.term_id         // Replace with dynamic ID if needed
                         },
                         failure: function() {
@@ -284,7 +284,7 @@
                                     btn.style.zIndex = '9999';  
                                     btn.onclick = () => {
                                         const payload = {
-                                            curriculum_id: res.curriculum_id,
+                                            schedule_id: res.schedule_id,
                                             term_id: res.term_id,
                                             date: dateStr,
                                             id: eventId  // make sure you already got this from the map
@@ -304,7 +304,7 @@
                                         })
                                         .then(data => {
                                             renderCalendar({
-                                                curriculum_id: res.curriculum_id,
+                                                schedule_id: res.schedule_id,
                                                 term_id: res.term_id,
                                             })
                                         })
@@ -335,8 +335,8 @@
 
                                     btn2.onclick = () => {
                                         const formattedDate = formatDateMMDDYY(dateStr);
-                                        const url = `/admin/curriculums/attendance-${res.curriculum_id}-${eventId}`;
-                                        window.location.href = url;
+                                        const url = `/admin/faculty-and-scheduling/attendance-${res.schedule_id}-${eventId}`;
+                                        window.open(url, '_blank');
                                     };
                                     frame.appendChild(btn2);
                                 } else {
@@ -358,7 +358,7 @@
 
                                     btn.onclick = () => {
                                             const payload = {
-                                            curriculum_id: res.curriculum_id,
+                                            schedule_id: res.schedule_id,
                                             term_id: res.term_id,
                                             date: dateStr,
                                         };
@@ -377,7 +377,7 @@
                                         })
                                         .then(data => {
                                             renderCalendar({
-                                                curriculum_id: res.curriculum_id,
+                                                schedule_id: res.schedule_id,
                                                 term_id: res.term_id,
                                             })
                                         })
@@ -403,7 +403,7 @@
 
             Livewire.on('openFacultyAttendanceModal', (obj) => {
                 var res = obj[0].obj;
-                var curriculum_id = res.curriculum_id;
+                var schedule_id = res.schedule_id;
                 var term_id = res.term_id;
                 $('#attendanceModal').on('shown.bs.modal', function () {
                     renderFacultyCalendar(res);
@@ -420,7 +420,7 @@
                         url: '/api/attendance-dates', // Replace with your actual backend route
                         method: 'GET',
                         extraParams: {
-                            curriculum_id: res.curriculum_id,  // Replace with dynamic ID if needed
+                            schedule_id: res.schedule_id,  // Replace with dynamic ID if needed
                             term_id: res.term_id         // Replace with dynamic ID if needed
                         },
                         failure: function() {
@@ -467,7 +467,7 @@
                                     btn.style.zIndex = '9999';  
                                     btn.onclick = () => {
                                         const payload = {
-                                            curriculum_id: res.curriculum_id,
+                                            schedule_id: res.schedule_id,
                                             term_id: res.term_id,
                                             date: dateStr,
                                             id: eventId  // make sure you already got this from the map
@@ -487,7 +487,7 @@
                                         })
                                         .then(data => {
                                             renderCalendar({
-                                                curriculum_id: res.curriculum_id,
+                                                schedule_id: res.schedule_id,
                                                 term_id: res.term_id,
                                             })
                                         })
@@ -518,8 +518,8 @@
 
                                     btn2.onclick = () => {
                                         const formattedDate = formatDateMMDDYY(dateStr);
-                                        const url = `/faculty/attendance-${res.curriculum_id}-${eventId}`;
-                                        window.location.href = url;
+                                        const url = `/faculty/attendance-${res.schedule_id}-${eventId}`;
+                                        window.open(url, '_blank');
                                     };
                                     frame.appendChild(btn2);
                                 } else {
@@ -541,7 +541,7 @@
 
                                     btn.onclick = () => {
                                             const payload = {
-                                            curriculum_id: res.curriculum_id,
+                                            schedule_id: res.schedule_id,
                                             term_id: res.term_id,
                                             date: dateStr,
                                         };
@@ -560,7 +560,7 @@
                                         })
                                         .then(data => {
                                             renderCalendar({
-                                                curriculum_id: res.curriculum_id,
+                                                schedule_id: res.schedule_id,
                                                 term_id: res.term_id,
                                             })
                                         })

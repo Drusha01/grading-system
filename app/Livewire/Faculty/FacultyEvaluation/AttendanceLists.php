@@ -23,7 +23,7 @@ class AttendanceLists extends Component
 
     public $departments = [];
 
-    public $curriculum = NULL;
+    public $schedule = NULL;
 
     public $date;
 
@@ -32,18 +32,18 @@ class AttendanceLists extends Component
     public $detail = [
         'id'=>NULL,
         'student_id'=> NULL,
-        'curriculum_id'=> NULL,
+        'schedule_id'=> NULL,
         'term_id'=> NULL,
         'date'=> NULL,
     ];
-    public function mount($curriculum_id,$id){
+    public function mount($schedule_id,$id){
 
        
         $this->detail['id'] = $id;
         $school_work_attendance = DB::table('school_works')  
         ->where('id','=',$id)
         ->first();
-         $this->detail['curriculum_id'] = $curriculum_id;
+         $this->detail['schedule_id'] = $schedule_id;
         $this->detail['term_id'] = $school_work_attendance->term_id;
         $this->detail['date'] = Carbon::create($school_work_attendance->schedule_date)->format('F d, Y');
         $this->colleges = DB::table('colleges')
@@ -55,7 +55,7 @@ class AttendanceLists extends Component
             ->where('is_active','=',1)
             ->get()
             ->toArray();
-        self::school_work_types($this->detail['curriculum_id']);
+        self::school_work_types($this->detail['schedule_id']);
 
     }
     public function render()
@@ -85,7 +85,7 @@ class AttendanceLists extends Component
             ->leftJoin('colleges as c','c.id','s.college_id')
             ->leftJoin('departments as d','d.id','s.department_id')
             ->leftJoin('year_levels as yl','yl.id','s.year_level_id')
-            ->where('es.curriculum_id','=',$this->detail['curriculum_id']);
+            ->where('es.schedule_id','=',$this->detail['schedule_id']);
         
 
         if (!empty($this->filters['search'])) {
@@ -108,7 +108,7 @@ class AttendanceLists extends Component
         //         $student_school_works = DB::table('school_works as sw')
         //             ->select(
         //                 'sw.id',
-        //                 'sw.curriculum_id',
+        //                 'sw.schedule_id',
         //                 'sw.term_id',
         //                 'school_work_name',
         //                 'school_work_type_id',
@@ -120,7 +120,7 @@ class AttendanceLists extends Component
 
         //             )
         //             ->leftjoin('school_work_scores as sws','sws.school_work_id','sw.id')
-        //             ->where('sw.curriculum_id','=',$this->detail['curriculum_id'])
+        //             ->where('sw.schedule_id','=',$this->detail['schedule_id'])
         //             ->where('sw.term_id','=',$this->detail['term_id'])
         //             ->where('sw.school_work_type_id','=',$value->id)
         //             ->get()
@@ -129,7 +129,7 @@ class AttendanceLists extends Component
         //         foreach ($student_school_works as $ssw_key => $ssw_value) {
         //             if(
         //                 !DB::table('school_work_scores as sws')
-        //                     ->where('sws.curriculum_id','=',$this->detail['curriculum_id'])
+        //                     ->where('sws.schedule_id','=',$this->detail['schedule_id'])
         //                     ->where('sws.term_id','=',$this->detail['term_id'])
         //                     ->where('sws.student_id','=',$v_value)
         //                     ->where('sws.school_work_id','=',$ssw_value->id)
@@ -138,7 +138,7 @@ class AttendanceLists extends Component
         //                  DB::table('school_work_scores')
         //                     ->insert([
         //                     'id' => NULL,
-        //                     'curriculum_id' => $this->detail['curriculum_id'],
+        //                     'schedule_id' => $this->detail['schedule_id'],
         //                     'student_id' => $v_value,
         //                     'term_id' => $this->detail['term_id'],
         //                     'school_work_id' => $ssw_value->id,
@@ -160,9 +160,9 @@ class AttendanceLists extends Component
         ]);
     }
 
-    public function school_work_types($curriculum_id){
+    public function school_work_types($schedule_id){
         $this->school_work_types = DB::table('school_works_types')
-            ->where('curriculum_id','=',$curriculum_id)
+            ->where('schedule_id','=',$schedule_id)
             ->where('term_id','=',$this->detail['term_id'])
             ->orderBy('number_order','asc')
             ->get()
@@ -190,7 +190,7 @@ class AttendanceLists extends Component
                     )
                     ->leftjoin('school_works as sw','sw.school_work_type_id','swt.id')
                     ->leftjoin('school_work_scores as sws','sws.school_work_id','sw.id')
-                    ->where('swt.curriculum_id','=',$this->detail['curriculum_id'])
+                    ->where('swt.schedule_id','=',$this->detail['schedule_id'])
                     ->where('swt.term_id','=',$this->detail['term_id'])
                     ->where('swt.id','=', $value->id)
                     ->where('sw.id','=', $this->detail['id'])
@@ -207,7 +207,7 @@ class AttendanceLists extends Component
                         if($s_value->id){
                             array_push( $scores,[
                                 'score_id' => $s_value->score_id,
-                                'curriculum_id' => $this->detail['curriculum_id'],
+                                'schedule_id' => $this->detail['schedule_id'],
                                 'student_id'=>$v_value,
                                 'term_id' => $this->detail['term_id'],
                                 'school_work_id' => $s_value->id,
@@ -228,7 +228,7 @@ class AttendanceLists extends Component
 
     public function updateScore(
         $score_id,
-        $curriculum_id,
+        $schedule_id,
         $student_id,
         $term_id,
         $school_work_id,
@@ -245,7 +245,7 @@ class AttendanceLists extends Component
             DB::table('school_work_scores')
                 ->where('id','=',$score_id)
                 ->update([
-                'curriculum_id' => $curriculum_id,
+                'schedule_id' => $schedule_id,
                 'student_id' => $student_id,
                 'term_id' => $term_id,
                 'school_work_id' => $school_work_id,
@@ -256,7 +256,7 @@ class AttendanceLists extends Component
             DB::table('school_work_scores')
                 ->insert([
                 'id' => NULL,
-                'curriculum_id' => $curriculum_id,
+                'schedule_id' => $schedule_id,
                 'student_id' => $student_id,
                 'term_id' => $term_id,
                 'school_work_id' => $school_work_id,
@@ -272,7 +272,7 @@ class AttendanceLists extends Component
         $this->dispatch('openModal',modal_id:$modal_id);
         $this->dispatch('openAttendanceModal', [
             'obj' => [
-                'curriculum_id' => $this->detail['curriculum_id'],
+                'schedule_id' => $this->detail['schedule_id'],
                 'term_id' => $this->detail['term_id'],
             ]
         ]);
@@ -284,7 +284,7 @@ class AttendanceLists extends Component
     }
 
       public function getDetails(){
-        $this->curriculum = DB::table('curriculums as cl')
+        $this->schedule = DB::table('curriculums as cl')
             ->select(
                 'cl.id',
                 's.college_id' ,
@@ -332,7 +332,7 @@ class AttendanceLists extends Component
             ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id')
             ->leftjoin('semesters as sm','sm.id','cl.semester_id')
             ->leftjoin('year_levels as yl','yl.id','cl.year_level_id')
-            ->where('cl.id','=',$this->detail['curriculum_id'])
+            ->where('cl.id','=',$this->detail['schedule_id'])
             ->first();
     }
 }
