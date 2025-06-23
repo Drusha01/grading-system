@@ -29,8 +29,8 @@ class EditGradeEquivalent extends Component
             ->first();
         $this->detail = [
         'id'=> $detail->id,
-        'minimum'=> $detail->minimum,
-        'maximum' => $detail->maximum,  
+        'minimum'=> intval($detail->minimum),
+        'maximum' => intval($detail->maximum),  
         'grade'=> $detail->grade,
     ];
 
@@ -38,7 +38,7 @@ class EditGradeEquivalent extends Component
     public function save(){
         $this->validate([
             'detail.minimum' => 'required|numeric',
-            'detail.maximum' => 'required|numeric|gt:detail.minimum',
+            'detail.maximum' => 'required|numeric|gte:detail.minimum',
             'detail.grade' => 'required|string|max:5',
         ], [
             'detail.minimum.required' => 'The minimum value is required.',
@@ -76,8 +76,8 @@ class EditGradeEquivalent extends Component
         if(DB::table('point_grade_equivalent')
             ->where('id','=',$this->detail['id'])
             ->update(values: [
-                'minimum' => $this->detail['minimum'],
-                'maximum' => $this->detail['maximum'],
+                'minimum' => intval($this->detail['minimum']),
+                'maximum' => intval($this->detail['maximum']),
                 'grade' => $this->detail['grade'],
             ])){
             }
