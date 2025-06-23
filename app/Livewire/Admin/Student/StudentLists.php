@@ -129,7 +129,7 @@ class StudentLists extends Component
                 s.subject_code,
                 cl.date_created
             ')
-            ->join('curriculums as cl', 'cl.id', '=', 'llg.curriculum_id')
+            ->join('schedulings as cl', 'cl.id', '=', 'llg.schedule_id')
             ->join('subjects as s', 's.id', '=', 'cl.subject_id')
             ->join('school_years as sy', 'sy.id', '=', 'cl.school_year_id')
             ->join('semesters as sm', 'sm.id', '=', 'cl.semester_id')
