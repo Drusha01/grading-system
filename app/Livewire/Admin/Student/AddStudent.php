@@ -41,7 +41,6 @@ class AddStudent extends Component
             'detail.department_id' => 'required|exists:departments,id',
             'detail.year_level_id' => 'required|exists:year_levels,id',
             'detail.code' => 'required|string|max:100|unique:students,code',
-            // 'detail.email' => 'required|email|max:100|unique:students,email',
             'detail.email' => [
                 'required',
                 'email',

@@ -116,7 +116,7 @@ class FacultyAndSchedulingSubjects extends Component
                 'cl.id' ,
                 's.college_id' ,
                 's.department_id' ,
-                'cl.subject_id' ,
+                'sh.subject_id' ,
                 'cl.room_id' ,
                 's.subject_code' ,
                 's.description',

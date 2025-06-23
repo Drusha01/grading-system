@@ -71,7 +71,7 @@
                             <tr class="align-middle">
                                 <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
                                     <td class="px-4">
-                                        <a href="{{route('subject-view',$value->subject_id)  }}" target="_blank">
+                                        <a href="{{route('subject-view',$value->subject_id)}}" target="_blank">
                                             {{$value->subject}}
                                         </a>
                                     </td>
@@ -142,7 +142,7 @@
                     <div class="modal-body row">
                         <div class="col-md-12 mb-3">
                             <label for="schedule_id" class="form-label">Select Subject Schedule</label>
-                            <select name="schedule_id" id="schedule_id" wire:model.defer="detail.schedule_id" class="form-select select2 @error('detail.schedule_id') is-invalid @enderror">  
+                            <select name="schedule_id" id="schedule_id" wire:model.defer="detail.schedule_id" wire:change="selectSubject()" class="form-select select2 @error('detail.schedule_id') is-invalid @enderror">  
                                 <option value="">Select Subject</option>
                                 @foreach ($subjectschedules as $key => $value )
                                      <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code.' '.
