@@ -199,6 +199,16 @@ class FacultyAndSchedulingSubjects extends Component
     }
 
     public function filterSubject(){
+        $curriculum_subjects = DB::table('curriculum_subjects as cs')
+            ->join('curriculums as cl', 'cs.curriculum_id', '=', 'cl.id')
+            ->where('cl.school_year_id', $this->detail['school_year_id'])
+            ->where('cl.college_id', $this->detail['college_id'])
+            ->where('cl.department_id', $this->detail['department_id'])
+            ->where('cs.year_level_id','=',$this->detail['year_level_id'])
+            ->where('cs.semester_id','=',$this->detail['semester_id'])
+            ->pluck('cs.subject_id') // <- Pluck subject_id column directly
+            ->toArray();
+
         $this->subjectschedules = DB::table('schedules as sh')
                 ->select(
                     'sh.id' ,
@@ -236,6 +246,8 @@ class FacultyAndSchedulingSubjects extends Component
 
     
 
+        $this->subjectschedules
+        ->whereIn('sh.subject_id',$curriculum_subjects);
         if (!empty($this->subjectFilter['search'])) {
             $this->subjectschedules
             ->where('s.subject_id','like','%'.$this->subjectFilter['search'] .'%')
@@ -350,6 +362,12 @@ class FacultyAndSchedulingSubjects extends Component
     public function addSchedule($modal_id){
         
         // added with same sy,college,department,yl,semester, schedule
+        if(strlen($this->detail['schedule_id']) == 0){
+          throw \Illuminate\Validation\ValidationException::withMessages([
+                'detail.schedule_id' => 'Please select schedule.',
+            ]);  
+        }
+
         if(
            $res = DB::table('schedulings')
                 ->where('school_year_id' ,'=', DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$this->detail['school_year'])->first()->id)

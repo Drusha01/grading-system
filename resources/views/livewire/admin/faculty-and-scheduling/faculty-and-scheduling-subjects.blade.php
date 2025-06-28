@@ -144,13 +144,15 @@
                             <label for="schedule_id" class="form-label">Select Subject Schedule</label>
                             <select name="schedule_id" id="schedule_id" wire:model.defer="detail.schedule_id" wire:change="selectSubject()" class="form-select select2 @error('detail.schedule_id') is-invalid @enderror">  
                                 <option value="">Select Subject</option>
-                                @foreach ($subjectschedules as $key => $value )
+                                @forelse ($subjectschedules as $key => $value )
                                      <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code.' '.
                                         $value->schedule_from.' - '.
                                         $value->schedule_to.' ( '.
                                         implode(', ', json_decode($value->day, true)).' )'.' '.$value->room_code.($value->is_lec? "-LECTURE": "-LABORATORY")
                                      }}</option>
-                                @endforeach
+                                @empty
+                                     <option value="">No schedules added yet or curriculum is empty</option>
+                                @endforelse
                             </select>
                             @error('detail.schedule_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
