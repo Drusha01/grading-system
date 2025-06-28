@@ -171,7 +171,7 @@
                                                 </td>
                                                 <td class="px-4">
                                                     @if($value->calculated_grade)
-                                                        {{ $value->calculated_grade }}
+                                                        {{ number_format($value->calculated_grade, 2, '.', '') }}
                                                     @else 
                                                         {{ $value->other }}
                                                     @endif

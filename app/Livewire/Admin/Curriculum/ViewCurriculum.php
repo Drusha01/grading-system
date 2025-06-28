@@ -10,6 +10,7 @@ use Livewire\WithPagination;
 
 class ViewCurriculum extends Component
 {
+    use WithPagination;
     public $title = "Curriculum";
 
     public $route = "curriculum";

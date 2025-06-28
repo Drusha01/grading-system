@@ -115,16 +115,11 @@ use App\Livewire\Admin\Rank\DeleteRank;
 use App\Livewire\Admin\Rank\ActivateRank;
 use App\Livewire\Admin\Rank\RankLists;
 
-use App\Livewire\Admin\Curriculum\AddCurriculum;
-use App\Livewire\Admin\Curriculum\EditCurriculum;
 use App\Livewire\Admin\Curriculum\ViewCurriculum;
-use App\Livewire\Admin\Curriculum\DeleteCurriculum;
-use App\Livewire\Admin\Curriculum\ActivateCurriculum;
 use App\Livewire\Admin\Curriculum\CurriculumLists;
 use App\Livewire\Admin\Curriculum\CurriculumColleges;
 use App\Livewire\Admin\Curriculum\CurriculumDepartments;
-use App\Livewire\Admin\Curriculum\CurriculumEnrolled;
-use App\Livewire\Admin\Curriculum\CurriculumSubjects;
+use App\Livewire\Admin\Curriculum\CurriculumProspectus;
 
 
 use App\Livewire\Admin\Schedule\AddSchedule;
@@ -316,7 +311,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
 
         Route::prefix('curriculums')->group(function () {
             Route::get('/',CurriculumLists::class)->name('curriculum-lists');
-            Route::get('/{school_year}/{college}/{department}',CurriculumEnrolled::class)->name('curriculum-lists-enrolled');
+            Route::get('/{school_year}/{college}/{department}',CurriculumProspectus::class)->name('curriculum-lists-enrolled');
             Route::get('/{school_year}/{college}',CurriculumDepartments::class)->name('curriculum-lists-departments');
             Route::get('/{school_year}',CurriculumColleges::class)->name('curriculum-lists-college');
         });

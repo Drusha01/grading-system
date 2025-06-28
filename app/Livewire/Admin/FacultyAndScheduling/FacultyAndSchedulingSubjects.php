@@ -82,10 +82,12 @@ class FacultyAndSchedulingSubjects extends Component
         $this->semesters = DB::table('semesters as s')
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'asc')
+            ->where('is_active','=',1)
             ->get()
             ->toArray();
         $this->year_levels = DB::table('year_levels as yl')
             ->orderBy('yl.id', 'asc')
+            ->where('is_active','=',1)
             ->get()
             ->toArray();
 

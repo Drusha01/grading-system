@@ -16,7 +16,7 @@
         <div class="row p-2">
                 @forelse($table_data as $key =>$value)
                     <div class="col-3 p-0 mx-2">
-                        <a href="/admin/faculty-and-scheduling/{{ $value->year_start.'-'.$value->year_end }}">
+                        <a href="/admin/curriculums/{{ $value->year_start.'-'.$value->year_end }}">
                             <div class="d-flex align-items-center justify-content-between brand-bg-color p-3 rounded " style="min-width:200px;">
                                 <div class="d-flex justify-content-end">
                                     <div class="">

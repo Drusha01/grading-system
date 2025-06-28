@@ -10,9 +10,10 @@ use Livewire\WithPagination;
 
 class CurriculumLists extends Component
 {
-    public $title = "Faculty and Scheduling";
+    use WithPagination;
+    public $title = "Curriculum";
 
-    public $route = "Faculty and Scheduling";
+    public $route = "curriculum";
 
     public function render()
     {

@@ -11,22 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE TABLE curriculums(
+       DB::statement('CREATE TABLE curriculums(
             id INT PRIMARY KEY AUTO_INCREMENT,
             school_year_id INT,
             college_id INT,
             department_id INT,
-            year_level_id INT,
-            semester_id INT,
-            schedule_id INT,
-
-            subject_id INT,
-            faculty_id INT,
-            room_id INT ,
-            schedule_from DATETIME,
-	        schedule_to DATETIME,
-            day VARCHAR(255),
-            is_lec BOOLEAN DEFAULT 1,
+            prospectus TEXT,
+            is_editable BOOLEAN DEFAULT 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');

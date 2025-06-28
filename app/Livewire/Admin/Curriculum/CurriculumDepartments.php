@@ -10,12 +10,14 @@ use Livewire\WithPagination;
 
 class CurriculumDepartments extends Component
 {
+    use WithPagination;
+
 
     public $school_year;
     public $college;
 
-    public $title = "Faculty and Scheduling";
-    public $route = 'Faculty and Scheduling';
+    public $title = "Curriculum";
+    public $route = 'Curriculum';
 
     public $filters = [
         'search'=> NULL,
