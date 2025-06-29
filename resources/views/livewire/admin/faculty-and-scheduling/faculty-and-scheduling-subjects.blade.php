@@ -264,7 +264,8 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <label for="faculty_id" class="form-label">Select Faculty</label>
-                            <select name="faculty_id" id="faculty_id" wire:model.defer="detail.faculty_id" class="form-select @error('detail.faculty_id') is-invalid @enderror">  
+                            <select name="faculty_id" id="faculty_id" wire:model="detail.faculty_id" class="form-select @error('detail.faculty_id') is-invalid @enderror">  
+                                <option value="">Select Faculty</option>
                                 @foreach ($faculty as $key => $value )
                                      <option value="{{ $value->id }}" >{{ $value->first_name.' - '.$value->middle_name.' '.$value->last_name.' '.$value->suffix }}</option>
                                 @endforeach

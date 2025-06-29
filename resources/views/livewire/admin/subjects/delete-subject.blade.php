@@ -11,18 +11,17 @@
 
         <form wire:submit.prevent="save()">
             <div class="row">
-                <div class="col-md-12 mb-3">
-                    <label for="prerequisite_subject_id" class="form-label">Prerequisite Subject</label>
-                    <select name="prerequisite_subject_id" disabled id="prerequisite_subject_id" wire:model="detail.prerequisite_subject_id" class="form-select @error('detail.prerequisite_subject_id') is-invalid @enderror">  
-                        <option value="">Select Subject</option>
+                <label for="prerequisite_subject_id" class="form-label">Prerequisite Subject</label>
+                <div class="col-md-12 mb-3" wire:ignore>
+                    <select name="prerequisite_subject_id" disabled id="prerequisite_subject_id" wire:model.live="detail.prerequisite_subject_id"  multiple="multiple" wire:ignore class="form-select position-relative z-10 select2 @error('detail.prerequisite_subject_id') is-invalid @enderror">  
                         @foreach ($subjects as $key => $value )
                             <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code }}</option>
                         @endforeach
                     </select>
-                    @error('detail.prerequisite_subject_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror  
                 </div>
+                @error('detail.prerequisite_subject_id')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror  
                 <div class="col-md-6 mb-3">
                     <label for="subject_id" class="form-label">Subject ID</label>
                     <input type="subject_id" id="subject_id" disabled wire:model.defer="detail.subject_id" placeholder="Subject ID" class="form-control @error('detail.subject_id') is-invalid @enderror">
@@ -105,6 +104,22 @@
             </div>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select2 Access Selection
+            $('#prerequisite_subject_id').select2();
+            
+            // Make sure Livewire receives the selected value
+            $('#prerequisite_subject_id').on('change', function(e) {
+                var data = $(this).val(); // Get selected value
+                @this.set('detail.prerequisite_subject_id', data);
+            });
+
+            // $('#prerequisite_subject_id').trigger('change');
+
+            });
+    
+    </script>
 </div>
 
 

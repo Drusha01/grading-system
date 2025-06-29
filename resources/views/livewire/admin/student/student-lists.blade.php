@@ -155,25 +155,28 @@
                             <div class="col-12">
                                 <table class="table table-striped table-bordered text-center align-middle position-relative" >
                                     <thead style="background:#952323;color:white;">
-                                        <tr class="align-middle">
+                                        <tr class="">
                                             <th scope="col" class="px-4">#</th>
-                                            <th scope="col" class="px-4 ">Subject</th>
+                                            <th scope="col" class="px-4 text-start">Subject</th>
                                             <th scope="col" class="text-center px-4 ">Grade</th> 
                                             <th scope="col" class="text-center px-4 ">Grade Equivalent</th> 
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse($grades as $key =>$value)
-                                            <tr class="align-middle">
+                                            <tr class="">
                                                 <th scope="row" class="px-4">{{ intval($key)+1 }}</th>
-                                                <td class="px-4">
-                                                     {{$value->subject_id}} -{{$value->subject_code}}
+                                                <td class="px-4 text-start">
+                                                     {{$value->subject_id}} -{{$value->subject_code.' '.($value->is_lec ? "Lecture" : "Laboratory
+                                                     ")}}
                                                 </td>
                                                 <td class="px-4">
-                                                    @if($value->calculated_grade)
-                                                        {{ number_format($value->calculated_grade, 2, '.', '') }}
-                                                    @else 
-                                                        {{ $value->other }}
+                                                    @if(1)
+                                                        @if($value->calculated_grade)
+                                                            {{ number_format($value->calculated_grade, 2, '.', '') }}
+                                                        @else 
+                                                            {{ $value->other }}
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td class="px-4">

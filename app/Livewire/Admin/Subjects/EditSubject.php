@@ -25,7 +25,7 @@ class EditSubject extends Component
         'subject_id' => NULL,
         'subject_code' => NULL,
         'description'=> NULL,
-        'prerequisite_subject_id' => NULL,
+        'prerequisite_subject_id' => [],
         'lecture_unit'=> 3,
         'laboratory_unit' => 0,
     ];
@@ -34,15 +34,7 @@ class EditSubject extends Component
         return [
             'detail.college_id' => 'required|exists:colleges,id',
             'detail.department_id' => 'required|exists:departments,id',
-            'detail.prerequisite_subject_id' => [
-                'nullable',
-                'exists:subjects,id',
-                function ($attribute, $value, $fail) {
-                    if (intval($this->detail['id']) > 0 && $value == $this->detail['id']) {
-                        $fail('A subject cannot be its own prerequisite.');
-                    }
-                },
-            ],
+            'detail.prerequisite_subject_id' => 'nullable|array',
             'detail.subject_id' => 'required|unique:subjects,subject_id,'.$this->detail['id'],
             'detail.subject_code' => 'required|unique:subjects,subject_code,'.$this->detail['id'],
             'detail.lecture_unit' => 'integer|min:1',
@@ -77,6 +69,7 @@ class EditSubject extends Component
             'detail.laboratory_unit.integer' => 'Laboratory unit must be an integer.',
             'detail.lecture.integer' => 'Laboratory unit must be an integer.',
             'detail.lecture_unit.min' => 'Laboratory unit must greater than 0.',
+            'detail.prerequisite_subject_id.array' => 'The day must be a valid array.',
         ];
     }
 
@@ -93,6 +86,11 @@ class EditSubject extends Component
                 'detail.laboratory_unit' => 'Either Lecture Unit or Laboratory Unit must be at least 1.',
             ]);
         }
+        foreach ($this->detail['prerequisite_subject_id'] as $key => $value) {
+             throw \Illuminate\Validation\ValidationException::withMessages([
+                'detail.prerequisite_subject_id' => 'A subject cannot be its own prerequisite.',
+            ]);
+        }
         if(DB::table('subjects')
             ->where('id','=',$this->detail['id'])
             ->update([
@@ -101,7 +99,7 @@ class EditSubject extends Component
             'subject_id' => $this->detail['subject_id'],
             'subject_code' => $this->detail['subject_code'],
             'description'=> $this->detail['description'],
-            'prerequisite_subject_id' => intval($this->detail['prerequisite_subject_id']),
+            'prerequisite_subject_id' => json_encode($this->detail['prerequisite_subject_id']),
             'lecture_unit'=> intval($this->detail['lecture_unit']),
             'laboratory_unit' => intval($this->detail['laboratory_unit']),
         ])){
@@ -135,7 +133,7 @@ class EditSubject extends Component
             'subject_id' => $detail->subject_id,
             'subject_code' => $detail->subject_code,
             'description'=> $detail->description,
-            'prerequisite_subject_id' => ($detail->prerequisite_subject_id == 0 ? NULL:$detail->prerequisite_subject_id),
+            'prerequisite_subject_id' => json_decode($detail->prerequisite_subject_id),
             'lecture_unit'=> $detail->lecture_unit,
             'laboratory_unit' => $detail->laboratory_unit,
         ];

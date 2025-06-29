@@ -11,10 +11,9 @@
 
         <form wire:submit.prevent="save()">
             <div class="row">
-                <div class="col-md-12 mb-3">
+                <div class="col-md-12 mb-3" wire:ignore>
                     <label for="prerequisite_subject_id" class="form-label">Prerequisite Subject</label>
-                    <select name="prerequisite_subject_id" id="prerequisite_subject_id" wire:model="detail.prerequisite_subject_id" class="form-select @error('detail.prerequisite_subject_id') is-invalid @enderror">  
-                        <option value="">Select Subject</option>
+                    <select name="prerequisite_subject_id" multiple id="prerequisite_subject_id" class="form-select select2 @error('detail.prerequisite_subject_id') is-invalid @enderror">  
                         @foreach ($subjects as $key => $value )
                             <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code }}</option>
                         @endforeach
@@ -103,5 +102,20 @@
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Select2 Access Selection
+        $('#prerequisite_subject_id').select2();
+        
+        // Make sure Livewire receives the selected value
+        $('#prerequisite_subject_id').on('change', function(e) {
+            var data = $(this).val(); // Get selected value
+            @this.set('detail.prerequisite_subject_id', data);
+        });
+        
+        $('#prerequisite_subject_id').trigger('change');
+    });
+
+</script>
 
 

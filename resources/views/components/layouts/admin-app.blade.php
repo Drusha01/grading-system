@@ -82,6 +82,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
          <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <!-- bootstrap-5 -->
          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -203,6 +204,13 @@
                 document.addEventListener('DOMContentLoaded', function () {
                     setTimeout(()=>{
                         $('#day').trigger('change');
+                    },100)
+                });
+            @endif
+            @if (request()->is('admin/subjects*')) 
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(()=>{
+                        $('#prerequisite_subject_id').trigger('change');
                     },100)
                 });
             @endif
@@ -578,6 +586,17 @@
                 });
                 calendar.render();
             }
+
+            function togglePassword() {
+                const input = document.getElementById("password");
+                const icon = document.getElementById("eye-icon");
+                const isHidden = input.type === "password";
+
+                input.type = isHidden ? "text" : "password";
+                icon.classList.toggle("fa-eye");
+                icon.classList.toggle("fa-eye-slash");
+            }
+
             
         </script>
         <!-- <script>

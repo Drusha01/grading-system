@@ -52,13 +52,13 @@ class SubjectLists extends Component
                 'd.name as department',
                 'c.code as college_code',
                 'd.code as department_code',
-                'pr.subject_id as prerequisite_subject_id',
-                'pr.subject_code as prerequisite_subject_code',
+                // 'pr.subject_id as prerequisite_subject_id',
+                // 'pr.subject_code as prerequisite_subject_code',
                 's.is_active',
             )
             ->leftJoin('colleges as c','c.id','s.college_id')
-            ->leftJoin('departments as d','d.id','s.department_id')
-            ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id');
+            ->leftJoin('departments as d','d.id','s.department_id');
+            // ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id');
         if($this->filters['college_id']){
             $table_data->where('s.college_id', '=',$this->filters['college_id']);
         }

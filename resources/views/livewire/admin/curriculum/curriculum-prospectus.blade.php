@@ -55,7 +55,17 @@
                             <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
                                 <td class="px-4">
                                         @if($value->prerequisite_subject_id)
-                                            {{$value->prerequisite_subject_id.' - '. $value->prerequisite_subject_code}}
+                                            @php 
+                                                $prerequisites = DB::table('subjects')
+                                                    ->whereIn('id', json_decode($value->prerequisite_subject_id))
+                                                    ->get()
+                                                    ->toArray();
+                                                foreach($prerequisites as $v_key => $v_value){
+                                                    echo $v_value->subject_id.' - '.$v_value->subject_code; 
+                                                    echo '<br>';  
+                                                    
+                                                }
+                                            @endphp
                                         @else 
                                             N/A
                                         @endif    

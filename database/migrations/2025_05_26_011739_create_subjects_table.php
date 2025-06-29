@@ -17,7 +17,7 @@ return new class extends Migration
             subject_id VARCHAR(50) NOT NULL,
             subject_code VARCHAR(100),
             description VARCHAR(255),
-            prerequisite_subject_id INT,
+            prerequisite_subject_id VARCHAR(255),
             lecture_unit INT,
             laboratory_unit INT,
             is_active BOOL DEFAULT 1,

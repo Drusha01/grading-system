@@ -25,7 +25,7 @@ class ActivateSubject extends Component
         'subject_id' => NULL,
         'subject_code' => NULL,
         'description'=> NULL,
-        'prerequisite_subject_id' => NULL,
+        'prerequisite_subject_id' => [],
         'lecture_unit'=> 3,
         'laboratory_unit' => 0,
         'is_active'=>NULL,

@@ -120,7 +120,7 @@
                         <div class="modal-body row">
                             <div class="col-md-6 mb-3">
                                 <label for="search" class="form-label">Search student</label>
-                                <input type="text" id="search" wire:model="studentFilter.search" wire:change="studentList()" placeholder="Search subject ..." class="form-control">
+                                <input type="text" id="search" wire:model="studentFilter.search" wire:change="studentList()" placeholder="Search student ..." class="form-control">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="college_id" class="form-label">Filter College</label>

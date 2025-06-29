@@ -124,12 +124,14 @@ class StudentLists extends Component
                 SUM(llg.grade / llg.sub_weight) as normalized_total,
                 ((SUM(llg.grade / llg.sub_weight) * 100)) as calculated_grade,
                 llg.other,
+                s.id as s_id,
                 s.lecture_unit,
                 s.laboratory_unit,
                 sm.semester,
                 s.subject_id, 
                 s.subject_code,
-                cl.date_created
+                cl.date_created,
+                cl.is_lec
             ')
             ->join('schedulings as cl', 'cl.id', '=', 'llg.schedule_id')
             ->join('schedules as sh', 'sh.id', '=', 'cl.schedule_id')
@@ -147,9 +149,45 @@ class StudentLists extends Component
                 's.subject_code',
                 'cl.date_created'
             )
+            ->orderBy('s.id', 'asc')
             ->orderBy('cl.date_created', 'asc')
             ->get()
             ->toArray();
+
+        // $this->grades = DB::table('lab_lec_grades as llg')
+        //     ->selectRaw('
+        //         s.id as subject_row_id,
+        //         s.subject_id,
+        //         s.subject_code,
+        //         sm.semester,
+        //         s.lecture_unit,
+        //         s.laboratory_unit,
+        //         MAX(cl.date_created) as date_created,
+        //         SUM(CASE WHEN cl.is_lec = 1 THEN llg.grade ELSE 0 END) as lec_total_grade,
+        //         SUM(CASE WHEN cl.is_lec = 0 THEN llg.grade ELSE 0 END) as lab_total_grade,
+        //         SUM(CASE WHEN cl.is_lec = 1 THEN llg.grade / llg.sub_weight ELSE 0 END) as lec_normalized_total,
+        //         SUM(CASE WHEN cl.is_lec = 0 THEN llg.grade / llg.sub_weight ELSE 0 END) as lab_normalized_total,
+        //         SUM(CASE WHEN cl.is_lec = 1 THEN (llg.grade / llg.sub_weight) * 100 ELSE 0 END) as lec_calculated_grade,
+        //         SUM(CASE WHEN cl.is_lec = 0 THEN (llg.grade / llg.sub_weight) * 100 ELSE 0 END) as lab_calculated_grade
+        //     ')
+        //     ->join('schedulings as cl', 'cl.id', '=', 'llg.schedule_id')
+        //     ->join('schedules as sh', 'sh.id', '=', 'cl.schedule_id')
+        //     ->join('subjects as s', 's.id', '=', 'sh.subject_id')
+        //     ->join('semesters as sm', 'sm.id', '=', 'cl.semester_id')
+        //     ->where('llg.student_id', $id)
+        //     ->groupBy(
+        //         's.id',
+        //         's.subject_id',
+        //         's.subject_code',
+        //         's.lecture_unit',
+        //         's.laboratory_unit',
+        //         'sm.semester'
+        //     )
+        //     ->orderBy('s.id', 'asc')
+        //     ->get()
+        //     ->toArray();
+
+
 
 
         // dd($this->grades);

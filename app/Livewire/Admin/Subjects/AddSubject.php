@@ -25,7 +25,7 @@ class AddSubject extends Component
         'subject_id' => NULL,
         'subject_code' => NULL,
         'description'=> NULL,
-        'prerequisite_subject_id' => NULL,
+        'prerequisite_subject_id' => [],
         'lecture_unit'=> 3,
         'laboratory_unit' => 0,
     ];
@@ -34,7 +34,8 @@ class AddSubject extends Component
         return [
             'detail.college_id' => 'required|exists:colleges,id',
             'detail.department_id' => 'required|exists:departments,id',
-            'detail.prerequisite_subject_id' => 'nullable|exists:subjects,id',
+            // 'detail.prerequisite_subject_id' => 'nullable|exists:subjects,id',
+            'detail.prerequisite_subject_id'             => 'nullable|array',
             'detail.subject_id' => 'required|unique:subjects,subject_id',
             'detail.subject_code' => 'required|unique:subjects,subject_code,',
             'detail.lecture_unit' => 'integer|min:1',
@@ -65,6 +66,7 @@ class AddSubject extends Component
             'detail.laboratory_unit.integer' => 'Laboratory unit must be an integer.',
             'detail.lecture.integer' => 'Laboratory unit must be an integer.',
             'detail.lecture_unit.min' => 'Lecture unit must greater than 0.',
+            'detail.prerequisite_subject_id.array' => 'The day must be a valid array.',
 
         ];
     }
@@ -85,13 +87,14 @@ class AddSubject extends Component
                 'detail.laboratory_unit' => 'Either Lecture Unit or Laboratory Unit must be at least 1.',
             ]);
         }
+
         if(DB::table('subjects')->insert([
             'college_id'=> $this->detail['college_id'],
             'department_id'=> $this->detail['department_id'],
             'subject_id' => $this->detail['subject_id'],
             'subject_code' => $this->detail['subject_code'],
             'description'=> $this->detail['description'],
-            'prerequisite_subject_id' => intval($this->detail['prerequisite_subject_id']),
+            'prerequisite_subject_id' => json_encode($this->detail['prerequisite_subject_id']),
             'lecture_unit'=> intval($this->detail['lecture_unit']),
             'laboratory_unit' => intval($this->detail['laboratory_unit']),
         ])){

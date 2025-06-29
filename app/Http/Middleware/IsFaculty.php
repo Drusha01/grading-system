@@ -42,7 +42,7 @@ class IsFaculty
                 ->where('is_active','=',1)
                 ->where('admin_type','=',3)->first();
             if($admin){
-                return redirect('/admin');
+                // return redirect('/admin');
             }
             if($scheduling == 0){
                 return redirect('/student');

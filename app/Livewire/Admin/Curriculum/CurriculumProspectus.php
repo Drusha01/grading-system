@@ -74,14 +74,11 @@ class CurriculumProspectus extends Component
                 's.subject_code' ,
                 's.description',
                 's.prerequisite_subject_id' ,
-                'pr.subject_id as prerequisite_subject_id',
-                'pr.subject_code as prerequisite_subject_code',
                 'sm.semester',
                 'yl.year_level'
             )
             ->where('curriculum_id','=',$this->curriculum['id'])
             ->leftjoin('subjects as s','s.id','cs.subject_id')
-            ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id')
             ->leftjoin('year_levels as yl','yl.id','cs.year_level_id')
             ->leftjoin('semesters as sm','sm.id','cs.semester_id')
             ->orderBy('yl.year_level')   // Order first by year level

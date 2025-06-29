@@ -92,8 +92,6 @@
             </div>
         </form>
     </div>
-    <style>
-    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Select2 Access Selection
