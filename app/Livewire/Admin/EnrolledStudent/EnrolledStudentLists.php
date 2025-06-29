@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\EnrolledStudent;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +70,8 @@ class EnrolledStudentLists extends Component
             ->where('is_active','=',1)
             ->get()
             ->toArray();
+        self::getDetails();
+
     }
     public function render()
     {
@@ -118,6 +121,8 @@ class EnrolledStudentLists extends Component
             'title'=>$this->title
         ]);
     }
+
+   
 
     public function add($modal_id){
         $this->studentFilter = [
@@ -185,6 +190,30 @@ class EnrolledStudentLists extends Component
             ]);
         }
 
+        
+        if(
+            $enrolled = DB::table('enrolled_students as es')
+                ->select(
+                    'sh.subject_id',
+                    'cl.is_lec'
+                )
+                ->join('schedulings as cl','cl.id','es.schedule_id')
+                ->Join('schedules as sh','sh.id','cl.schedule_id')
+                ->where('es.student_id','=',$this->detail['student_id'])
+                ->where('sh.subject_id','=',$this->scheduling->subject_id)
+                ->where('cl.semester_id','=',$this->scheduling->semester_id)
+                ->where('cl.school_year_id','=',$this->scheduling->school_year_id)
+                ->where('cl.is_lec','=',$this->scheduling->is_lec)
+                ->get()
+                ->toArray()
+
+        ){
+            // dd($this->scheduling->is_lec,$enrolled,$this->scheduling->subject_id,$this->detail['student_id']);
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'detail.student_id' => 'Student is already enrolled on same subject in this school year and semester.',
+            ]);
+        }
+
         $inserted = DB::table('enrolled_students')
             ->insert($this->detail)
             ;
@@ -240,8 +269,8 @@ class EnrolledStudentLists extends Component
                 'sh.schedule_from',
                 'sh.schedule_to',
                 'sh.day' ,
-                'sh.is_lec' ,
-                'cl.subject_id',
+                'cl.is_lec' ,
+                'sh.subject_id',
                 'cl.room_id',
                 'cl.schedule_id',
                 'cl.faculty_id',
@@ -256,12 +285,14 @@ class EnrolledStudentLists extends Component
                 's.lecture_unit',
                 's.laboratory_unit' ,
                 DB::raw('CONCAT(r.code," ",r.name) as room'),
+                'cl.school_year_id',
+                'cl.semester_id',
 
             )
             ->leftJoin('school_years as sy','sy.id','cl.school_year_id')
-            ->leftJoin('subjects as s','s.id','cl.subject_id')
-            ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
+            ->leftJoin('subjects as s','s.id','sh.subject_id')
+            ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('faculty as f','f.id','cl.faculty_id')
             ->leftJoin('users as u','u.id','f.user_id')
             ->leftJoin('colleges as c','c.id','s.college_id')

@@ -146,7 +146,7 @@ class EvaluationLists extends Component
                 'sy.year_start' ,
                 'sy.year_end' ,
             )
-            ->join('schedules as sh','sh.id','cl.subject_id')
+            ->join('schedules as sh','sh.id','cl.schedule_id')
             ->join('semesters as sm','sm.id','cl.semester_id')
             ->join('school_years as sy','sy.id','cl.school_year_id')
             ->first();
@@ -466,7 +466,7 @@ class EvaluationLists extends Component
                 'sh.schedule_to',
                 'sh.day' ,
                 'sh.is_lec' ,
-                'cl.subject_id',
+                'sh.subject_id',
                 'cl.room_id',
                 'cl.schedule_id',
                 'cl.faculty_id',
@@ -484,9 +484,9 @@ class EvaluationLists extends Component
 
             )
             ->leftJoin('school_years as sy','sy.id','cl.school_year_id')
-            ->leftJoin('subjects as s','s.id','cl.subject_id')
-            ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
+            ->leftJoin('subjects as s','s.id','sh.subject_id')
+            ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('faculty as f','f.id','cl.faculty_id')
             ->leftJoin('users as u','u.id','f.user_id')
             ->leftJoin('colleges as c','c.id','s.college_id')

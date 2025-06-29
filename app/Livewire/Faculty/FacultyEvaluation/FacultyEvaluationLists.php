@@ -145,7 +145,7 @@ class FacultyEvaluationLists extends Component
                 'sy.year_start' ,
                 'sy.year_end' ,
             )
-            ->join('schedules as sh','sh.id','cl.subject_id')
+            ->join('schedules as sh','sh.id','cl.schedule_id')
             ->join('semesters as sm','sm.id','cl.semester_id')
             ->join('school_years as sy','sy.id','cl.school_year_id')
             ->first();
