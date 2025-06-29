@@ -119,8 +119,10 @@ class StudentLists extends Component
     public function gradeLists($id,$modal_id){
         $this->grades = DB::table('lab_lec_grades as llg')
             ->selectRaw('
-                COUNT(cl.subject_id) as subject_count,
-                ((SUM(llg.grade / llg.sub_weight) * 100) / COUNT(cl.subject_id)) as calculated_grade,
+                cl.id as schedule_id,
+                SUM(llg.grade) as total_grade,
+                SUM(llg.grade / llg.sub_weight) as normalized_total,
+                ((SUM(llg.grade / llg.sub_weight) * 100)) as calculated_grade,
                 llg.other,
                 s.lecture_unit,
                 s.laboratory_unit,
@@ -135,7 +137,8 @@ class StudentLists extends Component
             ->join('school_years as sy', 'sy.id', '=', 'cl.school_year_id')
             ->join('semesters as sm', 'sm.id', '=', 'cl.semester_id')
             ->where('llg.student_id', $id)
-            ->groupBy('cl.subject_id', 
+            ->groupBy(
+                'cl.id',               // schedule_id
                 'llg.other', 
                 's.lecture_unit', 
                 's.laboratory_unit',
@@ -143,10 +146,13 @@ class StudentLists extends Component
                 's.subject_id', 
                 's.subject_code',
                 'cl.date_created'
-                )
+            )
             ->orderBy('cl.date_created', 'asc')
             ->get()
             ->toArray();
+
+
+        // dd($this->grades);
 
         $this->equivalent_grade = DB::table('point_grade_equivalent')
             ->get()

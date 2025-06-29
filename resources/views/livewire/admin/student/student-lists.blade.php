@@ -178,11 +178,20 @@
                                                 </td>
                                                 <td class="px-4">
                                                     @if($value->calculated_grade)
+                                                        @php
+                                                            $set = false;
+                                                        @endphp
                                                         @foreach ($equivalent_grade as $eg_key =>$eg_value)
-                                                            @if($value->calculated_grade >= $eg_value->minimum && $value->calculated_grade <= $eg_value->maximum)
+                                                            @if(floatval($value->calculated_grade) >= floatval($eg_value->minimum) && floatval($value->calculated_grade) < floatval($eg_value->maximum + 1))
                                                                 {{ $eg_value->grade }}
+                                                                @php
+                                                                    $set = true;
+                                                                @endphp
                                                             @endif
                                                         @endforeach
+                                                        @if(!$set)
+                                                            No grade equivalent
+                                                        @endif
                                                     @else 
                                                         {{ $value->other }}
                                                     @endif
