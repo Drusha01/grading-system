@@ -51,9 +51,9 @@ class MyScheduleLists extends Component
             ->join('faculty as f','f.user_id','u.id')
             ->join('schedulings as cl','cl.faculty_id','f.id')
             ->where('f.user_id','=',$userId)
-            ->leftJoin('subjects as s','s.id','cl.subject_id')
-            ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
+            ->leftJoin('subjects as s','s.id','sh.subject_id')
+            ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('colleges as c','c.id','s.college_id')
             ->leftJoin('departments as d','d.id','s.department_id')
             ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id');
