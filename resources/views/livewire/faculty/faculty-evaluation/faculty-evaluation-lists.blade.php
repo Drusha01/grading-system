@@ -84,14 +84,17 @@
                 <a class="btn btn-primary" wire:click="open_school_work_types_modal('addSchoolWorkTypeModal')">
                     <svg fill="currentColor" width="20px" viewBox="-8 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>paper</title> <path d="M13.52 5.72h-7.4c-0.36 0-0.56 0.2-0.6 0.24l-5.28 5.28c-0.040 0.040-0.24 0.24-0.24 0.56v12.2c0 1.24 1 2.24 2.24 2.24h11.24c1.24 0 2.24-1 2.24-2.24v-16.040c0.040-1.24-0.96-2.24-2.2-2.24zM5.28 8.56v1.8c0 0.32-0.24 0.56-0.56 0.56h-1.84l2.4-2.36zM14.080 24.040c0 0.32-0.28 0.56-0.56 0.56h-11.28c-0.32 0-0.56-0.28-0.56-0.56v-11.36h3.040c1.24 0 2.24-1 2.24-2.24v-3.040h6.52c0.32 0 0.56 0.24 0.56 0.56l0.040 16.080z"></path> </g></svg>
                 </a>
-                <a href="{{ route('enrolled-student-lists',$detail['schedule_id']) }}" class="btn btn-outline-secondary d-flex justify-content-center items-center" wire:wire:navigate>
+                <a href="{{ route('enrolled-student-lists',[
+                        'school_year' => $school_year,
+                        'semester' => $semester,
+                        'schedule_id' => $detail['schedule_id']]) }}" class="btn btn-outline-secondary d-flex justify-content-center items-center" wire:wire:navigate>
                     <svg fill="currentColor" viewBox="0 -64 640 640"  width="20px"  xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"></path></g></svg>
                 </a>
             </div>
         </div>
         <div class="row " style="min-width:800px;">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered text-center align-middle " >
+                <table class="table table-striped table-bordered text-center align-middle " style="overflow-x: auto;" >
                     <div wire:target="filters.search perPage, nextPage, previousPage, gotoPage"
                             wire:loading.flex>
                             <div class="form-loader">
@@ -108,8 +111,8 @@
                         </div>
                     <thead style="background:#952323;color:white;">
                         <tr class="align-middle">
-                            <th class="sticky-col"></th>
-                            <th class="sticky-col"></th>
+                            <th class="sticky-col left-0"></th>
+                            <th class="sticky-col left-1"></th>
                             @php
                                 $weight = DB::table('school_works_types')
                                     ->select(DB::raw('sum(weight) as total_weight'))
@@ -136,18 +139,17 @@
                                 <th colspan="1" class="text-center">No School Work Type</th>
                             @endforelse
                             <th class="">Total</th>
+                            @foreach ($terms as $key =>$value )
                             <th class="">
-                                @foreach ($terms as $key =>$value )
-                                @if($value->id == $detail['term_id'])
                                    {{ $value->term_name }}
-                                @endif
-                                @endforeach 
-                                Weighted Grade</th>
+                                WG
+                            </th>
+                            @endforeach 
                             <th class="">Total Grade</th>
                         </tr>
                         <tr class="align-middle">
-                            <th scope="col" class="sticky-col">#</th>
-                            <th scope="col" class="sticky-col-2">Student</th>
+                            <th scope="col" class="sticky-col left-0">#</th>
+                            <th scope="col" class="sticky-col left-1">Student</th>
                             @forelse ($school_work_types as $key => $value )
                                 @php
                                     $school_works_var = DB::table('school_works')
@@ -180,6 +182,16 @@
                                 ->first();
                             @endphp
                             <th scope="col" class="">{{  $term_weight['weight'] }} - {{number_format( $term_weight['weight']/$term_total->total*100, 2, '.', '')  }}%</th>
+                            <th scope="col" class="">
+                                @foreach ($terms as $key =>$value )
+                                    @if($value->id != $detail['term_id'])
+                                    @php 
+                                        $other_term_weight = $value->weight;
+                                    @endphp 
+                                    {{ $value->weight }}
+                                    @endif
+                                @endforeach
+                                - {{number_format( $other_term_weight/$term_total->total*100, 2, '.', '')  }}%</th>
                             <th scope="col" class="">{{ 100 }}</th>
 
                         </tr>
@@ -198,7 +210,6 @@
                                 @php
                                     $score_key = 0;
                                     $average = 0;
-                                    //dd($student_scores,$value);
                                     $temp_sub_total_score = 0;
                                     $temp_sub_total_max_score = 0;
                                     $school_work_type_id = 0;
@@ -248,7 +259,7 @@
                                             @if($v_value['school_work_type_id'] != $current_school_work_type->id)
                                                 <td class="" wire:key="{{ $value->id.'-'.$v_value['school_work_type_id'].'-'.$v_value['score']}}">
                                                     <div class="d-flex align-middle">
-                                                        <input type="number" name="" id="" value="{{ $v_value['score'] }}" class="form-control" style=" width: 100%;" 
+                                                        <input type="number" name="" id="" value="{{ $v_value['score'] }}" class="form-control" style=" min-width:50px;" 
                                                             wire:change="updateScore(
                                                             {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
                                                             {{ $v_value['schedule_id'] }},
@@ -272,8 +283,8 @@
                                                             @php
                                                                 $sub_total = $sub_average / $school_work_type_count_prev
                                                             @endphp
-                                                            {{ number_format( $sub_total, 3, '.', '')    }}
-                                                            {{  number_format(( $sub_total * $school_work_type_weight/100), 3, '.', '')}}
+                                                            {{ number_format( $sub_total, 2, '.', '')    }}
+                                                            {{  number_format(( $sub_total * $school_work_type_weight/100), 2, '.', '')}}
                                                         @php
                                                                 $total_grade +=  ($sub_total * $school_work_type_weight/100);
                                                                 $sub_average = 0;
@@ -292,9 +303,9 @@
                                     @endif
                                 @endforeach
                                 <td>
-                                    {{ ($total_grade ? number_format($total_grade, 3, '.', '') : 'No data') }}
+                                    {{ ($total_grade ? number_format($total_grade, 2, '.', '') : 'No data') }}
                                 </td>
-                                <td>
+                               <td>
                                     @php
                                         if($total_grade >= 0 && $inc ){
                                             if(DB::table('term_grades')
@@ -348,8 +359,37 @@
                                             }
                                         }
                                     @endphp
-                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100), 3, '.', '')) }}
+                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100), 2, '.', '')) }}
                                 </td>
+                                <td>
+                                    @php
+                                        $this_grade = $total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100;
+                                        if(DB::table('term_grades')
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->where('other','=','INC')
+                                            ->first()){
+                                            $grade = 'INC';
+                                        }else{
+                                            $term_grades = DB::table('term_grades')
+                                                    ->select(
+                                                    DB::raw('sum(grade) as grade'))
+                                                    ->where('schedule_id','=',$detail['schedule_id'])
+                                                    ->where('student_id','=',$value->id)
+                                                    ->first();
+                                            if($term_grades){
+                                                $grade = $term_grades->grade;
+                                            }else{
+                                                $grade = 'INC';
+                                            }
+                                        }
+                                    @endphp
+                                    @if(floatval($grade))
+                                        {{ number_format($grade-$this_grade, 2, '.', '') }}
+                                    @else
+                                        {{ $grade }}    
+                                    @endif
+                                </td>   
                                 <td>
                                     @php
                                     if(DB::table('term_grades')
@@ -403,7 +443,7 @@
 
                                     @endphp
                                     @if(floatval($grade))
-                                        {{ number_format($grade, 3, '.', '') }}
+                                        {{ number_format($grade, 2, '.', '') }}
                                     @else
                                         {{ $grade }}    
                                     @endif
@@ -678,25 +718,16 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" id="weightModalclose" aria-label="Close"></button>
                         </div>
                         <div class="modal-body row">
-                            <div class="col-md-6 mb-3">
-                                <label for="term_id" class="form-label">Term</label>
-                                <select name="term_id" id="term_id" class="form-control" wire:model.live="term_weight.term_id">
-                                    @foreach ($terms as $key =>$value )
-                                        <option value="{{ $value->id }}">{{ $value->term_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('term_weight.term_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="weight" class="form-label">Term weight</label>
-                                <input type="number" min="1" step="0.1" id="weight" wire:model.defer="term_weight.weight" placeholder="Term Weight" 
-                                    class="form-control @error('term_weight.weight') is-invalid @enderror">
-                                @error('term_weight.weight')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            @foreach ($temp_terms as $key =>$value )
+                                <div class="col-md-6 mb-3">
+                                    <label for="weight" class="form-label">{{ $value['term_name'] }}Term weight</label>
+                                    <input type="number" min="1" step="0.1" id="weight" wire:model="temp_terms.{{ $key }}.weight" placeholder="Term Weight" 
+                                        class="form-control @error('term_weight.weight') is-invalid @enderror">
+                                    @error('temp_terms.weight')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endforeach
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-success">

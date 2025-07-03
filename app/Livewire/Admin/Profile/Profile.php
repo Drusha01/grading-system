@@ -158,25 +158,65 @@ class Profile extends Component
             ->where('f.user_id','=',$id)
             ->first();
 
-        $this->detail = [
-            'id' => $detail->id,
-            'user_id' => $detail->user_id,
-            'college_id' => $detail->college_id,
-            'department_id' => $detail->department_id,
-            'code' => $detail->code,
-            'first_name' => $detail->first_name,
-            'middle_name' => $detail->middle_name,
-            'last_name' => $detail->last_name,
-            'suffix' => $detail->suffix,
-            'email' => $detail->email,
-            'academic_rank_id' => $detail->academic_rank_id,  
-            'designation_id' => $detail->designation_id,
-            'faculty_type_id' => $detail->faculty_type_id,
-            'is_active' => $detail->is_active,
-            'release_time' => $detail->release_time,
-            'hours_per_week' => $detail->hours_per_week,
-            'is_admin'=> ($detail->admin_type == 1 ? true : false),
-        ];
+        if(!$detail){
+
+           $detail =DB::table('students as s')->select(
+                's.id',
+                's.college_id' ,
+                'u.id as user_id',
+                's.department_id' ,
+                DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS fullname'),
+                'u.first_name' ,
+                'u.middle_name' ,
+                'u.last_name' ,
+                'u.suffix' ,
+                'u.email' ,
+                'u.is_active' ,
+                's.user_id',
+                's.code',
+                'c.name as college',
+                'c.code as college_code',
+                'd.name as department',
+                'd.code as department_code',
+            )
+            ->leftJoin('colleges as c','c.id','s.college_id')
+            ->leftJoin('departments as d','d.id','s.department_id')
+            ->leftJoin('users as u','u.id','s.user_id')
+            ->where('s.user_id','=',$id)
+            ->first();
+            $this->detail = [
+                'id' => $detail->id,
+                'user_id' => $detail->user_id,
+                'first_name' => $detail->first_name,
+                'middle_name' => $detail->middle_name,
+                'last_name' => $detail->last_name,
+                'suffix' => $detail->suffix,
+                'email' => $detail->email,
+                'college_id' => $detail->college_id,
+                'department_id' => $detail->department_id,
+                'code' => $detail->code,
+            ];
+        }else{
+            $this->detail = [
+                'id' => $detail->id,
+                'user_id' => $detail->user_id,
+                'college_id' => $detail->college_id,
+                'department_id' => $detail->department_id,
+                'code' => $detail->code,
+                'first_name' => $detail->first_name,
+                'middle_name' => $detail->middle_name,
+                'last_name' => $detail->last_name,
+                'suffix' => $detail->suffix,
+                'email' => $detail->email,
+                'academic_rank_id' => $detail->academic_rank_id,  
+                'designation_id' => $detail->designation_id,
+                'faculty_type_id' => $detail->faculty_type_id,
+                'is_active' => $detail->is_active,
+                'release_time' => $detail->release_time,
+                'hours_per_week' => $detail->hours_per_week,
+                'is_admin'=> ($detail->admin_type == 1 ? true : false),
+            ];
+        }
     }
 
     public function save(){

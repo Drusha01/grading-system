@@ -37,8 +37,6 @@ class AttendanceLists extends Component
         'date'=> NULL,
     ];
     public function mount($schedule_id,$id){
-
-       
         $this->detail['id'] = $id;
         $school_work_attendance = DB::table('school_works')  
         ->where('id','=',$id)

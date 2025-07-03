@@ -60,7 +60,17 @@ class EnrolledStudentLists extends Component
 
 
 
-    public function mount($schedule_id){
+    public $school_year;
+    public $semester;
+    public $school_year_id;
+    public $semester_id;
+    public function mount($school_year, $semester, $schedule_id){
+        $this->school_year = $school_year;
+        $this->semester = $semester;
+        $this->school_year_id = DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$school_year)->first()->id;
+        $this->semester_id = DB::table('semesters')->where(DB::raw('semester'),'=',$semester)->first()->id;
+
+
         $this->detail['schedule_id'] = $schedule_id;
         $this->colleges = DB::table('colleges')
             ->where('is_active','=',1)

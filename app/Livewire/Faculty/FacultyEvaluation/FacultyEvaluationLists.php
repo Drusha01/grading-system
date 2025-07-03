@@ -38,6 +38,7 @@ class FacultyEvaluationLists extends Component
 
     public $school_works = [];
 
+    public $temp_terms = [];
     public $schedule = NULL;
 
     public $detail = [
@@ -97,8 +98,16 @@ class FacultyEvaluationLists extends Component
     ];
 
     public $student_scores = [];
+    public $school_year;
+    public $semester;
+    public $school_year_id;
+    public $semester_id;
 
-    public function mount($schedule_id){
+    public function mount($school_year, $semester, $schedule_id){
+        $this->school_year = $school_year;
+        $this->semester = $semester;
+        $this->school_year_id = DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$school_year)->first()->id;
+        $this->semester_id = DB::table('semesters')->where(DB::raw('semester'),'=',$semester)->first()->id;
 
         $this->detail['schedule_id'] = $schedule_id;
         $this->colleges = DB::table('colleges')
@@ -483,9 +492,9 @@ class FacultyEvaluationLists extends Component
 
             )
             ->leftJoin('school_years as sy','sy.id','cl.school_year_id')
-            ->leftJoin('subjects as s','s.id','cl.subject_id')
             ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
+            ->leftJoin('subjects as s','s.id','sh.subject_id')
             ->leftJoin('faculty as f','f.id','cl.faculty_id')
             ->leftJoin('users as u','u.id','f.user_id')
             ->leftJoin('colleges as c','c.id','s.college_id')
@@ -822,6 +831,14 @@ class FacultyEvaluationLists extends Component
     public function open_term_weight($modal_id){
         $this->term_weight['term_id'] = $this->detail['term_id'];
         self::fetch_terms();
+        $this->temp_terms = [];
+        foreach($this->terms as $key => $value){
+            array_push($this->temp_terms,[
+                'id' =>$value->id,
+                'weight'=>floatval($value->weight),
+                'term_name'=>$value->term_name
+            ]);
+        }
         $this->dispatch('openModal',modal_id:$modal_id);
     }
 
@@ -861,27 +878,19 @@ class FacultyEvaluationLists extends Component
     }
 
     public function updateWeight($modal_id){
-        $total = DB::table('terms')
-            ->select(
-                DB::raw('sum(weight) as total')
-            )
-            ->where('schedule_id','=',$this->detail['schedule_id'])
-            ->where('id','<>',$this->term_weight['term_id'])
-            ->first();
-        if($total->total + $this->term_weight['weight'] >100){
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'term_weight.weight' => 'Weight exceeds '.(100 - $total->total).'!' ,
-            ]);
+
+        foreach($this->temp_terms as $key => $value) {
+            $res = DB::table('terms')
+                ->where('schedule_id','=',$this->detail['schedule_id'])
+                ->where('id','=',$value['id'])
+                ->update([
+                    'weight'=> floatval($value['weight'])
+                ]);
         }
-        $res = DB::table('terms')
-            ->where('schedule_id','=',$this->detail['schedule_id'])
-            ->where('id','=',$this->term_weight['term_id'])
-            ->update([
-                'weight'=> $this->term_weight['weight']
-            ]);
         $this->dispatch('notifySuccess', 
             'Updated successfully!',
                 '');
+        self::terms($this->detail['schedule_id']);
     }
 
     public function viewAttendance($modal_id){
@@ -889,6 +898,8 @@ class FacultyEvaluationLists extends Component
         $this->dispatch('openFacultyAttendanceModal', [
             'obj' => [
                 'schedule_id' => $this->detail['schedule_id'],
+                'school_year' => $this->school_year,
+                'semester' => $this->semester,
                 'term_id' => $this->detail['term_id'],
             ]
         ]);

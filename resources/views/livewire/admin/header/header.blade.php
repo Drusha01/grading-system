@@ -7,8 +7,8 @@
             <div class="container-fluid">
                 <div class="navbar-collapse offcanvas-collapse">
                     <ul class="navbar-nav me-auto d-flex align-items-center gap-2">
-                        <li class="nav-item dropdown">
-                            <div class="dropdown">
+                        <li class="nav-item dropdown p-4">
+                            <!-- <div class="dropdown">
                                 <a role="button" class="nav-link dropdown-toggle m-1" id="navbarDropdown" data-bs-toggle="dropdown"
                                     aria-expanded="false">
                                     <i class="bx bx-bell fs-4" style="color: whitesmoke;"></i>
@@ -26,7 +26,7 @@
                                         <li class="dropdown-item custom-item position-relative">
                                         <div style="border-bottom: solid grey 1px;">
                                             <p class="mb-0" style="padding-right:0.8em;">Notification message</p>
-                                            <small class="text-muted"><?= date('M d, Y h:i A', strtotime(now())) ?></small>
+                                            <small class="text-muted"></small>
                                         </div>
                                         <button class="btn btn-sm btn ms-2 position-absolute" style="top:0; right: 0;"
                                             onclick="">
@@ -35,7 +35,7 @@
                                         </li>
                                     <li class="dropdown-item text-muted">No notifications available.</li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </li>
                     </ul>
                 </div>

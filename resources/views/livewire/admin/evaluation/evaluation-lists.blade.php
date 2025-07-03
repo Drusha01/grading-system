@@ -136,13 +136,12 @@
                                 <th colspan="1" class="text-center">No School Work Type</th>
                             @endforelse
                             <th class="">Total</th>
-                            <th class="">
-                                @foreach ($terms as $key =>$value )
-                                @if($value->id == $detail['term_id'])
+                            @foreach ($terms as $key =>$value )
+                                <th class="">
                                    {{ $value->term_name }}
-                                @endif
-                                @endforeach 
-                                Weighted Grade</th>
+                                   WG
+                            </th>
+                            @endforeach 
                             <th class="">Total Grade</th>
                         </tr>
                         <tr class="align-middle">
@@ -180,6 +179,16 @@
                                 ->first();
                             @endphp
                             <th scope="col" class="">{{  $term_weight['weight'] }} - {{number_format( $term_weight['weight']/$term_total->total*100, 2, '.', '')  }}%</th>
+                            <th scope="col" class="">
+                                @foreach ($terms as $key =>$value )
+                                    @if($value->id != $detail['term_id'])
+                                    @php 
+                                        $other_term_weight = $value->weight;
+                                    @endphp 
+                                    {{ $value->weight }}
+                                    @endif
+                                @endforeach
+                                - {{number_format( $other_term_weight/$term_total->total*100, 2, '.', '')  }}%</th>
                             <th scope="col" class="">{{ 100 }}</th>
 
                         </tr>
@@ -272,8 +281,8 @@
                                                             @php
                                                                 $sub_total = $sub_average / $school_work_type_count_prev
                                                             @endphp
-                                                            {{ number_format( $sub_total, 3, '.', '')    }}
-                                                            {{  number_format(( $sub_total * $school_work_type_weight/100), 3, '.', '')}}
+                                                            {{ number_format( $sub_total, 2, '.', '')    }}
+                                                            {{  number_format(( $sub_total * $school_work_type_weight/100), 2, '.', '')}}
                                                         @php
                                                                 $total_grade +=  ($sub_total * $school_work_type_weight/100);
                                                                 $sub_average = 0;
@@ -292,7 +301,7 @@
                                     @endif
                                 @endforeach
                                 <td>
-                                    {{ ($total_grade ? number_format($total_grade, 3, '.', '') : 'No data') }}
+                                    {{ ($total_grade ? number_format($total_grade, 2, '.', '') : 'No data') }}
                                 </td>
                                 <td>
                                     @php
@@ -348,29 +357,39 @@
                                             }
                                         }
                                     @endphp
-                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100), 3, '.', '')) }}
+                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100), 2, '.', '')) }}
                                 </td>
                                 <td>
                                     @php
-                                    if(DB::table('term_grades')
-                                        ->where('schedule_id','=',$detail['schedule_id'])
-                                        ->where('student_id','=',$value->id)
-                                        ->where('other','=','INC')
-                                        ->first()){
-                                        $grade = 'INC';
-                                    }else{
-                                        $term_grades = DB::table('term_grades')
-                                                ->select(
-                                                DB::raw('sum(grade) as grade'))
-                                                ->where('schedule_id','=',$detail['schedule_id'])
-                                                ->where('student_id','=',$value->id)
-                                                ->first();
-                                        if($term_grades){
-                                            $grade = $term_grades->grade;
-                                        }else{
+                                        $this_grade = $total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100;
+                                        if(DB::table('term_grades')
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->where('other','=','INC')
+                                            ->first()){
                                             $grade = 'INC';
+                                        }else{
+                                            $term_grades = DB::table('term_grades')
+                                                    ->select(
+                                                    DB::raw('sum(grade) as grade'))
+                                                    ->where('schedule_id','=',$detail['schedule_id'])
+                                                    ->where('student_id','=',$value->id)
+                                                    ->first();
+                                            if($term_grades){
+                                                $grade = $term_grades->grade;
+                                            }else{
+                                                $grade = 'INC';
+                                            }
                                         }
-                                    }
+                                    @endphp
+                                    @if(floatval($grade))
+                                        {{ number_format($grade-$this_grade, 2, '.', '') }}
+                                    @else
+                                        {{ $grade }}    
+                                    @endif
+                                </td>
+                                <td>
+                                    @php
 
                                     $lab_lec = DB::table('lab_lec')
                                         ->where('schedule_id','=',$detail['schedule_id'])
@@ -403,7 +422,7 @@
 
                                     @endphp
                                     @if(floatval($grade))
-                                        {{ number_format($grade, 3, '.', '') }}
+                                        {{ number_format($grade, 2, '.', '') }}
                                     @else
                                         {{ $grade }}    
                                     @endif
@@ -457,7 +476,7 @@
                                                 {{ $value->school_work_type }}
                                             </td>
                                             <td class="px-4">
-                                                <input type="number" disabled name="" id="" value="{{ $value->weight }}" wire:model="school_work_type_value.{{ $key }}.val" 
+                                                <input type="number" style="min-width:50px;" disabled name="" id="" value="{{ $value->weight }}" wire:model="school_work_type_value.{{ $key }}.val" 
                                                     wire:change="updateSchoolWorktype('{{$value->id }}', $event.target.value)" class="form-control" placeholder="weight" min="0.0" step="0.1" >
                                             </td>
                                             <td class="px-4">

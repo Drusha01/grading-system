@@ -343,7 +343,7 @@
 
                                     btn2.onclick = () => {
                                         const formattedDate = formatDateMMDDYY(dateStr);
-                                        const url = `/admin/faculty-and-scheduling/attendance-${res.schedule_id}-${eventId}`;
+                                        const url = `/admin/faculty-and-scheduling/evaluation-${res.schedule_id}/attendance-${eventId}`;
                                         window.open(url, '_blank');
                                     };
                                     frame.appendChild(btn2);
@@ -412,6 +412,8 @@
             Livewire.on('openFacultyAttendanceModal', (obj) => {
                 var res = obj[0].obj;
                 var schedule_id = res.schedule_id;
+                var school_year = res.school_year;
+                var semester = res.semester;
                 var term_id = res.term_id;
                 $('#attendanceModal').on('shown.bs.modal', function () {
                     renderFacultyCalendar(res);
@@ -526,7 +528,7 @@
 
                                     btn2.onclick = () => {
                                         const formattedDate = formatDateMMDDYY(dateStr);
-                                        const url = `/faculty/attendance-${res.schedule_id}-${eventId}`;
+                                        const url = `/faculty/my-schedules/${res.school_year}/${res.semester}/evaluation-${res.schedule_id}/attendance-${eventId}`;
                                         window.open(url, '_blank');
                                     };
                                     frame.appendChild(btn2);

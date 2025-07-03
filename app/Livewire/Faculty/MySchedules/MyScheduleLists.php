@@ -14,6 +14,18 @@ class MyScheduleLists extends Component
     public $title = "My Schedule";
     public $route = 'my-schedule';
     
+    public $school_year;
+    public $semester;
+    public $school_year_id;
+    public $semester_id;
+    public function mount($school_year, $semester){
+        $this->school_year = $school_year;
+        $this->semester = $semester;
+        $this->school_year_id = DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$school_year)->first()->id;
+        $this->semester_id = DB::table('semesters')->where(DB::raw('semester'),'=',$semester)->first()->id;
+        
+
+    }
     public function render()
     {
 
@@ -51,6 +63,10 @@ class MyScheduleLists extends Component
             ->join('faculty as f','f.user_id','u.id')
             ->join('schedulings as cl','cl.faculty_id','f.id')
             ->where('f.user_id','=',$userId)
+            ->leftJoin('school_years as sy', 'sy.id', 'cl.school_year_id')
+            ->leftJoin('semesters as sm', 'sm.id', 'cl.semester_id')
+            ->where('sy.id', '=', $this->school_year_id)
+            ->where('sm.id', '=', $this->semester_id)
             ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
             ->leftJoin('subjects as s','s.id','sh.subject_id')
             ->leftJoin('rooms as r','r.id','cl.room_id')

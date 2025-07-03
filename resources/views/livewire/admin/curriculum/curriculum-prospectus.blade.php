@@ -1,6 +1,25 @@
 <div>
-    <div class="container-fluid d-flex justify-content-center shadow">
-        <span class="fs-2 fw-bold h1 m-0 brand-color">  {{ $title }}s</span>
+    <div class="container-fluid position-relative shadow" style="min-height: 110px;">
+        <!-- Centered Title -->
+        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+            <span class="fs-2 fw-bold h1 m-0 brand-color">{{ $title }}s</span>
+        </div>
+
+        <!-- Top Right Filters -->
+        <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-2">
+            <select wire:model.live="detail.year_level_id"  class="form-select">
+                <option value="">Select Year Level</option>
+                @foreach ($year_levels as $key => $value)
+                    <option value="{{ $value->id }}">{{ $value->year_level }}</option>
+                @endforeach
+            </select>
+            <select wire:model.live="detail.semester_id"  class="form-select">
+                <option value="">Select Semester</option>
+                @foreach ($semesters as $key => $value)
+                    <option value="{{ $value->id }}">{{ $value->semester }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="container-fluid">
         <div class="table-header">
@@ -42,6 +61,8 @@
                         <th scope="col" class="px-4">#</th>
                         <th scope="col" class="px-4 ">Prerequisite</th>
                         <th scope="col" class="px-4 ">Subject</th>
+                        <th scope="col" class="px-4 ">Lecture Unit</th>
+                        <th scope="col" class="px-4 ">Laboratory Unit</th>
                         <th scope="col" class="px-4 ">Year Level</th>
                         <th scope="col" class="px-4 ">Semester</th>
                         @if($curriculum['is_editable'])
@@ -71,6 +92,8 @@
                                         @endif    
                                 </td>
                                 <td class="px-4">{{$value->subject_id.' - '.$value->subject_code}}</td>
+                                <td class="px-4">{{$value->lecture_unit}}</td>
+                                <td class="px-4">{{$value->laboratory_unit}}</td>
                                 <td class="px-4">{{$value->year_level}}</td>
                                 <td class="px-4">{{$value->semester}}</td>
                                 @if($curriculum['is_editable'])

@@ -75,13 +75,22 @@ class CurriculumProspectus extends Component
                 's.description',
                 's.prerequisite_subject_id' ,
                 'sm.semester',
-                'yl.year_level'
+                'yl.year_level',
+                's.lecture_unit',
+                's.laboratory_unit' ,
             )
             ->where('curriculum_id','=',$this->curriculum['id'])
             ->leftjoin('subjects as s','s.id','cs.subject_id')
             ->leftjoin('year_levels as yl','yl.id','cs.year_level_id')
-            ->leftjoin('semesters as sm','sm.id','cs.semester_id')
-            ->orderBy('yl.year_level')   // Order first by year level
+            ->leftjoin('semesters as sm','sm.id','cs.semester_id');
+
+            if(strlen($this->detail['year_level_id'])){
+                $table_data = $table_data->where('cs.year_level_id','=',$this->detail['year_level_id']);
+            }
+            if(strlen($this->detail['semester_id'])){
+                $table_data = $table_data->where('cs.semester_id','=',$this->detail['semester_id']);
+            }
+            $table_data = $table_data->orderBy('yl.year_level')   // Order first by year level
             ->orderBy('sm.semester') 
             ->paginate(10);
         return view('livewire.admin.curriculum.curriculum-prospectus',[

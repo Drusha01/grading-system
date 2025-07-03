@@ -100,7 +100,6 @@ class EvaluationLists extends Component
     public $student_scores = [];
 
     public function mount($schedule_id){
-
         $this->detail['schedule_id'] = $schedule_id;
         $this->colleges = DB::table('colleges')
             ->where('is_active','=',1)

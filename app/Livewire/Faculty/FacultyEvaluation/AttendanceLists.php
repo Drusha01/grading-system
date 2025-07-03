@@ -25,7 +25,7 @@ class AttendanceLists extends Component
 
     public $schedule = NULL;
 
-    public $date;
+    public $date,$school_year, $semester;
 
     public $school_work_types = [];
     public $student_scores = [];
@@ -36,14 +36,18 @@ class AttendanceLists extends Component
         'term_id'=> NULL,
         'date'=> NULL,
     ];
-    public function mount($schedule_id,$id){
+    public function mount($school_year, $semester, $schedule_id,$id){
+        $this->school_year = $school_year;
+        $this->semester = $semester;
+        $this->school_year_id = DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$school_year)->first()->id;
+        $this->semester_id = DB::table('semesters')->where(DB::raw('semester'),'=',$semester)->first()->id;
 
        
         $this->detail['id'] = $id;
         $school_work_attendance = DB::table('school_works')  
         ->where('id','=',$id)
         ->first();
-         $this->detail['schedule_id'] = $schedule_id;
+        $this->detail['schedule_id'] = $schedule_id;
         $this->detail['term_id'] = $school_work_attendance->term_id;
         $this->detail['date'] = Carbon::create($school_work_attendance->schedule_date)->format('F d, Y');
         $this->colleges = DB::table('colleges')
@@ -270,9 +274,11 @@ class AttendanceLists extends Component
     }
     public function viewAttendance($modal_id){
         $this->dispatch('openModal',modal_id:$modal_id);
-        $this->dispatch('openAttendanceModal', [
+        $this->dispatch('openFacultyAttendanceModal', [
             'obj' => [
                 'schedule_id' => $this->detail['schedule_id'],
+                'school_year' => $this->school_year,
+                'semester' => $this->semester,
                 'term_id' => $this->detail['term_id'],
             ]
         ]);
