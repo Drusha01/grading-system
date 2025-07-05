@@ -369,7 +369,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
 
 
     Route::prefix('faculty')->middleware([IsFaculty::class])->group(function () {
-        Route::get('/',function (){return redirect (route('my-schedule-lists'));})->name('my-schedule-default');
+        Route::get('/',function (){return redirect (route('my-schedule-school-years-lists'));})->name('my-schedule-default');
         Route::prefix('my-schedules/')->group(function () {
             Route::get('/',MyScheduleShoolYears::class)->name('my-schedule-school-years-lists');
             Route::prefix('/{school_year}')->group(function () {
