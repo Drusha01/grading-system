@@ -32,6 +32,18 @@
             </div>
             <div class="col">
                 <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary waves-effect waves-light"
+                        wire:click="openImportModal('importModal')">
+                        <svg viewBox="0 0 24 24" width="15px" class="mx-1" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z" fill="#222222"></path>
+                            <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="#222222"></path>
+                        </svg>
+                        Import
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-primary waves-effect waves-light"
+                        wire:click="downloadTemplate()">
+                        Template
+                    </button>
                     <a class="btn btn-primary" wire:wire:navigate href="{{ route($route.'-add') }}">
                         <svg  viewBox="0 0 20 20" width="20px" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="currentColor" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
                     </a>
@@ -446,6 +458,84 @@
             </div>
         </div>
         
+        <div class="modal fade" id="importModal"  wire:ignore.self>
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importModalTitle">Import Students</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" id="importModalclose" aria-label="Close"></button>
+                    </div>
+                    <form wire:submit.prevent="importSheet('importModal')" enctype="multipart/form-data">
+                        <div class="modal-body row">
+                            <div class="row">
+                                <div class="row z-3 py-2">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="row">
+                                            <ul class="mx-5">
+                                                <li class="p-2">
+                                                    Ensure to populate column that is required, with "<span class="text-danger">(*)</span> ".
+                                                </li>
+                                                <li class="p-2">
+                                                    Ensure that the Columns <span class="text-danger"> ("Work Sheet Reference" ;*) </span> , the " <span class="text-danger">;*</span>  " means that it is required.
+                                                </li>
+                                                <li class="p-2">
+                                                    For columns that are selection base, you can view the reference in the other working sheets in the template. Please prefer to use the Code.
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-4">
+                                    <label for="status-filter" class="mb-1">Import File <span class="text-danger">*</span></label>
+                                    <input type="file" name="file" id="file" wire:model.live="excel_file_input" class="form-control">
+                                    @error('excel_file_input')
+                                        <span class="text-danger mt-1 d-block">{{ $message }}</span>
+                                    @enderror
+                                    <div wire:loading wire:target="excel_file_input" class="text-info mt-2">
+                                        <i class="spinner-border spinner-border-sm"></i> Uploading...
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-4">
+                                    @if($import['total_valid_inserts'] < $import['total_inserts'])
+                                        <div class="row">
+                                            <p class="text-danger">
+                                                There are {{$import['total_inserts'] - $import['total_valid_inserts']}} rows  have encountered validation errors, do you want to download and fix the errors?
+                                            </p>
+                                            <p>
+                                                The errors are marked as <span class="text-warning">comments</span> in the excel cells once you download it.
+                                            </p>
+                                            @if($import['total_valid_inserts'] > 0)
+                                                <p>
+                                                    There are total of {{$import['total_valid_inserts']}} valid rows, if you click import it will only insert the valid rows.
+                                                </p>
+                                            @endif
+                                        </div>
+                                        <div class="row">
+                                            <div>
+                                                <button type="button" class="btn btn-primary" wire:click="downloadErrorSheet()">Download</button>
+                                            </div>
+                                        </div>
+                                    @elseif($import['total_inserts'] > 0 && $import['total_valid_inserts'] == $import['total_inserts'])
+                                        <p>
+                                            There are total of {{$import['total_valid_inserts']}} valid rows.
+                                        </p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="add-button" 
+                                @if( $import['total_valid_inserts'] <= 0 ) 
+                                    disabled 
+                                @endif
+                                >Import
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {

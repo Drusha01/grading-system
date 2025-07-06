@@ -10,9 +10,18 @@ use Livewire\WithPagination;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
 
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportTemplate;
+use Maatwebsite\Excel\Excel as ExcelFormat;
+use App\Exports\MultiSheetExport;
+use Illuminate\Support\Facades\Validator;
+use App\Imports\ExcelParser;
+use Livewire\WithFileUploads;
+
 class StudentLists extends Component
 {
-    use WithPagination;
+    use WithPagination,WithFileUploads;
 
     public $title = "Student";
 
@@ -44,6 +53,41 @@ class StudentLists extends Component
         'new_password' => NULL,
         'confirm_password' => NULL,
     ];
+
+    public $excel_file_input = NULL;
+    public $import = [
+        'sheets' => NULL,
+        'import_headers' => NULL,
+        'total_valid_inserts' => NULL,
+        'total_inserts' => NULL,
+        'valid_insert_rows_arr' => [],
+        'comments' => [],
+        'default_import_headers' =>[
+            'Email (*)',
+            'ID (*)',
+            'Year Level ID (Year Levels ;*)',
+            'College ID (Colleges ;*)',
+            'Department ID (Departments ;*)',
+            'First Name (*)',
+            'Middle Name',
+            'Last Name (*)',
+            'Suffix',
+            'Password (*)',
+        ],
+        'headerToFieldMap' => [
+            'email (*)' => 'email',
+            'id (*)' => 'code',
+            'year level id (year levels ;*)' => 'year_level_id',
+            'college id (colleges ;*)' => 'college_id',
+            'department id (departments ;*)' => 'department_id',
+            'first name (*)' => 'first_name',
+            'middle name' => 'middle_name',
+            'last name (*)' => 'last_name',
+            'suffix' => 'suffix',
+            'password (*)' =>'password',
+        ]
+    ];
+
 
 
     public function mount(){
@@ -350,5 +394,345 @@ class StudentLists extends Component
                 '');
         }
          $this->dispatch('closeModal',modal_id:$modal_id);
+    }
+
+     
+
+    public function downloadTemplate(){
+        $headers = $this->import['default_import_headers'];
+
+        $data = [];
+        $title = 'Student';
+
+        $this->dispatch('swalSuccess', ['message' => 'Successfully downloaded file!']);
+        return Excel::download(new MultiSheetExport([
+            new ExportTemplate( $data, $headers,$title),
+            new ExportTemplate( 
+                DB::table('year_levels')
+                    ->select('id','year_level')
+                    ->get()
+                    ->toArray()
+                ,array_map('ucfirst', ['ID','Year Level']),"Year Levels" ),
+            new ExportTemplate( 
+                DB::table('colleges')
+                    ->select('id','name')
+                    ->get()
+                    ->toArray()
+                ,array_map('ucfirst', ['ID','College']),"Colleges" ),
+            new ExportTemplate( 
+                DB::table('departments')
+                    ->select('id','name')
+                    ->get()
+                    ->toArray()
+                ,array_map('ucfirst', ['ID','Department']),"Departments" ),
+        ]), $title.' Import Template.xlsx');
+    }
+
+
+    public function import_rules(){
+        return [
+            'detail.college_id' => 'required|exists:colleges,id',
+            'detail.department_id' => 'required|exists:departments,id',
+            'detail.year_level_id' => 'required|exists:year_levels,id',
+            'detail.code' => 'required|string|max:100|unique:students,code',
+            'detail.email' => [
+                'required',
+                'email',
+                'unique:users,email',
+                'regex:/^[a-zA-Z0-9._%+-]+@wmsu\.edu\.ph$/'
+            ],
+            'detail.first_name' => 'required|string|max:255',
+            'detail.middle_name' => 'nullable|string|max:255',
+            'detail.last_name' => 'required|string|max:255',
+            'detail.suffix' => 'nullable|string|max:255',
+            'detail.password' => [
+                'required',
+                Password::min(8)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ],
+        ];
+    }
+
+
+    public function messages(){
+        return [
+            'detail.college_id.required' => 'The college is required.',
+            'detail.college_id.exists' => 'The selected college does not exist.',
+            'detail.department_id.required' => 'The department is required.',
+            'detail.department_id.exists' => 'The selected department does not exist.',
+            'detail.year_level_id.required' => 'The year level is required.',
+            'detail.year_level_id.exists' => 'The selected year level does not exist.',
+            'detail.code.required' => 'The student code is required.',
+            'detail.code.unique' => 'This code is already taken.',
+            'detail.first_name.required' => 'First name is required.',
+            'detail.last_name.required' => 'Last name is required.',
+            'detail.email.email' => 'The email must be a valid email address.',
+            'detail.email.required' => 'The email is required.',
+            'detail.email.unique' => 'The email has already been taken.',
+            'detail.email.regex' => 'The email must be @wmsu.edu.ph domain.',
+            'detail.confirm_password' => 'required|same:detail.password',
+            'detail.password.required' => 'The password field is required.',
+            'detail.password.min' => 'The password must be at least 8 characters.',
+            'detail.password.mixed_case' => 'The password must contain both uppercase and lowercase letters.',
+            'detail.password.letters' => 'The password must include at least one letter.',
+            'detail.password.numbers' => 'The password must include at least one number.',
+            'detail.password.symbols' => 'The password must include at least one special character.',
+            'detail.password.uncompromised' => 'This password has appeared in a data leak. Please choose a different password.',
+            
+            'detail.confirm_password.required_with' => 'Please confirm your password.',
+            'detail.confirm_password.required' => 'The confirm password field is required.',
+            'detail.confirm_password.same' => 'The password confirmation does not match.',
+        ];
+    }
+
+    public function openImportModal($modal_id){
+        $this->excel_file_input = NULL;
+        self::resetImportDetails();
+         $this->dispatch('openModal',modal_id:$modal_id);
+
+
+    }
+
+    public function resetImportDetails(){
+        $this->import['sheets'] = NULL;
+        $this->import['import_headers'] = NULL;
+        $this->import['total_inserts'] = NULL;
+        $this->import['total_valid_inserts'] = NULL;
+        $this->import['valid_insert_rows_arr'] = [];
+        $this->import['comments'] = [];
+        
+    }
+
+
+    public function updatedExcelFileInput($value){
+        self::resetImportDetails();
+        // Make sure it is xlsx
+        $this->validateOnly('excel_file_input', [
+            'excel_file_input' => 'required|file|mimes:xlsx,xls'
+        ]);
+
+        $importer = new ExcelParser($value);
+        $this->import['sheets'] = $importer->getSheets();
+        $import_sheet = $this->import['sheets'][0];
+        $import_sheet_data = $import_sheet['data'];
+
+        $headers = array_map(fn($h) => strtolower(trim($h)), $import_sheet_data[0]); // Assuming $sheet[0] is the header row
+        $fieldMap = [];
+
+        $this->import['import_headers'] = $headers;
+        foreach ($headers as $index => $header) {
+            if (isset($this->import['headerToFieldMap'][$header])) {
+                $fieldMap[$index] = $this->import['headerToFieldMap'][$header];
+            }
+        }
+
+        // check if there is rows to add
+        if (count($import_sheet['data']) <= 1) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'excel_file_input' => 'The imported file must contain at least one data row.',
+            ]);
+        }
+
+        // check if headers are the same with import template
+        $normalizedHeaders = array_map('strtolower', $headers);
+        $normalizedDefaults = array_map('strtolower', $this->import['default_import_headers']);
+        $diff1 = array_diff($normalizedHeaders, $normalizedDefaults);
+        $diff2 = array_diff($normalizedDefaults, $normalizedHeaders);
+        if (count($diff1) || count($diff2)) {
+            foreach ($diff1 as $key => $value) {
+                if(strlen($value)){
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'excel_file_input' => 'Headers are not the same, please download the import template.',
+                    ]);
+                }
+            }
+            foreach ($diff2 as $key => $value) {
+                if(strlen($value)){
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'excel_file_input' => 'Headers are not the same, please download the import template.',
+                    ]);
+                }
+            }
+           
+        }
+        
+        $flippedHeaderToFieldMap = array_flip($this->import['headerToFieldMap']);
+
+        $row_error_count = 0;
+        $this->import['valid_insert_rows_arr'] = [];
+        $this->import['total_valid_inserts'] = 0;
+        $this->import['total_inserts'] = 0;
+        $this->import['comments'] = [];
+        foreach ($import_sheet_data as $rowIndex => $row) {
+            if($rowIndex == 0){
+                continue;
+            }
+            $is_valid_row = false;
+            foreach ($row as $key => $value) {
+                if(isset($value)){
+                    $is_valid_row = true; 
+                }
+            }
+            if(!$is_valid_row){
+                continue; // skip if the entire row is unpopulated 
+            }
+            $this->import['total_inserts']++;
+            $formatted = ['detail' => []];
+
+            foreach ($fieldMap as $colIndex => $field) {
+                // Assign the value from the row to the 'detail' field in the $formatted array
+                $formatted['detail'][$field] = $row[$colIndex] ?? null;
+            }
+            // Now validate the data
+            $validator = Validator::make($formatted, $this->import_rules(), $this->messages());
+            
+            if ($validator->fails()) {
+                $row_error_count++;  // Increment error count for this row
+                
+                // Get the validation errors
+                $errors = $validator->errors()->toArray();
+                
+                // Loop through the errors to get the column index and the corresponding error message
+                foreach ($errors as $fieldName => $errorMessages) {
+                    $field_name_index = substr($fieldName, strrpos($fieldName, '.') + 1);
+                    $import_column_key =  $flippedHeaderToFieldMap[substr($fieldName, strrpos($fieldName, '.') + 1)];
+                    $column_index = array_search($import_column_key, $headers);
+                    $rowIndex;
+                    array_push($this->import['comments'],[
+                        'row'=>$rowIndex,
+                        'column'=>$column_index,
+                        'error_message'=>$errorMessages
+                    ]);
+                }
+            }else{
+          
+                $is_valid_insert = true;
+                // get indexes
+                $unique_check_arr = [
+                    ['columnIndex'=> self::getIndexColumn($fieldMap,'email'),'error_message'=> "Emai; is duplicate to row "],
+                    ['columnIndex'=> self::getIndexColumn($fieldMap,'code'),'error_message'=> "ID is duplicate to row "],
+                ];
+                // loop within the sheet, then ensure that unique row is unique.
+                foreach ($import_sheet_data as $RowIdx => $sheet_row) {
+                    if($RowIdx >0){
+                        if($rowIndex != $RowIdx){
+                            $ivr = false;
+                            foreach ($sheet_row as $k => $v) {
+                                if(isset($v)){
+                                    $ivr = true; 
+                                }
+                            }
+                            if(!$ivr){
+                                continue; // skip if the entire row is unpopulated 
+                            }
+                            foreach($unique_check_arr as $uca_key =>  $uca_value){
+                                if($sheet_row[$uca_value['columnIndex']] == $row[$uca_value['columnIndex']]){
+                                    $is_valid_insert = false;
+                                    array_push($this->import['comments'],[
+                                        'row'=>$rowIndex,
+                                        'column'=>$uca_value['columnIndex'],
+                                        'error_message'=> $uca_value['error_message'].($RowIdx+1)
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+                if($is_valid_insert){
+                    $this->import['total_valid_inserts']++;
+                    array_push($this->import['valid_insert_rows_arr'],$rowIndex);
+                }
+            }
+        }
+    }
+
+
+    public function getIndexColumn($fieldMap,$column){
+        foreach($fieldMap as $key => $value){
+            if($value == $column){
+                return $key;
+            }
+        }
+    }
+
+    public function downloadErrorSheet(){
+        $title = 'Students ';
+        $export_data = [];
+        foreach($this->import['sheets'] as $key =>$sheet){
+            if($key == 0){
+                $header = $sheet['data'][0];
+                array_shift($sheet['data']);
+                array_push($export_data,new ExportTemplate( $sheet['data'], $header, $sheet['sheet_title'] ,$this->import['comments']));
+            }else{
+                $header = $sheet['data'][0];
+                array_shift($sheet['data']);
+                array_push($export_data,new ExportTemplate( $sheet['data'], $header, $sheet['sheet_title']));
+            }
+        }
+        $this->dispatch('notifySuccess', 
+            'Downloaded successfully!',
+                '');
+        
+        return Excel::download(new MultiSheetExport($export_data), $title.' Import Template (with comments).xlsx');
+    }
+
+
+     public function importSheet($modal_id){
+        $flippedHeaderToFieldMap = array_flip($this->import['headerToFieldMap']);
+        $index = 0;
+
+        foreach($this->import['valid_insert_rows_arr'] as $key => $value){
+            $item = $this->import['sheets'][0]['data'][$value];
+            $record = [];
+            foreach($this->import['headerToFieldMap'] as $h_key =>$h_value){
+                $index = array_search($h_key, $this->import['import_headers']);
+                $record[$h_value] = $item[$index];
+            }
+            self::insertRecord($record);
+        }
+        $this->dispatch('closeModal',modal_id:$modal_id);
+        $this->dispatch('notifySuccess', 
+            'Successfully imported '.count($this->import['valid_insert_rows_arr']).' rows!',
+                '');
+
+    }
+
+    public function insertRecord($record){
+        try {
+            $res = DB::table('users')
+            ->insert([
+                'first_name'=> $record['first_name'],
+                'middle_name'=> $record['middle_name'],
+                'last_name'=> $record['last_name'],
+                'suffix'=> $record['suffix'],
+                'email'=> $record['email'],
+                'password'=> Hash::make($record['password']),
+                'admin_type'=> 3,
+            ]);
+        if($res){
+            $user = DB::table('users')
+                ->where('email','=',$record['email'])
+                ->first();
+            if(DB::table('students')->insert([
+                'user_id'=> $user->id,
+                'college_id'=> $record['college_id'],
+                'department_id'=> $record['department_id'],
+                'year_level_id'=> $record['year_level_id'],
+                'code'=> $record['code'],
+                'email'=> $record['email'],
+                'first_name'=> $record['first_name'],
+                'middle_name'=> $record['middle_name'],
+                'last_name'=> $record['last_name'],
+                'suffix'=> $record['suffix'],
+            ])){
+            }
+        }
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        } 
     }
 }
