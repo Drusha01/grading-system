@@ -26,6 +26,12 @@ class StudentLists extends Component
     public $grades_v2 = [];
 
     public $equivalent_grade = [];
+
+    public $semesters = [];
+
+    public $curriculum = [];
+
+    public $curriculum_id, $curriculums = [];
     public $filters = [
         'search'=> NULL,
         'college_id' =>NULL,
@@ -53,6 +59,13 @@ class StudentLists extends Component
             ->where('is_active','=',1)
             ->get()
             ->toArray();
+        $this->semesters = DB::table('semesters as s')
+            ->orderBy('s.is_active','desc')
+            ->orderBy('s.id', 'asc')
+            ->where('is_active','=',1)
+            ->get()
+            ->toArray();
+
     }
 
     public function render()
@@ -117,6 +130,44 @@ class StudentLists extends Component
     }
 
     public function gradeLists_v2($id,$modal_id){
+
+        
+        $student = DB::table('students as s')
+            ->where('s.id', $id)
+            ->first();
+
+        $this->curriculums = DB::table('curriculums as c')
+            ->select(
+                'c.id',
+                'year_start',
+                'year_end'
+            )
+            ->join('school_years as sy','sy.id','c.school_year_id')
+            ->where('c.college_id','=',$student->college_id)
+            ->where('c.department_id','=',$student->department_id)
+            ->get()
+            ->toArray();
+        $currentYear = date('Y');
+
+
+        $curriculum_initial = DB::table('curriculums as c')
+            ->select(
+                'c.id',
+                'year_start',
+                'year_end'
+            )
+            ->join('school_years as sy','sy.id','c.school_year_id')
+            ->where('c.college_id','=',$student->college_id)
+            ->where('c.department_id','=',$student->department_id)
+            ->where('year_start','<=',$currentYear)
+            ->where('year_end','=',$currentYear)
+            ->first();
+            
+        if($curriculum_initial){
+            $this->curriculum_id = $curriculum_initial->id;
+        }
+
+        $this->getCurriculum();
         
         $this->grades_v2 = DB::table('lab_lec_grades as llg')
             ->selectRaw('
@@ -166,6 +217,36 @@ class StudentLists extends Component
         $this->dispatch('openModal',modal_id : $modal_id);
     }
 
+    public function updatedCurriculumId($curriculum_id){
+        $this->curriculum_id = $curriculum_id;
+        $this->getCurriculum();
+    }
+
+    public function getCurriculum(){
+         $this->curriculum = DB::table('curriculum_subjects as cs')
+            ->select(
+                'cs.id',
+                's.subject_id' ,
+                's.subject_code' ,
+                's.description',
+                's.prerequisite_subject_id' ,
+                'sm.semester',
+                'sm.id as semester_id',
+                'yl.year_level',
+                'yl.id as year_level_id',
+                's.lecture_unit',
+                's.laboratory_unit' ,
+            )
+            ->where('curriculum_id','=',$this->curriculum_id)
+            ->leftjoin('subjects as s','s.id','cs.subject_id')
+            ->leftjoin('year_levels as yl','yl.id','cs.year_level_id')
+            ->leftjoin('semesters as sm','sm.id','cs.semester_id')
+            ->orderBy('yl.year_level') 
+            ->orderBy('yl.year_level') 
+            ->orderBy('sm.semester')    
+            ->get()
+            ->toArray();
+    }
 
     public function gradeLists($id,$modal_id){
         $this->grades = DB::table('lab_lec_grades as llg')

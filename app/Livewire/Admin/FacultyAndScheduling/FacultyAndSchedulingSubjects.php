@@ -61,10 +61,13 @@ class FacultyAndSchedulingSubjects extends Component
 
     public $subjectschedules = [];
 
+    public $faculty_subjects = [];
+
     public $faculty = [];
 
     public $year_levels = []; 
 
+    protected $listeners = ['deleteSubject' => 'deleteSubject'];
     public function mount($school_year,$college,$department,$year_level,$semester){
 
         $this->detail['school_year'] = $school_year;
@@ -189,6 +192,8 @@ class FacultyAndSchedulingSubjects extends Component
     public function add($modal_id){
         $this->detail['schedule_id'] = NULL;
         $this->detail['faculty_id'] = NULL;
+
+        $this->faculty_subjects =[];    
 
         self::filterSubject();
         self::filterFaculty();
@@ -378,9 +383,13 @@ class FacultyAndSchedulingSubjects extends Component
                 ->where('schedule_id' ,'=', $this->detail['schedule_id'])
                 ->first()
         ){
+            $this->dispatch('notifyWarning', 
+            'Schedule already exists.!',
+                '');
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'detail.schedule_id' => 'Schedule already exists.',
             ]);
+            
         }
 
         $schedule_id = DB::table('schedulings')->insertGetId([
@@ -475,8 +484,8 @@ class FacultyAndSchedulingSubjects extends Component
             $this->dispatch('notifySuccess', 
             'Added successfully!',
                 '');
-            $this->dispatch('closeModal',modal_id : $modal_id);
         }
+        $this->getAllSubjects($this->detail['faculty_id']);
     }
     
     public function view($id,$modal_id){
@@ -575,4 +584,87 @@ class FacultyAndSchedulingSubjects extends Component
         $this->dispatch('closeModal',modal_id : $modal_id);
 
     }
+
+    public function updatedDetailFacultyId($faculty_id){
+        $this->getAllSubjects($faculty_id);
+
+        //filter only to this school year, 
+    }
+
+    public function getAllSubjects($faculty_id){
+        $this->detail['subject_id'] = NULL;
+        $this->faculty_subjects = DB::table('schedulings as cl')
+            ->select(
+                    'cl.id',
+                    'c.name as college',
+                    'd.name as department',
+                    'c.code as college_code',
+                    'd.code as department_code',
+                    'r.code as room_code',
+                    'r.name as room_name',
+                    's.is_active',
+                    'sh.schedule_from',
+                    'sh.schedule_to',
+                    'sh.day' ,
+                    'sh.is_lec' ,
+                    'sh.subject_id',
+                    'cl.room_id',
+                    'cl.schedule_id',
+                    'cl.faculty_id',
+                    's.id as subjectid',
+                    's.college_id' ,
+                    's.department_id' ,
+                    's.subject_id' ,
+                    's.subject_code' ,
+                    's.description',
+                    's.prerequisite_subject_id' ,
+                    's.lecture_unit',
+                    's.laboratory_unit' ,
+                    'c.name as college',
+                    'd.name as department',
+                    'c.code as college_code',
+                    'd.code as department_code',
+                    'pr.subject_id as prerequisite_subject_id',
+                    'pr.subject_code as prerequisite_subject_code',
+                    's.is_active',
+                    'r.code as room_code',
+                    'r.id as room_id',
+                    'r.name as room_name',
+                    'sh.schedule_from',
+                    'sh.schedule_to',
+                    'sh.day' ,
+                    'sh.is_lec' ,
+
+                )
+                ->leftJoin('rooms as r','r.id','cl.room_id')
+                ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
+                ->leftJoin('subjects as s','s.id','sh.subject_id')
+                ->leftJoin('faculty as f','f.id','cl.faculty_id')
+                ->leftJoin('users as u','u.id','f.user_id')
+                ->leftJoin('colleges as c','c.id','s.college_id')
+                ->leftJoin('departments as d','d.id','s.department_id')
+                ->leftjoin('subjects as pr','pr.id','s.prerequisite_subject_id')
+                ->where('cl.school_year_id' ,'=', DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$this->detail['school_year'])->first()->id)
+                ->where('cl.college_id' ,'=', DB::table('colleges')->where('code','=',$this->detail['college'])->first()->id)
+                ->where('cl.department_id' ,'=', DB::table('departments')->where('code','=',$this->detail['department'])->first()->id)
+                ->where('cl.year_level_id' ,'=', DB::table('year_levels')->where('year_level','=',$this->detail['year_level'])->first()->id)
+                ->where('cl.semester_id' ,'=', DB::table('semesters')->where('semester','=',$this->detail['semester'])->first()->id)
+                ->where('cl.faculty_id' ,'=', $faculty_id)
+                ->get()
+                ->toArray();
+
+    }
+
+    public function deleteSubject($id)
+    {
+        DB::table('schedulings as cl')
+            ->where('id',$id)->delete();
+         $this->dispatch('notifySuccess', 
+        'Deleted successfully!',
+            '');
+
+        $this->getAllSubjects($this->detail['faculty_id']);
+
+    }
+
 }

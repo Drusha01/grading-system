@@ -25,6 +25,8 @@ class CurriculumProspectus extends Component
 
     public $edit = false;
 
+    public $is_table = true;
+
     public $permanent = false;
     public $curriculum = [
         'id'=> NULL,
@@ -75,7 +77,9 @@ class CurriculumProspectus extends Component
                 's.description',
                 's.prerequisite_subject_id' ,
                 'sm.semester',
+                'sm.id as semester_id',
                 'yl.year_level',
+                'yl.id as year_level_id',
                 's.lecture_unit',
                 's.laboratory_unit' ,
             )
@@ -84,15 +88,23 @@ class CurriculumProspectus extends Component
             ->leftjoin('year_levels as yl','yl.id','cs.year_level_id')
             ->leftjoin('semesters as sm','sm.id','cs.semester_id');
 
-            if(strlen($this->detail['year_level_id'])){
-                $table_data = $table_data->where('cs.year_level_id','=',$this->detail['year_level_id']);
-            }
-            if(strlen($this->detail['semester_id'])){
-                $table_data = $table_data->where('cs.semester_id','=',$this->detail['semester_id']);
-            }
+            // if(strlen($this->detail['year_level_id'])){
+            //     $table_data = $table_data->where('cs.year_level_id','=',$this->detail['year_level_id']);
+            // }
+            // if(strlen($this->detail['semester_id'])){
+            //     $table_data = $table_data->where('cs.semester_id','=',$this->detail['semester_id']);
+            // }
             $table_data = $table_data->orderBy('yl.year_level')   // Order first by year level
-            ->orderBy('sm.semester') 
-            ->paginate(10);
+            ->orderBy('yl.year_level') 
+            ->orderBy('sm.semester');
+            if($this->is_table){
+                $table_data = $table_data
+                ->paginate(10);
+            }else{
+                $table_data = $table_data
+                ->get()
+                ->toArray();
+            }
         return view('livewire.admin.curriculum.curriculum-prospectus',[
             'table_data' =>$table_data
         ])

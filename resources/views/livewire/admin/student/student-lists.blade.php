@@ -53,7 +53,6 @@
                                     <div class="sk-wave-rect"></div>
                                 </div>
                             </div>
-
                         </div>
                     <thead style="background:#952323;color:white;">
                         <tr class="align-middle">
@@ -106,9 +105,9 @@
                                             <button class="btn btn-outline-secondary" wire:click="change_password({{ $value->id }},'changePasswordModal')">
                                                 <svg fill="currentColor" width="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M17,9V7c0-2.8-2.2-5-5-5S7,4.2,7,7v2c-1.7,0-3,1.3-3,3v7c0,1.7,1.3,3,3,3h10c1.7,0,3-1.3,3-3v-7C20,10.3,18.7,9,17,9z M9,7c0-1.7,1.3-3,3-3s3,1.3,3,3v2H9V7z M13.1,15.5c0,0-0.1,0.1-0.1,0.1V17c0,0.6-0.4,1-1,1s-1-0.4-1-1v-1.4c-0.6-0.6-0.7-1.5-0.1-2.1c0.6-0.6,1.5-0.7,2.1-0.1C13.6,13.9,13.7,14.9,13.1,15.5z"></path></g></svg>
                                             </button>
-                                            <button class="btn btn-outline-success" wire:click="gradeLists({{$value->id }},'gradesModal')">
+                                            <!-- <button class="btn btn-outline-success" wire:click="gradeLists({{$value->id }},'gradesModal')">
                                                 <svg viewBox="0 0 1024 1024" width="20px" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M981.333333 960h-21.333333V576a21.333333 21.333333 0 0 0-42.666667 0v384h-128V213.333333a42.666667 42.666667 0 0 1 42.666667-42.666666h42.666667a42.666667 42.666667 0 0 1 42.666666 42.666666v21.333334a21.333333 21.333333 0 0 0 42.666667 0v-21.333334a85.333333 85.333333 0 0 0-85.333333-85.333333h-42.666667a85.333333 85.333333 0 0 0-85.333333 85.333333v746.666667h-85.333334V426.666667a85.333333 85.333333 0 0 0-85.333333-85.333334h-42.666667a85.333333 85.333333 0 0 0-85.333333 85.333334v533.333333h-85.333333V640a85.333333 85.333333 0 0 0-85.333334-85.333333h-42.666666a85.333333 85.333333 0 0 0-85.333334 85.333333v320H64V42.666667a21.333333 21.333333 0 0 0-42.666667 0v938.666666a21.333333 21.333333 0 0 0 21.333334 21.333334h938.666666a21.333333 21.333333 0 0 0 0-42.666667z m-661.333333 0H192V640a42.666667 42.666667 0 0 1 42.666667-42.666667h42.666666a42.666667 42.666667 0 0 1 42.666667 42.666667z m298.666667 0h-128V426.666667a42.666667 42.666667 0 0 1 42.666666-42.666667h42.666667a42.666667 42.666667 0 0 1 42.666667 42.666667z" fill="currentColor"></path><path d="M938.666667 384a21.333333 21.333333 0 0 0-21.333334 21.333333v85.333334a21.333333 21.333333 0 0 0 42.666667 0v-85.333334a21.333333 21.333333 0 0 0-21.333333-21.333333zM958.293333 311.893333a24.533333 24.533333 0 0 0-4.48-7.04l-3.2-2.56a16.213333 16.213333 0 0 0-3.84-1.92L942.933333 298.666667a21.333333 21.333333 0 0 0-12.373333 1.28 19.2 19.2 0 0 0-11.52 11.52 21.333333 21.333333 0 0 0-1.706667 8.533333 21.333333 21.333333 0 0 0 6.186667 15.146667 21.333333 21.333333 0 0 0 7.04 4.48A21.333333 21.333333 0 0 0 938.666667 341.333333a21.333333 21.333333 0 0 0 15.146666-6.186666A22.4 22.4 0 0 0 960 320a21.333333 21.333333 0 0 0-1.706667-8.106667z" fill="currentColor"></path></g></svg>
-                                            </button>
+                                            </button> -->
                                             <button class="btn btn-outline-primary" wire:click="gradeLists_v2({{$value->id }},'gradesVersionTwoModal')">
                                                 <svg viewBox="0 0 1024 1024" width="20px" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M981.333333 960h-21.333333V576a21.333333 21.333333 0 0 0-42.666667 0v384h-128V213.333333a42.666667 42.666667 0 0 1 42.666667-42.666666h42.666667a42.666667 42.666667 0 0 1 42.666666 42.666666v21.333334a21.333333 21.333333 0 0 0 42.666667 0v-21.333334a85.333333 85.333333 0 0 0-85.333333-85.333333h-42.666667a85.333333 85.333333 0 0 0-85.333333 85.333333v746.666667h-85.333334V426.666667a85.333333 85.333333 0 0 0-85.333333-85.333334h-42.666667a85.333333 85.333333 0 0 0-85.333333 85.333334v533.333333h-85.333333V640a85.333333 85.333333 0 0 0-85.333334-85.333333h-42.666666a85.333333 85.333333 0 0 0-85.333334 85.333333v320H64V42.666667a21.333333 21.333333 0 0 0-42.666667 0v938.666666a21.333333 21.333333 0 0 0 21.333334 21.333334h938.666666a21.333333 21.333333 0 0 0 0-42.666667z m-661.333333 0H192V640a42.666667 42.666667 0 0 1 42.666667-42.666667h42.666666a42.666667 42.666667 0 0 1 42.666667 42.666667z m298.666667 0h-128V426.666667a42.666667 42.666667 0 0 1 42.666666-42.666667h42.666667a42.666667 42.666667 0 0 1 42.666667 42.666667z" fill="currentColor"></path><path d="M938.666667 384a21.333333 21.333333 0 0 0-21.333334 21.333333v85.333334a21.333333 21.333333 0 0 0 42.666667 0v-85.333334a21.333333 21.333333 0 0 0-21.333333-21.333333zM958.293333 311.893333a24.533333 24.533333 0 0 0-4.48-7.04l-3.2-2.56a16.213333 16.213333 0 0 0-3.84-1.92L942.933333 298.666667a21.333333 21.333333 0 0 0-12.373333 1.28 19.2 19.2 0 0 0-11.52 11.52 21.333333 21.333333 0 0 0-1.706667 8.533333 21.333333 21.333333 0 0 0 6.186667 15.146667 21.333333 21.333333 0 0 0 7.04 4.48A21.333333 21.333333 0 0 0 938.666667 341.333333a21.333333 21.333333 0 0 0 15.146666-6.186666A22.4 22.4 0 0 0 960 320a21.333333 21.333333 0 0 0-1.706667-8.106667z" fill="currentColor"></path></g></svg>
                                             </button>
@@ -155,74 +154,145 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" id="gradesModalclose" aria-label="Close"></button>
                         </div>
                         <div class="modal-body row">
-                            <div class="col-12">
-                                <table class="table table-striped table-bordered text-center align-middle position-relative" >
-                                    <thead style="background:#952323;color:white;">
-                                        <tr class="">
-                                            <th scope="col" class="px-4">#</th>
-                                            <th scope="col" class="px-4 text-start">Subject</th>
-                                            <th scope="col" class="px-4 ">School Year</th>
-                                            <th scope="col" class="px-4 ">Semester</th>
-                                            <th scope="col" class="text-center px-4 ">Grade</th> 
-                                            <th scope="col" class="text-center px-4 ">Grade Equivalent</th> 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($grades_v2 as $key =>$value)
-                                            <tr class="">
-                                                <th scope="row" class="px-4">{{ intval($key)+1 }}</th>
-                                                <td class="px-4 text-start">
-                                                     {{$value->subject_id}} - {{$value->subject_code}}
-                                                </td>
-                                                <th scope="row" class="px-4">{{ $value->school_year}}</th>
-                                                <th scope="row" class="px-4">{{ $value->semester}}</th>
-                                                <td class="px-4">
-                                                    @php
-                                                        $lab = floatval($value->lab_calculated_grade);
-                                                        $lec = floatval($value->lec_calculated_grade);
-                                                        $weight = 0;
-
-                                                        if ($lab > 0) $weight += 1;
-                                                        if ($lec > 0) $weight += 1;
-
-                                                        $grade = $weight > 0
-                                                            ? (($lab * 0.5) + ($lec * 0.5)) 
-                                                            : NULL;
-                                                    @endphp
-                                                    @if($grade)
-                                                    {{ number_format($grade, 2, '.', '') }}
-                                                    @endif
-                                                </td>
-                                                <td class="px-4">
-                                                    @if($grade)
-                                                        @php
-                                                            $set = false;
-                                                        @endphp
-                                                        @foreach ($equivalent_grade as $eg_key =>$eg_value)
-                                                            @if(floatval($grade) >= floatval($eg_value->minimum) && floatval($grade) < floatval($eg_value->maximum + 1))
-                                                                {{ $eg_value->grade }}
-                                                                @php
-                                                                    $set = true;
+                            <div class="col-md-12 mb-3">
+                                <label for="department_id" class="form-label">Curriculum</label>
+                                <select name="curriculum_id" id="curriculum_id" wire:model.live="curriculum_id" class="form-select">  
+                                    @foreach ($curriculums as $key => $value )
+                                        <option value="{{ $value->id }}" >{{ $value->year_start.' - '.$value->year_end }}</option>
+                                    @endforeach
+                                </select>
+                                @error('detail.department_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror  
+                            </div>
+                            <div class="col-12 overflow-scroll" style="max-height:700px;">
+                                <div class="row">
+                                    @foreach($year_levels as $key => $value)
+                                        <div class="row d-flex px-2 justify-content-center border border-black text-black fs-4 py-2 fw-bold">{{ $value->year_level }}</div>
+                                        <div class="row mb-3 px-2">
+                                            @foreach($semesters as $s_key => $s_value)
+                                                @php 
+                                                $grade_average = 0.0;
+                                                $grade_count = 0.0;
+                                                @endphp
+                                                <div class="col-md-6">
+                                                    <div class="row d-flex justify-content-center border border-black text-black fs-5 py-2 fw-bold">{{ $s_value->semester }}</div>
+                                                    <div class="row">
+                                                        <table class="table table-striped table-bordered" >
+                                                            <thead style="background:#952323;color:white;">
+                                                                <tr class="align-middle">
+                                                                    <th scope="col" class="">Grade</th>
+                                                                    <th scope="col" class="">Code</th>
+                                                                    <th scope="col"colspan="3" class="">Description</th>
+                                                                    <th scope="col" class="">LEC</th>
+                                                                    <th scope="col" class="">LAB</th>
+                                                                    <th scope="col" class="">PREREQ</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @php 
+                                                                    $has_row = false;
                                                                 @endphp
-                                                            @endif
-                                                        @endforeach
-                                                        @if(!$set)
-                                                            No grade equivalent
-                                                        @endif
-                                                    @else 
-                                                        
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr class="align-middle">
-                                                <td colspan="42">
-                                                    <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                                                @foreach($curriculum as $tb_key =>$tb_value)
+                                                                    @if($value->id == $tb_value->year_level_id && $s_value->id ==  $tb_value->semester_id)
+                                                                        @php 
+                                                                        $has_row = true;
+                                                                        @endphp
+                                                                        <tr class="align-middle">
+                                                                            <td class="">
+                                                                                @foreach($grades_v2 as $g_key =>$g_value)
+                                                                                    @if($g_value->subject_id == $tb_value->subject_id)
+                                                                                        @php
+                                                                                            $lab = floatval($g_value->lab_calculated_grade);
+                                                                                            $lec = floatval($g_value->lec_calculated_grade);
+                                                                                            $weight = 0;
+
+                                                                                            if ($lab > 0) $weight += 1;
+                                                                                            if ($lec > 0) $weight += 1;
+
+                                                                                            $grade = $weight > 0
+                                                                                                ? (($lab * 0.5) + ($lec * 0.5)) 
+                                                                                                : NULL;
+                                                                                        @endphp
+                                                                                        @if($grade)
+                                                                                            {{ number_format($grade, 2, '.', '') }}
+                                                                                            @php
+                                                                                                $grade_count++;
+                                                                                                $grade_average+=$grade;
+                                                                                            @endphp
+                                                                                        @else
+                                                                                        
+                                                                                        @endif
+                                                                                        -
+                                                                                        @if($grade)
+                                                                                            @php
+                                                                                                $set = false;
+                                                                                            @endphp
+                                                                                            @foreach ($equivalent_grade as $eg_key =>$eg_value)
+                                                                                                @if(floatval($grade) >= floatval($eg_value->minimum) && floatval($grade) < floatval($eg_value->maximum + 1))
+                                                                                                    {{ $eg_value->grade }}
+                                                                                                    @php
+                                                                                                        $set = true;
+                                                                                                    @endphp
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                            @if(!$set)
+                                                                                                No grade equivalent
+                                                                                            @endif
+                                                                                        @endif
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </td>
+                                                                            <td class="">{{$tb_value->subject_code}}</td>
+                                                                            <td class="" colspan="3">{{$tb_value->description}}</td>
+                                                                            <td class="">{{$tb_value->lecture_unit}}</td>
+                                                                            <td class="">{{$tb_value->laboratory_unit}}</td>
+                                                                            <td class="">
+                                                                                @if($tb_value->prerequisite_subject_id)
+                                                                                    @php 
+                                                                                        $prerequisites = DB::table('subjects')
+                                                                                            ->whereIn('id', json_decode($tb_value->prerequisite_subject_id))
+                                                                                            ->get()
+                                                                                            ->toArray();
+                                                                                        foreach($prerequisites as $v_key => $v_value){
+                                                                                            echo $v_value->subject_id.' - '.$v_value->subject_code; 
+                                                                                            echo '<br>';  
+                                                                                            
+                                                                                        }
+                                                                                    @endphp
+                                                                                @else 
+                                                                                    N/A
+                                                                                @endif    
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endif
+                                                                @endforeach
+                                                                @if(!$has_row)
+                                                                    <tr class="align-middle">
+                                                                        <td colspan="42">
+                                                                            <div class="alert alert-danger d-flex justify-content-center">No records found!</div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="43">
+                                                                            <div class="d-flex justify-content-start">
+                                                                                Average: 
+                                                                                @if($grade_average>0)
+                                                                                    {{ number_format($grade_average/$grade_count, 2, '.', '') }}
+                                                                                @endif
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -323,15 +393,45 @@
                         </div>
                         <div class="modal-body row">
                             <div class="col-md-6 mb-3">
-                                <label for="new_password" class="form-label">New password</label>
-                                <input type="password" id="new_password" wire:model.defer="detail.new_password" placeholder="New password" class="form-control @error('detail.new_password') is-invalid @enderror">
-                                @error('detail.new_password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                <label for="password" class="form-label">Password </label>
+                                <div class="input-group d-flex">
+                                    <input 
+                                        type="password" 
+                                        wire:model.defer="detail.new_password"
+                                        id="password" 
+                                        class="form-control" 
+                                        placeholder="Password"
+                                    >
+                                    <button 
+                                        class="" 
+                                        type="button" 
+                                        id="togglePassword"
+                                    >
+                                    <svg viewBox="0 0 24 24" width="20px" class="m-2" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                    </button>
+                                </div>
+                                @error('detail.password') 
+                                    <span class="text-white">{{ $message }}</span> 
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="confirm_password" class="form-label">Confirm password</label>
-                                <input type="password" id="confirm_password" wire:model.defer="detail.confirm_password" placeholder="Confirm password" class="form-control @error('detail.confirm_password') is-invalid @enderror">
+                                <label for="confirm_password" class="form-label">Confirm password </label>
+                                <div class="input-group d-flex">
+                                    <input 
+                                        type="password" 
+                                        wire:model.defer="detail.confirm_password"
+                                        id="confirmpassword" 
+                                        class="form-control" 
+                                        placeholder="Password"
+                                    >
+                                    <button 
+                                        class="" 
+                                        type="button" 
+                                        id="confirmtogglePassword"
+                                    >
+                                    <svg viewBox="0 0 24 24" width="20px" class="m-2" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                    </button>
+                                </div>
                                 @error('detail.confirm_password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -347,4 +447,40 @@
         </div>
         
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.getElementById('password');
+            const toggleButton = document.getElementById('togglePassword');
+            const confirmpasswordInput = document.getElementById('confirmpassword');
+            const confirmtoggleButton = document.getElementById('confirmtogglePassword');
+
+            const hideText = `
+                <svg viewBox="0 0 24 24" width="20px" class="m-2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`;
+
+            const eyeIcon = `<svg viewBox="0 0 24 24" width="20px" class="m-2" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>`;
+
+            toggleButton.innerHTML = eyeIcon;
+
+            toggleButton.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+
+                // Toggle innerHTML
+                toggleButton.innerHTML = (type === 'password') ? eyeIcon : hideText;
+            });
+
+
+            confirmtoggleButton.innerHTML = eyeIcon;
+
+            confirmtoggleButton.addEventListener('click', function () {
+                const type = confirmpasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmpasswordInput.setAttribute('type', type);
+
+                // Toggle innerHTML
+                confirmtoggleButton.innerHTML = (type === 'password') ? eyeIcon : hideText;
+            });
+        });
+    </script>
 </div>
