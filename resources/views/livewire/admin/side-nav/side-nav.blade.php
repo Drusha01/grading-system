@@ -1,19 +1,19 @@
 <div>
     <div id="sidebarMenu" class="sidepanel d-flex flex-column overflow-auto flex-shrink-0 p-3 pb-0 border-end border-dark position-fixed w-100"  style=" max-width: 280px; height: 100%; background-color: white;">
-        <a href="{{ route("dashboard") }}" wire:navigate class="d-flex align-items-center justify-content-center mb-md-0 link-dark text-decoration-none">
-            <img src="{{asset('image/wmsu_logo.webp')}}" class="me-2" alt="" width="50px" height="50px">
-            <span class="fs-2 h1 m-0 brand-color ">Admin</span>
-        </a>
+            <a href="{{ route("dashboard") }}" wire:navigate class="d-flex align-items-center justify-content-center mb-md-0 link-dark text-decoration-none">
+                <img src="{{asset('image/wmsu_logo.webp')}}" class="me-2" alt="" width="50px" height="50px">
+                <span class="fs-2 h1 m-0 brand-color ">Admin</span>
+            </a>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             @if(isset($admin))
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a href="{{ route("dashboard") }}" wire:navigate class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('admin/dashboard*')) {{ 'active' }} @endif""
                     aria-current="page">
                     <svg viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="currentColor" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5ZM14 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V5ZM4 16a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3ZM14 13a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-6Z"></path> </g></svg>
                     <span class="fs-6 ms-2">Dashboard</span>
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a href="{{ route("student-lists") }}" wire:navigate
                     class="nav-link link-dark d-flex align-items-center mb-2 @if (request()->is('admin/student*')) {{ 'active' }} @endif" >

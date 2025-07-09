@@ -44,6 +44,12 @@ class CurriculumProspectus extends Component
         'subject_id' => NULL,
     ];
 
+     public $filters = [
+        'search'=> NULL,
+        'college_id' =>NULL,
+        'department_id' =>NULL,
+    ];
+
     
     public function mount($school_year,$college,$department){
 
@@ -97,6 +103,11 @@ class CurriculumProspectus extends Component
             $table_data = $table_data->orderBy('yl.year_level')   // Order first by year level
             ->orderBy('yl.year_level') 
             ->orderBy('sm.semester');
+             if (!empty($this->filters['search'])) {
+                $table_data
+                ->where('s.subject_id','like','%'.$this->filters['search'] .'%')
+                ->orwhere('s.subject_code','like','%'.$this->filters['search'] .'%');
+            }
             if($this->is_table){
                 $table_data = $table_data
                 ->paginate(10);
@@ -183,6 +194,7 @@ class CurriculumProspectus extends Component
         $messages = [
             'curriculum.prospectus.required' => 'The prospectus field is required.',
         ];
+        
         $this->validate($rules, $messages);
 
         if(intval($this->curriculum['id'])){
@@ -222,6 +234,33 @@ class CurriculumProspectus extends Component
     }
 
     public function addSubject($modal_id){
+        
+        $year_level = DB::table('year_levels')
+        ->orderBy('is_active','desc')
+        ->where('is_active','=',1)
+        ->get()
+        ->first();
+        
+        $semester = DB::table('semesters as s')
+        ->orderBy('s.is_active','desc')
+        ->orderBy('s.id', 'asc')
+        ->where('is_active','=',1)
+        ->get()
+        ->first();
+
+        $subject = DB::table('subjects')
+            ->where('id','=',$this->detail['subject_id'])
+            ->first();
+        if( 
+            $semester->id == $this->detail['semester_id'] && 
+            $this->detail['year_level_id'] == $year_level->id &&
+            $subject->prerequisite_subject_id
+            ){
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'detail.subject_id' => 'Subject cannot add at '.$year_level->year_level.' '.$semester->semester .' that has prerequisites.',
+            ]);
+        }
+        
         $rules = [
             'detail.curriculum_id' => 'required|integer',
             'detail.year_level_id' => 'required|integer',
