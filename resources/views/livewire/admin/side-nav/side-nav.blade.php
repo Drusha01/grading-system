@@ -219,18 +219,31 @@
             </li>
             <div class="my-3"></div>
         </ul>
-        <div class=" dropdown mt-auto py-3" style="position:sticky;bottom:0px;left:0px;background:#fff;width:100%;">
-            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{ asset('image/wmsu_logo.webp') }}" alt="" style="width: 32px; height: 32px; object-fit: cover; border-radius:50%;" class="me-2">
-                <strong class="text-truncate" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; max-width: calc(100% - 40px);">
-                    {{$user->first_name.' '.$user->middle_name.' '.$user->last_name.' '.$user->suffix}}
+        <div x-data="{ open: false }" class="mt-auto py-3 position-relative" style="position:sticky;bottom:0;background:#fff;width:100%;z-index:10;">
+            <a href="#" @click.prevent="open = !open" @click.outside="open = false"
+            class="d-flex align-items-center link-dark text-decoration-none" role="button">
+                <img src="{{ asset('image/wmsu_logo.webp') }}" alt=""
+                    style="width: 32px; height: 32px; object-fit: cover; border-radius:50%;" class="me-2">
+                <strong class="text-truncate"
+                        style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; max-width: calc(100% - 40px);">
+                    {{ $user->first_name.' '.$user->middle_name.' '.$user->last_name.' '.$user->suffix }}
                 </strong>
-                    
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-caret-down-fill ms-2" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658A.5.5 0 0 1 2.8 5h10.4a.5.5 0 0 1 .349.858l-4.796 5.482a.5.5 0 0 1-.752 0z"/>
+                </svg>
             </a>
-            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                <li><a class="dropdown-item" href="{{ route('logout') }}" wire:navigate >Sign out</a></li>
+
+            <!-- Dropdown menu -->
+            <ul x-show="open" x-transition
+                class="dropdown-menu show text-small shadow mt-2"
+                style="display: block; position: absolute; top: auto; bottom: 100%; z-index: 9999;">
+                <li>
+                    <a class="dropdown-item" href="{{ route('logout') }}" wire:navigate>Sign out</a>
+                </li>
             </ul>
         </div>
+
         <script>
             $(document).ready(function () {
                 $('.btn-toggle').click(function () {

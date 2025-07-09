@@ -254,7 +254,7 @@ class CurriculumProspectus extends Component
         if( 
             $semester->id == $this->detail['semester_id'] && 
             $this->detail['year_level_id'] == $year_level->id &&
-            $subject->prerequisite_subject_id
+            count(json_decode($subject->prerequisite_subject_id))>0
             ){
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'detail.subject_id' => 'Subject cannot add at '.$year_level->year_level.' '.$semester->semester .' that has prerequisites.',
