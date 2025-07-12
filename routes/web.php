@@ -169,6 +169,7 @@ use App\Livewire\Faculty\MySchedules\MyScheduleSemesters;
 // student 
 use App\Livewire\Student\MyGrades\MyGrades;
 use App\Livewire\Student\MySchedules\MySchedules;
+use App\Livewire\Student\MyGradeComponents\MyGradeComponents;
 
 // admin routes
 Route::middleware([IsUnauthenticated::class])->group(function () {
@@ -255,11 +256,13 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
 
         Route::prefix('students')->group(function () {
             Route::get('/',StudentLists::class)->name('student-lists');
+            Route::get('/view-{student_id}/schedule-{schedule_id}',MyGradeComponents::class)->name('admin-student-grade-components');
             Route::get('/add',AddStudent::class)->name('student-add');  
             Route::get('/edit-{id}',EditStudent::class)->name('student-edit');
             Route::get('/delete-{id}',DeleteStudent::class)->name('student-delete');
             Route::get('/activate-{id}',ActivateStudent::class)->name('student-activate');
             Route::get('/view-{id}',ViewStudent::class)->name('student-view');
+
         });
 
         Route::prefix('rooms')->group(function () {
@@ -391,6 +394,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         Route::get('school-years/view-{id}',ViewSchoolYear::class)->name('my-school-year-view');
         Route::get('departments/view-{id}',ViewDepartment::class)->name('my-department-view');
         Route::get('colleges/view-{id}',ViewCollege::class)->name('my-college-view');
+        Route::get('students/view-{student_id}/schedule-{schedule_id}',MyGradeComponents::class)->name('faculty-student-grade-components');
         Route::get('students/view-{id}',ViewStudent::class)->name('faculty-student-view');
 
         Route::prefix('academic')->middleware([IsStudent::class])->group(function () {
@@ -416,11 +420,12 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
 
     Route::prefix('student')->middleware([IsStudent::class])->group(function () {
         Route::get('/',function (){return redirect (route('my-grades'));})->name('my-grades-default');
+        Route::get('/my-grades/view-{student_id}/schedule-{schedule_id}',MyGradeComponents::class)->name('student-grade-components');
         Route::get('/my-grades',MyGrades::class)->name('my-grades');
         Route::get('/my-schedules',MySchedules::class)->name('my-schedules');
-        Route::get('rooms/view-{id}',ViewRoom::class)->name('student-room-view');
-        Route::get('subjects/view-{id}',ViewSubject::class)->name('student-subject-view');
-        Route::get('faculty/view-{id}',ViewFaculty::class)->name('student-faculty-view');
+        Route::get('/rooms/view-{id}',ViewRoom::class)->name('student-room-view');
+        Route::get('/subjects/view-{id}',ViewSubject::class)->name('student-subject-view');
+        Route::get('/faculty/view-{id}',ViewFaculty::class)->name('student-faculty-view');
 
     });
 

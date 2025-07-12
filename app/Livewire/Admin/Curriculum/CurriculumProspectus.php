@@ -105,8 +105,8 @@ class CurriculumProspectus extends Component
             ->orderBy('sm.semester');
              if (!empty($this->filters['search'])) {
                 $table_data
-                ->where('s.subject_id','like','%'.$this->filters['search'] .'%')
-                ->orwhere('s.subject_code','like','%'.$this->filters['search'] .'%');
+                ->where('s.subject_id','like','%'.$this->filters['search'] .'%');
+                // ->orwhere('s.subject_code','like','%'.$this->filters['search'] .'%');
             }
             if($this->is_table){
                 $table_data = $table_data

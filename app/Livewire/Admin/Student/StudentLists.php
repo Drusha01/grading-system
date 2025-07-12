@@ -118,6 +118,7 @@ class StudentLists extends Component
         $table_data = DB::table('students as s')
             ->select(
                 's.id' ,
+                'user_id',
                 's.college_id' ,
                 'department_id' ,
                 'year_level' ,

@@ -10,8 +10,8 @@
                     <label for="email" class="form-label text-white">Email</label>
                     <div class="input-group d-flex">
                         <input type="email" wire:model="detail.email" id="email" placeholder="Email"class="form-control" >
-                        @error('detail.email') <span class="text-white">{{ $message }}</span> @enderror
                     </div>
+                    @error('detail.email') <span class="text-white">{{ $message }}</span> @enderror
                 </div>
                 <div class="row mb-2 mx-1">
                     <label for="password" class="form-label text-white">Password</label>

@@ -13,7 +13,7 @@ class MySchedules extends Component
 {
     use WithPagination;
 
-    public $title = "My Schedules";
+    public $title = "My Schedule";
 
     public $route = "my-schedules";
 
@@ -46,6 +46,11 @@ class MySchedules extends Component
     public function render()
     {
         $userId = Session::get('user_id');
+
+        $student_id = DB::table('students')
+            ->where('user_id','=',$userId)
+            ->get()
+            ->first()->id;
 
         $table_data = DB::table('enrolled_students as es')
             ->select(
@@ -91,7 +96,7 @@ class MySchedules extends Component
             ->leftjoin('year_levels as yl','yl.id','cl.year_level_id')
             ->leftjoin('school_years as sy','sy.id','cl.school_year_id')
             ->leftjoin('semesters as sm','sm.id','cl.semester_id')
-            ->where('es.student_id','=',$userId)
+            ->where('es.student_id','=',$student_id )
             ;
 
         if(strlen($this->detail['year_level_id'])){

@@ -69,29 +69,50 @@
                                     </a>
                                 </td>
                                 @forelse ($student_scores[$key] as $v_key =>$v_value )
-                                    @if($v_value['score'])
-                                    <td>
-                                        <span class="badge bg-success">Present</span>
-                                    </td>
-                                        <td>
-                                            <button class="btn btn-danger" 
-                                                wire:click="updateScore(
-                                                    {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
-                                                    {{ $detail['schedule_id'] }},
-                                                    {{ $v_value['student_id'] }},
-                                                    {{ $detail['term_id'] }},
-                                                    {{ $detail['id']}},
-                                                    0,
-                                                    1)">
-                                                Absent
-                                            </button>
-                                        </td> 
+                                    @php
+                                    @endphp
+                                    @if(isset($v_value['score']))
+                                        @if($v_value['score'])
+                                            <td>
+                                                <span class="badge bg-success">Present</span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger" 
+                                                    wire:click="updateScore(
+                                                        {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
+                                                        {{ $detail['schedule_id'] }},
+                                                        {{ $v_value['student_id'] }},
+                                                        {{ $detail['term_id'] }},
+                                                        {{ $detail['id']}},
+                                                        0,
+                                                        1)">
+                                                    Absent
+                                                </button>
+                                            </td> 
+                                        @else
+                                            <td>
+                                                {!!
+                                                    (isset($v_value['score']) ? 
+                                                    '<span class="badge bg-danger">Absent</span>' : 
+                                                    '<span class="badge bg-secondary">No Data</span>') !!}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success" 
+                                                    wire:click="updateScore(
+                                                        {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
+                                                        {{ $detail['schedule_id'] }},
+                                                        {{ $value->id }},
+                                                        {{ $detail['term_id'] }},
+                                                        {{ $detail['id']}},
+                                                        1,
+                                                        1)">
+                                                    Present
+                                                </button>
+                                            </td> 
+                                        @endif
                                     @else
                                         <td>
-                                            {!!
-                                                ($v_value['score_id']>=0 ? 
-                                                '<span class="badge bg-danger">Absent</span>' : 
-                                                '<span class="badge bg-secondary">No Data</span>') !!}
+                                                <span class="badge bg-secondary">No Data</span>
                                         </td>
                                         <td>
                                             <button class="btn btn-success" 
@@ -104,6 +125,17 @@
                                                     1,
                                                     1)">
                                                 Present
+                                            </button>
+                                            <button class="btn btn-danger" 
+                                                wire:click="updateScore(
+                                                    {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
+                                                    {{ $detail['schedule_id'] }},
+                                                    {{ $v_value['student_id'] }},
+                                                    {{ $detail['term_id'] }},
+                                                    {{ $detail['id']}},
+                                                    0,
+                                                    1)">
+                                                Absent
                                             </button>
                                         </td> 
                                     @endif
