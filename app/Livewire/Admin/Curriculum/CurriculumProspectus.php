@@ -292,8 +292,11 @@ class CurriculumProspectus extends Component
             $this->dispatch('notifySuccess', 
             'Added successfully!',
                 '');
+
+                $this->detail['subject_id'] = NULL;
             }
-        $this->dispatch('closeModal',modal_id:$modal_id);
+
+        // $this->dispatch('closeModal',modal_id:$modal_id);
     }
 
     public function view($id,$modal_id){
