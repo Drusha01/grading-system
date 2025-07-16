@@ -36,7 +36,7 @@ class DepartmentLists extends Component
     public function mount($id= NULL){
         if($id){
             array_push($this->college_ids,intval($id));
-            $this->college_id = $id;
+            $this->filters['college_id'] = $id;
         }
 
         $this->colleges = DB::table('colleges')
@@ -46,10 +46,11 @@ class DepartmentLists extends Component
     }
 
     public function updateCollege(){
-        $this->college_ids =[];
-        if($this->college_id){
-            array_push($this->college_ids,intval($this->college_id));
-        }
+        // $this->college_ids =[];
+        // if($this->college_id){
+        //     array_push($this->college_ids,intval($this->college_id));
+        // }
+        redirect( route('department-lists-college',$this->filters['college_id']));
     }
     public function render()
     {
