@@ -25,10 +25,12 @@ class MyGradeComponents extends Component
     public $student_scores;
 
     public $schedule_id;
+    public $student_id;
 
     public function mount($student_id,$schedule_id){
 
         $this->schedule_id = $schedule_id;
+        $this->student_id = $student_id;
         if(!$student_id){
             $userId = Session::get('user_id');
             $student_id = DB::table('students')

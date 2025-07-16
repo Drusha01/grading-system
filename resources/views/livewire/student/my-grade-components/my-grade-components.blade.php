@@ -73,6 +73,7 @@
                             $term_grade = DB::table('term_grades')
                                 ->where('term_id','=',$t_value->id)
                                 ->where('schedule_id','=',$schedule_id)
+                                ->where('student_id','=',$student_id)
                                 ->first();
                             @endphp
                             <label for="" class="fs-3">{{ $t_value->term_name }} Grade :
