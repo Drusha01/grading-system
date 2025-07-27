@@ -87,10 +87,13 @@ class EditSubject extends Component
             ]);
         }
         foreach ($this->detail['prerequisite_subject_id'] as $key => $value) {
-             throw \Illuminate\Validation\ValidationException::withMessages([
-                'detail.prerequisite_subject_id' => 'A subject cannot be its own prerequisite.',
-            ]);
+            if($value == $this->detail['id']){
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                   'detail.prerequisite_subject_id' => 'A subject cannot be its own prerequisite.',
+               ]);
+            }
         }
+       
         if(DB::table('subjects')
             ->where('id','=',$this->detail['id'])
             ->update([

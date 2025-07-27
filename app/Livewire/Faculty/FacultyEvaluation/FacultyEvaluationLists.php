@@ -582,6 +582,10 @@ class FacultyEvaluationLists extends Component
 
     }
 
+    public function open_lablect_weight($modal_id){
+        dd(":asd");   
+    }
+
     public function updateSchoolWorktype($id, $weight){
         $total_weight = DB::table('school_works_types')
             ->select(DB::raw('sum(weight) as total_weight'))

@@ -91,6 +91,7 @@ class StudentLists extends Component
 
 
     public function mount(){
+
         $this->colleges = DB::table('colleges')
             ->where('is_active','=',1)
             ->get()
@@ -192,6 +193,7 @@ class StudentLists extends Component
             ->where('c.department_id','=',$student->department_id)
             ->get()
             ->toArray();
+            
         $currentYear = date('Y');
 
 

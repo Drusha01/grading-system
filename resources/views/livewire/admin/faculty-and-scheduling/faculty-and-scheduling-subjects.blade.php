@@ -30,6 +30,8 @@
             <div class="col-4">
                 <input type="search" wire:model.live="filters.search" name="" id="" placeholder="Search ... " class="form-control">
             </div>
+            <div class="col-2 d-flex items-center">
+            </div>
             <div class="d-flex col justify-content-end gap-2">
                 <a class="btn btn-primary" wire:click="add('AddSubjectModal')">
                     <svg  viewBox="0 0 20 20" width="20px" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="currentColor" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
@@ -144,6 +146,15 @@
                             @error('detail.faculty_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror  
+                        </div>
+                        
+                        <div class="col-md-12 mb-3">
+                            <label for="schedule_id" class="form-label">Select Curriculum</label>
+                            <select name="" id="" wire:model.live="subject_school_year" wire:change="filterSubject()" class="form-select"> 
+                                @foreach ($curriculums as $key => $value )
+                                    <option value="{{ $value->school_year_id }}" >{{ $value->year_start .' - '.$value->year_end }}</option>
+                                @endforeach
+                            </select> 
                         </div>
                         <div class="col-md-12 mb-3">
                             <label for="schedule_id" class="form-label">Select Subject Schedule</label>

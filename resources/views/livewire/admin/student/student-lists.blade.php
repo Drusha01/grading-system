@@ -169,6 +169,7 @@
                             <div class="col-md-12 mb-3">
                                 <label for="department_id" class="form-label">Curriculum</label>
                                 <select name="curriculum_id" id="curriculum_id" wire:model.live="curriculum_id" class="form-select">  
+                                    <option value="">Select Curriculum</option>
                                     @foreach ($curriculums as $key => $value )
                                         <option value="{{ $value->id }}" >{{ $value->year_start.' - '.$value->year_end }}</option>
                                     @endforeach

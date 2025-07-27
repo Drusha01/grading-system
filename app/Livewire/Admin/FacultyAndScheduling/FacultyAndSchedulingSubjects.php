@@ -67,7 +67,11 @@ class FacultyAndSchedulingSubjects extends Component
 
     public $year_levels = []; 
 
+    public $curriculums;
+
     protected $listeners = ['deleteSubject' => 'deleteSubject'];
+
+    public $subject_school_year;
     public function mount($school_year,$college,$department,$year_level,$semester){
 
         $this->detail['school_year'] = $school_year;
@@ -76,11 +80,33 @@ class FacultyAndSchedulingSubjects extends Component
         $this->detail['year_level'] = $year_level;
         $this->detail['semester'] = $semester;
 
+
         $this->detail['school_year_id'] = DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$this->detail['school_year'])->first()->id;
         $this->detail['college_id'] = DB::table('colleges')->where('code','=',$this->detail['college'])->first()->id;
         $this->detail['department_id'] = DB::table('departments')->where('code','=',$this->detail['department'])->first()->id;
         $this->detail['year_level_id'] = DB::table('year_levels')->where('year_level','=',$this->detail['year_level'])->first()->id;
         $this->detail['semester_id'] = DB::table('semesters')->where('semester','=',$this->detail['semester'])->first()->id;
+
+        $this->subject_school_year = $this->detail['school_year_id'] ;
+
+        
+        $this->curriculums = DB::table('curriculums as c')
+            ->select('c.id',
+            'c.school_year_id',
+            'c.department_id',
+            'c.college_id',
+            'sy.year_start',
+            'sy.year_end',
+            'sy.date_start',
+            'sy.date_end'
+            )
+            ->where('college_id','=',$this->detail['college_id'])
+            ->where('department_id','=',$this->detail['department_id'])
+            ->join('school_years as sy','sy.id','c.school_year_id')
+            ->get()
+            ->toArray();
+            
+        // dd($this->curriculums);
 
         $this->semesters = DB::table('semesters as s')
             ->orderBy('s.is_active','desc')
@@ -206,7 +232,7 @@ class FacultyAndSchedulingSubjects extends Component
     public function filterSubject(){
         $curriculum_subjects = DB::table('curriculum_subjects as cs')
             ->join('curriculums as cl', 'cs.curriculum_id', '=', 'cl.id')
-            ->where('cl.school_year_id', $this->detail['school_year_id'])
+            ->where('cl.school_year_id', $this->subject_school_year)
             ->where('cl.college_id', $this->detail['college_id'])
             ->where('cl.department_id', $this->detail['department_id'])
             ->where('cs.year_level_id','=',$this->detail['year_level_id'])
