@@ -103,6 +103,11 @@ class FacultyEvaluationLists extends Component
     public $school_year_id;
     public $semester_id;
 
+    public $laboratory_schedules = [];
+    public $laboratory_schedules_weight = [];
+
+    public $lecture_weight = NULL;
+
     public function mount($school_year, $semester, $schedule_id){
         $this->school_year = $school_year;
         $this->semester = $semester;
@@ -583,7 +588,106 @@ class FacultyEvaluationLists extends Component
     }
 
     public function open_lablect_weight($modal_id){
-        dd(":asd");   
+
+        $lecture_schedules = DB::table('schedulings as cl')
+            ->select(
+                DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS fullname'),
+                DB::raw("DATE_FORMAT(sh.schedule_from, '%h:%i %p') as schedule_from"),
+                DB::raw("DATE_FORMAT(sh.schedule_to, '%h:%i %p') as schedule_to"),
+                'sh.day' ,
+                DB::raw('sum(ll.sub_weight) as sum'),
+                DB::raw('sum(ll.sub_weight)/count(*) as ave'),
+                DB::raw('count(*) as count'),
+                'cl.id'
+            )
+            ->join('schedules as sh','cl.schedule_id','sh.id')
+            ->join('subjects as s','sh.subject_id','s.id')
+            ->where('cl.id','=',$this->detail['schedule_id'])
+            ->join('lab_lec as ll','ll.schedule_id','cl.id' )
+            ->join('faculty as f','cl.faculty_id','f.id')
+            ->leftJoin('users as u','u.id','f.user_id')
+            ->groupBy(
+                'u.first_name',
+                'u.middle_name',
+                'u.last_name',
+                'u.suffix',
+                'sh.day',
+                'sh.schedule_from',
+                'sh.schedule_to',
+                'cl.id'
+            )
+            ->get()
+            ->first();
+
+        $this->lecture_weight = $lecture_schedules->ave;
+        // dd($this->school_year_id,$this->schedule->subject_id);
+        $this->laboratory_schedules = DB::table('schedulings as cl')
+            ->select(
+                DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS fullname'),
+                DB::raw("DATE_FORMAT(sh.schedule_from, '%h:%i %p') as schedule_from"),
+                DB::raw("DATE_FORMAT(sh.schedule_to, '%h:%i %p') as schedule_to"),
+                'sh.day' ,
+                DB::raw('sum(ll.sub_weight) as sum'),
+                DB::raw('sum(ll.sub_weight)/count(*) as ave'),
+                DB::raw('count(*) as count'),
+                'cl.id'
+            )
+            ->join('schedules as sh','cl.schedule_id','sh.id')
+            ->join('subjects as s','sh.subject_id','s.id')
+            ->where('cl.is_lec','=',0)
+            ->where('cl.school_year_id','=',$this->school_year_id)
+            ->where('cl.semester_id','=',$this->semester_id)
+            ->where('sh.subject_id','=',$this->schedule->subject_id)
+            ->join('lab_lec as ll','ll.schedule_id','cl.id' )
+            ->join('faculty as f','cl.faculty_id','f.id')
+            ->leftJoin('users as u','u.id','f.user_id')
+            ->groupBy(
+                'u.first_name',
+                'u.middle_name',
+                'u.last_name',
+                'u.suffix',
+                'sh.day',
+                'sh.schedule_from',
+                'sh.schedule_to',
+                'cl.id'
+            )
+            ->get()
+            ->toArray();
+        $this->laboratory_schedules  = (array) $this->laboratory_schedules;
+
+        $this->laboratory_schedules_weight = [];
+        foreach ($this->laboratory_schedules as $key => $value) {
+            array_push($this->laboratory_schedules_weight,
+            [
+                'weight'=>$value->ave,
+                'id' => $value->id
+                ]
+            );
+        }
+        $this->dispatch('openModal',modal_id:$modal_id);
+
+        // dd($this->laboratory_schedules,$this->laboratory_schedules_weight   );
+    }
+
+    public function updateLabWeight($modal_id){
+
+         DB::table('lab_lec')
+            ->where('schedule_id','=',$this->detail['schedule_id'])
+            ->update([
+                'sub_weight' => $this->lecture_weight 
+            ]);
+        
+        foreach ($this->laboratory_schedules_weight as $key => $value) {
+            DB::table('lab_lec')
+                ->where('schedule_id','=',$value['id'])
+                ->update([
+                    'sub_weight' => $value['weight']
+                ]);
+        }
+         $this->dispatch('notifySuccess', 
+        'Updated successfully!',
+            '');
+        $this->dispatch('closeModal',modal_id:$modal_id);
     }
 
     public function updateSchoolWorktype($id, $weight){

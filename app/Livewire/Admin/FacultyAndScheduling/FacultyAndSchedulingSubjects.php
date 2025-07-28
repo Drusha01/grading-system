@@ -106,8 +106,6 @@ class FacultyAndSchedulingSubjects extends Component
             ->get()
             ->toArray();
             
-        // dd($this->curriculums);
-
         $this->semesters = DB::table('semesters as s')
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'asc')
@@ -230,6 +228,7 @@ class FacultyAndSchedulingSubjects extends Component
     }
 
     public function filterSubject(){
+        $this->detail['schedule_id'] = NULL;    
         $curriculum_subjects = DB::table('curriculum_subjects as cs')
             ->join('curriculums as cl', 'cs.curriculum_id', '=', 'cl.id')
             ->where('cl.school_year_id', $this->subject_school_year)
@@ -407,6 +406,7 @@ class FacultyAndSchedulingSubjects extends Component
                 ->where('year_level_id' ,'=', DB::table('year_levels')->where('year_level','=',$this->detail['year_level'])->first()->id)
                 ->where('semester_id' ,'=', DB::table('semesters')->where('semester','=',$this->detail['semester'])->first()->id)
                 ->where('schedule_id' ,'=', $this->detail['schedule_id'])
+                ->where('faculty_id' ,'=', $this->detail['faculty_id'])
                 ->first()
         ){
             $this->dispatch('notifyWarning', 
