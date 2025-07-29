@@ -248,7 +248,7 @@
                                                 $school_work_type_weight = $v_value['weight']/ $weight->total_weight * 100;
                                             }
                                             if(intval($v_value['score'])){
-                                                $sub_average += ($v_value['score']/$v_value['max_score'] * $multiplier) + $offset;
+                                                $sub_average += ($v_value['score']/$v_value['max_score'] ) ;
                                             }
                                             if(is_null($v_value['score'])){
                                                 if($v_value['school_work_type_id'] == $current_school_work_type->id) {  
@@ -264,7 +264,7 @@
                                             @if($v_value['school_work_type_id'] != $current_school_work_type->id)
                                                 <td class="" wire:key="{{ $value->id.'-'.$v_value['school_work_type_id'].'-'.$v_value['score']}}">
                                                     <div class="d-flex align-middle">
-                                                        <input type="number" name="" disabled id="" value="{{ $v_value['score'] }}" class="form-control" style=" width: 100%;" 
+                                                        <input type="number" name="" disabled id="" value="{{ $v_value['score'] }}" class="form-control" style=" min-width: 100px;" 
                                                             wire:change="updateScore(
                                                             {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
                                                             {{ $v_value['schedule_id'] }},
@@ -288,8 +288,8 @@
                                                             @php
                                                                 $sub_total = $sub_average / $school_work_type_count_prev
                                                             @endphp
-                                                            {{ number_format( $sub_total, 2, '.', '')    }}
-                                                            {{  number_format(( $sub_total * $school_work_type_weight/100), 2, '.', '')}}
+                                                            {{ number_format( $sub_total*100, 2, '.', '')    }}
+                                                            {{  number_format(( $sub_total * $school_work_type_weight), 2, '.', '')}}
                                                         @php
                                                                 $total_grade +=  ($sub_total * $school_work_type_weight/100);
                                                                 $sub_average = 0;
@@ -308,7 +308,7 @@
                                     @endif
                                 @endforeach
                                 <td>
-                                    {{ ($total_grade ? number_format($total_grade, 2, '.', '') : 'No data') }}
+                                    {{ ($total_grade ? number_format($total_grade*100, 2, '.', '') : 'No data') }}
                                 </td>
                                 <td>
                                     @php
@@ -364,7 +364,7 @@
                                             }
                                         }
                                     @endphp
-                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100), 2, '.', '')) }}
+                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade*100 * ($term_weight['weight'] / $term_total->total * 100) / 100), 2, '.', '')) }}
                                 </td>
                                 <td>
                                     @php
@@ -390,7 +390,7 @@
                                         }
                                     @endphp
                                     @if(floatval($grade))
-                                        {{ number_format($grade-$this_grade, 2, '.', '') }}
+                                        {{ number_format(($grade-$this_grade)*100, 2, '.', '') }}
                                     @else
                                         {{ $grade }}    
                                     @endif
@@ -429,7 +429,7 @@
 
                                     @endphp
                                     @if(floatval($grade))
-                                        {{ number_format($grade, 2, '.', '') }}
+                                        {{ number_format($grade*100, 2, '.', '') }}
                                     @else
                                         {{ $grade }}    
                                     @endif
