@@ -17,6 +17,7 @@ return new class extends Migration
             college_id INT,
             department_id INT,
             prospectus TEXT,
+            effective_date DATE,
             is_editable BOOLEAN DEFAULT 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

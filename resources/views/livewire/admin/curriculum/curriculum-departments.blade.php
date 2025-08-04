@@ -17,7 +17,7 @@
             @forelse($table_data as $key =>$value)
                 <div class="col">
                     <a class="course d-flex align-items-center justify-content-start brand-bg-color fs-5 h-100 rounded position-relative" 
-                        href="/admin/curriculums/{{ $school_year }}/{{ $college }}/{{ $value->code }}">
+                        href="/admin/curriculums/{{ $college }}/{{ $value->code }}">
                         <div class="d-flex justify-content-between  p-3 rounded " style="min-width:200px;">
                             <div class="d-flex justify-content-end">
                                 <div class="">

@@ -22,10 +22,11 @@ class CurriculumDepartments extends Component
     public $filters = [
         'search'=> NULL,
     ];
-    public function mount($school_year,$college){
-        $this->school_year = $school_year;
+    public function mount($college){
         $this->college = $college;
     }
+
+    
     public function render()
     {
         $table_data = DB::table('departments as d')

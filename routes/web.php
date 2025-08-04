@@ -317,10 +317,10 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         });
 
         Route::prefix('curriculums')->group(function () {
-            Route::get('/',CurriculumLists::class)->name('curriculum-lists');
-            Route::get('/{school_year}/{college}/{department}',CurriculumProspectus::class)->name('curriculum-lists-enrolled');
-            Route::get('/{school_year}/{college}',CurriculumDepartments::class)->name('curriculum-lists-departments');
-            Route::get('/{school_year}',CurriculumColleges::class)->name('curriculum-lists-college');
+            Route::get('/subjects/{curriculum_id}',CurriculumProspectus::class)->name('curriculum-lists-enrolled');
+            Route::get('/{college}/{department}',CurriculumLists::class)->name('curriculum-lists');
+            Route::get('/{college}',CurriculumDepartments::class)->name('curriculum-lists-departments');
+            Route::get('/',CurriculumColleges::class)->name('curriculum-lists-college');
         });
 
         Route::prefix('faculty-and-scheduling')->group(function () {

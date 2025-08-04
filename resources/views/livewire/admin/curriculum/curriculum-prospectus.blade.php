@@ -48,19 +48,18 @@
             @if($is_table)
                 <table class="table table-striped table-bordered position-relative" >
                     <div wire:target="filters.search perPage, nextPage, previousPage, gotoPage"
-                            wire:loading.flex>
-                            <div class="form-loader">
-                                Loading...
-                                <div class="sk-wave sk-primary mt-4">
-                                    <div class="sk-wave-rect"></div>
-                                    <div class="sk-wave-rect"></div>
-                                    <div class="sk-wave-rect"></div>
-                                    <div class="sk-wave-rect"></div>
-                                    <div class="sk-wave-rect"></div>
-                                </div>
+                        wire:loading.flex>
+                        <div class="form-loader">
+                            Loading...
+                            <div class="sk-wave sk-primary mt-4">
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
+                                <div class="sk-wave-rect"></div>
                             </div>
-
                         </div>
+                    </div>
                     <thead style="background:#952323;color:white;">
                         <tr class="align-middle">
                             <th scope="col" class="px-4">#</th>

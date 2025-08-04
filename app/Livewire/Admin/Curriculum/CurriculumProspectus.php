@@ -51,12 +51,12 @@ class CurriculumProspectus extends Component
     ];
 
     
-    public function mount($school_year,$college,$department){
+    public function mount($curriculum_id){
 
-
-        $this->curriculum['school_year_id'] = DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$school_year)->first()->id;
-        $this->curriculum['college_id'] = DB::table('colleges')->where('code','=',$college)->first()->id;
-        $this->curriculum['department_id'] = DB::table('departments')->where('code','=',$department)->first()->id;
+            $this->curriculum['id'] = $curriculum_id;
+        // $this->curriculum['school_year_id'] = DB::table('school_years')->where(DB::raw('concat(year_start,"-",year_end)'),'=',$school_year)->first()->id;
+        // $this->curriculum['college_id'] = DB::table('colleges')->where('code','=',$college)->first()->id;
+        // $this->curriculum['department_id'] = DB::table('departments')->where('code','=',$department)->first()->id;
 
         $this->semesters = DB::table('semesters as s')
             ->orderBy('s.is_active','desc')
@@ -156,9 +156,7 @@ class CurriculumProspectus extends Component
 
     public function getCurriculum(){
         $curriculum = DB::table('curriculums')
-            ->where('school_year_id','=',$this->curriculum['school_year_id'])
-            ->where('college_id','=',$this->curriculum['college_id'])
-            ->where('department_id','=',$this->curriculum['department_id'])
+            ->where('id','=',$this->curriculum['id'])
             ->first();
 
         if($curriculum){

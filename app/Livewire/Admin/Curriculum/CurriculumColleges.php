@@ -20,8 +20,8 @@ class CurriculumColleges extends Component
     public $filters = [
         'search'=> NULL,
     ];
-    public function mount($school_year){
-        $this->school_year = $school_year;
+    public function mount(){
+        // $this->school_year = $school_year;
     }
     public function render()
     {
