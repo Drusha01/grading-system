@@ -197,7 +197,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         })->name('admin-dashboard');
         Route::prefix('dashboard')->group(function () {
            Route::get('/',function(){
-           return redirect(route('curriculum-lists'));
+           return redirect(route('curriculum-lists-college'));
            })->name('dashboard');
         });
         Route::prefix('colleges')->group(function () {
