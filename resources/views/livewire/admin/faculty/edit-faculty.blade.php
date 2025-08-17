@@ -15,7 +15,7 @@
                     <label for="email" class="form-label">Email</label>
                     <input type="email" id="email" wire:model.defer="detail.email" placeholder="Email" class="form-control @error('detail.email') is-invalid @enderror">
                     @error('detail.email')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3 d-flex align-items-end">
@@ -23,7 +23,7 @@
                         <input type="checkbox" id="is_admin" wire:model.defer="detail.is_admin" class="form-check-input @error('detail.is_admin') is-invalid @enderror">
                         <label for="is_admin" class="form-check-label">Is Admin?</label>
                         @error('detail.is_admin')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            <div class="text-danger d-block">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -31,14 +31,14 @@
                     <label for="code" class="form-label">ID</label>
                     <input type="text" id="code"  wire:model.defer="detail.code" placeholder="ID" class="form-control @error('detail.code') is-invalid @enderror">
                     @error('detail.code')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="hours_per_week" class="form-label">No. of hours per week</label>
                     <input type="number" min="1"  id="hours_per_week" wire:model.defer="detail.hours_per_week" placeholder="Number of hours per week" class="form-control @error('detail.hours_per_week') is-invalid @enderror">
                     @error('detail.hours_per_week')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
@@ -50,7 +50,7 @@
                         @endforeach
                     </select>
                     @error('detail.college_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror  
                 </div>
                 <div class="col-md-6 mb-3">
@@ -64,14 +64,14 @@
                         @endforeach
                     </select>
                     @error('detail.department_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror  
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="first_name" class="form-label">First name</label>
                     <input type="text" id="first_name"  wire:model.defer="detail.first_name" placeholder="First name" class="form-control @error('detail.first_name') is-invalid @enderror">
                     @error('detail.first_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -79,21 +79,21 @@
                     <label for="middle_name" class="form-label">Middle name</label>
                     <input type="text" id="middle_name"  wire:model.defer="detail.middle_name" placeholder="Middle name" class="form-control @error('detail.middle_name') is-invalid @enderror">
                     @error('detail.middle_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="last_name" class="form-label">Last name</label>
                     <input type="text" id="last_name"   wire:model.defer="detail.last_name" placeholder="Last name" class="form-control @error('detail.last_name') is-invalid @enderror">
                     @error('detail.last_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="suffix" class="form-label">Suffix </label>
                     <input type="text" id="suffix"  wire:model.defer="detail.suffix" placeholder="Suffix" class="form-control @error('detail.suffix') is-invalid @enderror">
                     @error('detail.suffix')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
@@ -105,7 +105,7 @@
                         @endforeach
                     </select>
                     @error('detail.faculty_type_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror  
                 </div>
                 <div class="col-md-6 mb-3">
@@ -117,7 +117,7 @@
                         @endforeach
                     </select>
                     @error('detail.designation_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror  
                 </div>
                 <div class="col-md-6 mb-3">
@@ -129,7 +129,7 @@
                         @endforeach
                     </select>
                     @error('detail.academic_rank_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror  
                 </div>
                  <div class="col-6 mb-3 d-flex align-items-end">

@@ -15,14 +15,14 @@
                     <label for="email" class="form-label">Email</label>
                     <input type="email" id="email" wire:model.defer="detail.email" placeholder="Email" class="form-control @error('detail.email') is-invalid @enderror">
                     @error('detail.email')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="code" class="form-label">ID</label>
                     <input type="text" id="code" wire:model.defer="detail.code" placeholder="ID" class="form-control @error('detail.code') is-invalid @enderror">
                     @error('detail.code')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
@@ -34,7 +34,7 @@
                         @endforeach
                     </select>
                     @error('detail.year_level_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror  
                 </div>
             </div>
@@ -48,7 +48,7 @@
                         @endforeach
                     </select>
                     @error('detail.college_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror  
                 </div>
                 <div class="col-md-6 mb-3">
@@ -62,7 +62,7 @@
                         @endforeach
                     </select>
                     @error('detail.department_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror  
                 </div>
             </div>          
@@ -71,7 +71,7 @@
                     <label for="first_name" class="form-label">First name</label>
                     <input type="text" id="first_name" wire:model.defer="detail.first_name" placeholder="First name" class="form-control @error('detail.first_name') is-invalid @enderror">
                     @error('detail.first_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -79,7 +79,7 @@
                     <label for="middle_name" class="form-label">Middle name</label>
                     <input type="text" id="middle_name" wire:model.defer="detail.middle_name" placeholder="Middle name" class="form-control @error('detail.middle_name') is-invalid @enderror">
                     @error('detail.middle_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
@@ -88,7 +88,7 @@
                     <label for="last_name" class="form-label">Last name</label>
                     <input type="text" id="last_name" wire:model.defer="detail.last_name" placeholder="Last name" class="form-control @error('detail.last_name') is-invalid @enderror">
                     @error('detail.last_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -96,7 +96,7 @@
                     <label for="suffix" class="form-label">Suffix </label>
                     <input type="text" id="suffix" wire:model.defer="detail.suffix" placeholder="Suffix" class="form-control @error('detail.suffix') is-invalid @enderror">
                     @error('detail.suffix')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
