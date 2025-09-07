@@ -116,6 +116,7 @@ class MySchedules extends Component
             ->orderBy('sm.id','desc')
             ->paginate(10);
 
+
         return view('livewire.student.my-schedules.my-schedules',[
             'table_data' => $table_data
         ])

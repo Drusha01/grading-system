@@ -66,7 +66,8 @@ class MyScheduleLists extends Component
             ->leftJoin('school_years as sy', 'sy.id', 'cl.school_year_id')
             ->leftJoin('semesters as sm', 'sm.id', 'cl.semester_id')
             ->where('sy.id', '=', $this->school_year_id)
-            ->where('sm.id', '=', $this->semester_id)
+            ->where('sy.id', '=', $this->school_year_id)
+            ->where('sh.subject_id', '<>', NULL)
             ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
             ->leftJoin('subjects as s','s.id','sh.subject_id')
             ->leftJoin('rooms as r','r.id','cl.room_id')
@@ -83,6 +84,7 @@ class MyScheduleLists extends Component
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'desc')
             ->paginate(10);
+
         return view('livewire.faculty.my-schedules.my-schedule-lists',[
             'table_data'=>$table_data
         ])

@@ -16,7 +16,7 @@
                     <select name="subject_id" id="subject_id" wire:model="detail.subject_id" class="form-select @error('detail.subject_id') is-invalid @enderror">  
                         <option value="">Select Subject</option>
                         @foreach ($subjects as $key => $value )
-                            <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code }}</option>
+                            <option value="{{ $value->id }}" >{{ $value->subject_code.' - '.$value->description }}</option>
                         @endforeach
                     </select>
                     @error('detail.subject_id')

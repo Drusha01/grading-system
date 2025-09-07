@@ -53,6 +53,7 @@
                             <th scope="col" class="px-4 ">Prerequisite</th>
                             <th scope="col" class="px-4 ">Subject ID</th>
                             <th scope="col" class="px-4 ">Subject Code</th>
+                            <th scope="col" class="px-4 ">Description</th>
                             <th scope="col" class="px-4 ">College</th>
                             <th scope="col" class="px-4 ">Department</th>
                             <th scope="col" class="px-4 ">Lecture Unit</th>
@@ -84,6 +85,7 @@
                                     </td>
                                     <td class="px-4">{{$value->subject_id}}</td>
                                     <td class="px-4">{{$value->subject_code}}</td>
+                                    <td class="px-4">{{$value->description}}</td>
                                     <td class="px-4">
                                         <a href="/admin/colleges/view-{{ $value->college_id }}" target="_blank">
                                             {{ $value->college_code }}

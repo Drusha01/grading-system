@@ -98,7 +98,15 @@
                     @if(floatval($total_grade))
                         {{ number_format($total_grade, 2, '.', '') }}
                     @else
-                        INC
+                        @php
+                        $other = DB::table('lab_lec_grades')
+                            ->where('student_id','=',$student_id)
+                            ->where('schedule_id','=',$schedule_id)
+                            ->first();
+                        @endphp
+                        @if($other)
+                        {{ $other->other }}
+                        @endif
                     @endif    
                 </label>
             </div>

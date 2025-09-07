@@ -15,7 +15,7 @@
                     <label for="prerequisite_subject_id" class="form-label">Prerequisite Subject</label>
                     <select name="prerequisite_subject_id" multiple id="prerequisite_subject_id" class="form-select select2 @error('detail.prerequisite_subject_id') is-invalid @enderror">  
                         @foreach ($subjects as $key => $value )
-                            <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code }}</option>
+                            <option value="{{ $value->id }}" >{{ $value->subject_code.' - '.$value->description }}</option>
                         @endforeach
                     </select>
                     @error('detail.prerequisite_subject_id')

@@ -13,22 +13,23 @@
             <div class="d-flex col justify-content-end gap-2">
             </div>
         </div>
-        <div class="row p-2">
-                @forelse($table_data as $key =>$value)
-                    <div class="col-3 p-0 mx-2">
-                        <a href="/admin/faculty-and-scheduling/{{ $value->year_start.'-'.$value->year_end }}">
-                            <div class="d-flex align-items-center justify-content-between brand-bg-color p-3 rounded " style="min-width:200px;">
-                                <div class="d-flex justify-content-end">
-                                    <div class="">
-                                        <p>Curriculum</p>
-                                        <span class="fs-5">{{$value->year_start.' - '.$value->year_end}}</span>
-                                    </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-3">
+            @forelse($table_data as $key =>$value)
+                <div class="col">
+                    <a class="course d-flex align-items-center justify-content-start brand-bg-color fs-5 h-100 rounded position-relative" 
+                         href="/admin/faculty-and-scheduling/{{ $value->year_start.'-'.$value->year_end }}">
+                        <div class="p-3 rounded " style="min-width:200px; height: 120px;">
+                            <div class="d-flex justify-content-end">
+                                <div class="">
+                                    <p>Curriculum</p>
+                                    <span class="fs-5">{{$value->year_start.' - '.$value->year_end}}</span>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                @empty
-                @endforelse
+                        </div>
+                    </a>
+                </div>
+            @empty
+            @endforelse
         </div>
         <div class="row mx-5 d-flex justify-content-end">
             {{ $table_data->links('pagination::bootstrap-5') }}

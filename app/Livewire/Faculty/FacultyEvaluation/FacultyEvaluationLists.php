@@ -690,6 +690,20 @@ class FacultyEvaluationLists extends Component
         $this->dispatch('closeModal',modal_id:$modal_id);
     }
 
+    public function updateLabLecGrades($lab_lec_id,$student_id,$var){
+        if(DB::table('lab_lec_grades')
+            ->where('id','=',$lab_lec_id)
+            ->where('student_id','=',$student_id)
+            ->update([
+                'grade' =>  NULL,
+                'other' => $var,
+            ])){
+            $this->dispatch('notifySuccess', 
+            'Updated successfully!',
+                '');
+        }
+    }
+
     public function updateSchoolWorktype($id, $weight){
         $total_weight = DB::table('school_works_types')
             ->select(DB::raw('sum(weight) as total_weight'))

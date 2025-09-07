@@ -230,6 +230,13 @@
                 myModal.click();
             }); 
 
+              Livewire.on('resetStudentLists', () => {
+                setTimeout(()=>{
+                    $('#student_lists').select2();
+                },1000)
+            }); 
+
+
             Livewire.on('openAttendanceModal', (obj) => {
                 var res = obj[0].obj;
                 var schedule_id = res.schedule_id;
@@ -629,5 +636,7 @@
                 initSelect2();
             });
         </script> -->
+
+        
     </body>
 </html>

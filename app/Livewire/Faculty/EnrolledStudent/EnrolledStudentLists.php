@@ -135,6 +135,7 @@ class EnrolledStudentLists extends Component
             'college_id'=> NULL,
             'studentFilter'=> NULL
         ];
+
         self::studentList();
         $this->dispatch('openModal',modal_id:$modal_id);
     }

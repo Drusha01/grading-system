@@ -332,7 +332,7 @@
                                                 ->where('student_id','=',$value->id)
                                                 ->update([
                                                     'grade' => NULL,
-                                                    'other' => 'INC',
+                                                    'other' => NULL,
                                                 ]);
                                             }else{
                                                 DB::table('term_grades')
@@ -341,7 +341,7 @@
                                                     'term_id' => $detail['term_id'],
                                                     'student_id' => $value->id,
                                                     'grade' => NULL,
-                                                    'other' => 'INC',
+                                                    'other' => NULL,
                                                 ]);
                                             }
                                         }else{
@@ -371,29 +371,21 @@
                                             }
                                         }
                                     @endphp
-                                    {{ (($total_grade >= 0 && $inc) ? 'INC' : number_format(($total_grade *100* ($term_weight['weight'] / $term_total->total * 100) / 100), 2, '.', '')) }}
+                                    {{ (($total_grade >= 0 ) ? number_format(($total_grade *100* ($term_weight['weight'] / $term_total->total * 100) / 100), 2, '.', '') : "") }}
                                 </td>
                                 <td>
                                     @php
                                         $this_grade = $total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100;
-                                        if(DB::table('term_grades')
-                                            ->where('schedule_id','=',$detail['schedule_id'])
-                                            ->where('student_id','=',$value->id)
-                                            ->where('other','=','INC')
-                                            ->first()){
-                                            $grade = 'INC';
+                                        $term_grades = DB::table('term_grades')
+                                                ->select(
+                                                DB::raw('sum(grade) as grade'))
+                                                ->where('schedule_id','=',$detail['schedule_id'])
+                                                ->where('student_id','=',$value->id)
+                                                ->first();
+                                        if($term_grades){
+                                            $grade = $term_grades->grade;
                                         }else{
-                                            $term_grades = DB::table('term_grades')
-                                                    ->select(
-                                                    DB::raw('sum(grade) as grade'))
-                                                    ->where('schedule_id','=',$detail['schedule_id'])
-                                                    ->where('student_id','=',$value->id)
-                                                    ->first();
-                                            if($term_grades){
-                                                $grade = $term_grades->grade;
-                                            }else{
-                                                $grade = 'INC';
-                                            }
+                                            $grade = '';
                                         }
                                     @endphp
                                     @if(floatval($grade))
@@ -404,12 +396,21 @@
                                 </td>   
                                 <td>
                                     @php
+                                    $lab_lec = DB::table('lab_lec')
+                                        ->where('schedule_id','=',$detail['schedule_id'])
+                                        ->where('term_id','=',$detail['term_id'])
+                                        ->first();
+                                    $lab_lec_grades = DB::table('lab_lec_grades')
+                                        ->where('schedule_id','=',$detail['schedule_id'])
+                                        ->where('student_id','=',$value->id)
+                                        ->first();
                                     if(DB::table('term_grades')
                                         ->where('schedule_id','=',$detail['schedule_id'])
                                         ->where('student_id','=',$value->id)
                                         ->where('other','=','INC')
                                         ->first()){
-                                        $grade = 'INC';
+
+                                        $grade = NULL;
                                     }else{
                                         $term_grades = DB::table('term_grades')
                                                 ->select(
@@ -419,29 +420,23 @@
                                                 ->first();
                                         if($term_grades){
                                             $grade = $term_grades->grade;
+                                            DB::table('lab_lec_grades')
+                                            ->where('id','=',$lab_lec_grades->id)
+                                            ->where('student_id','=',$value->id)
+                                            ->update([
+                                                'schedule_id' => $detail['schedule_id'],
+                                                'sub_weight' => $lab_lec->sub_weight,
+                                                'grade' => (floatval($grade) ? $grade * $lab_lec->sub_weight/100 : NULL),
+                                            ]);
                                         }else{
-                                            $grade = 'INC';
+                                            $grade = NULL;
                                         }
                                     }
 
-                                    $lab_lec = DB::table('lab_lec')
-                                        ->where('schedule_id','=',$detail['schedule_id'])
-                                        ->where('term_id','=',$detail['term_id'])
-                                        ->first();
-                                    if($lab_lec_grades = DB::table('lab_lec_grades')
-                                        ->where('schedule_id','=',$detail['schedule_id'])
-                                        ->where('student_id','=',$value->id)
-                                        ->first()
+                                    
+                                    if($lab_lec_grades 
                                         ){
-                                        DB::table('lab_lec_grades')
-                                        ->where('id','=',$lab_lec_grades->id)
-                                        ->update([
-                                            'schedule_id' => $detail['schedule_id'],
-                                            'student_id' => $value->id,
-                                            'sub_weight' => $lab_lec->sub_weight,
-                                            'grade' => (floatval($grade) ? $grade * $lab_lec->sub_weight/100 : NULL),
-                                            'other' => (floatval($grade) ? NULL : 'INC'),
-                                        ]);
+                                        
                                     }else{
                                         DB::table('lab_lec_grades')
                                         ->insert([
@@ -449,15 +444,24 @@
                                             'student_id' => $value->id,
                                             'sub_weight' => $lab_lec->sub_weight,
                                             'grade' => (floatval($grade) ? $grade*$lab_lec->sub_weight/100 : NULL),
-                                            'other' => (floatval($grade) ? NULL : 'INC'),
+                                            'other' => (floatval($grade) ? NULL : NULL),
                                         ]);
                                     }
 
                                     @endphp
-                                    @if(floatval($grade))
+                                    @if(floatval($grade) && !$inc)
                                         {{ number_format($grade*100, 2, '.', '') }}
                                     @else
-                                        {{ $grade }}    
+                                        @php 
+                                            $other = DB::table('lab_lec_grades')
+                                            ->where('student_id','=',$value->id)
+                                            ->where('id','=',$lab_lec_grades->id)
+                                            ->first();
+                                            if($other){
+                                                $grade = $other->other;
+                                            }
+                                        @endphp
+                                        <input type="text" class="form-control" value="{{$grade }}" wire:change="updateLabLecGrades({{ $lab_lec_grades->id }},{{ $value->id }},$event.target.value,)">
                                     @endif
                                 </td>
                                 @php

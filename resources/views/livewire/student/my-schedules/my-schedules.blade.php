@@ -72,6 +72,7 @@
                     </thead>
                     <tbody>
                         @forelse($table_data as $key =>$value)
+                            @if($value->subject_id)
                             <tr class="align-middle">
                                 <th scope="row" class="px-4">{{($table_data->currentPage()-1)*$table_data->perPage()+$key+1 }}</th>
                                     <td class="px-4">
@@ -104,6 +105,8 @@
                                     </td>
                                     <td class="px-4">{{implode(', ', json_decode($value->day, true))}}</td>
                                 </tr>
+                            @else
+                            @endif#
                             @empty
                                 <tr class="align-middle">
                                     <td colspan="42">

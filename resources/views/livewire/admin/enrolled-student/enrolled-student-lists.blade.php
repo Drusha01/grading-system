@@ -110,7 +110,7 @@
         </div>
         
         <div class="modal fade" id="AddModal" wire:ignore.self data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable d-flex justify-content-center">
+            <div class="modal-dialog modal-2xl modal-dialog-centered modal-dialog-scrollable d-flex justify-content-center">
                 <form wire:submit.prevent="saveAdd('AddModal')">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -118,31 +118,30 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" id="AddModalclose" aria-label="Close"></button>
                         </div>
                         <div class="modal-body row">
-                            <div class="col-md-6 mb-3">
-                                <label for="search" class="form-label">Search student</label>
-                                <input type="text" id="search" wire:model="studentFilter.search" wire:change="studentList()" placeholder="Search student ..." class="form-control">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="college_id" class="form-label">Filter College</label>
-                                <select name="college_id" id="college_id" wire:model.defer="studentFilter.college_id" wire:change="studentList()" class="form-select ">  
-                                    <option value="">Select College</option>
-                                    @forelse ($colleges as $key => $value )
-                                        <option value="{{ $value->id }}" >{{ $value->code.' - '.$value->name }}</option>
-                                    @empty
-                                        <option value="">No Data</option>
-                                    @endforelse
-                                </select>
-                            </div>
                             <div class="col-md-12 mb-3">
-                                <label for="student_id" class="form-label">Select Student</label>
-                                <select name="student_id" id="student_id" wire:model.defer="detail.student_id" class="form-select @error('detail.student_id') is-invalid @enderror">  
-                                    <option value="">Select Student</option>
-                                    @forelse ($students as $key => $value )
-                                         <option value="{{ $value->id }}" >{{ $value->code.' '.$value->fullname }}</option>
+                                <label for="search" class="form-label">Search</label>
+                                <input type="text" id="search" wire:model="studentFilter.search" wire:keyDown.debounce.250ms="studentList()" placeholder="Search student ..." class="form-control">
+                            </div>
+                            <div class="col-md-12 mb-3" >
+                            <label for="student_lists" class="form-label"> Select Student(s)</label>
+                               <div class="rounded p-2" style="max-height: 250px; overflow-y: auto;">
+                                    @forelse($students as $value)
+                                        <div class="form-check">
+                                            <input type="checkbox"
+                                                class="form-check-input"
+                                                id="student_{{ $value->id }}"
+                                                @if (in_array($value->id, $this->detail['student_lists']))
+                                                checked
+                                                @endif
+                                                wire:click="updateSelectedStudent({{ $value->id }},$event.target.checked)">
+                                            <label class="form-check-label" for="student_{{ $value->id }}">
+                                                {{ $value->code.' '.$value->fullname }}
+                                            </label>
+                                        </div>
                                     @empty
-                                        <option value="">No Data</option>
+                                        No result ...
                                     @endforelse
-                                </select>
+                                </div>
                                 @error('detail.student_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror  
@@ -234,8 +233,8 @@
                 </form>
             </div>
         </div>
-       
     </div>
-
-
 </div>
+<script>
+   
+</script>

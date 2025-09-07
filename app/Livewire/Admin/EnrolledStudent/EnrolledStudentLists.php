@@ -43,11 +43,11 @@ class EnrolledStudentLists extends Component
 
     public $detail = [
         'student_id'=> NULL,
+        'student_lists'=> [],
         'schedule_id'=> NULL,
     ];
 
     protected $rules = [
-        'detail.student_id' => 'required|exists:students,id',
         'detail.schedule_id' => 'required|exists:schedulings,id',
     ];
 
@@ -125,14 +125,42 @@ class EnrolledStudentLists extends Component
    
 
     public function add($modal_id){
+        $enrolled = DB::table('enrolled_students')
+            ->where('schedule_id' ,'=',$this->detail['schedule_id'])
+            ->get()
+            ->toArray();
+        foreach ($enrolled as $key => $value) {
+            array_push($this->detail['student_lists'],$value->student_id);
+        }
         $this->studentFilter = [
             'college_id'=> NULL,
-            'studentFilter'=> NULL
+            'search'=> NULL
         ];
         self::studentList();
         $this->dispatch('openModal',modal_id:$modal_id);
     }
 
+    public function updatedDetailStudentLists(){
+        $this->dispatch('resetStudentLists');
+
+    }
+
+    public function updatedStudentFilterSearch(){
+    }
+
+    public function updateSelectedStudent($student_id,$checked){
+        if($checked){
+            array_push($this->detail['student_lists'],$student_id);
+        }else{
+            $temp = [];
+            foreach ($this->detail['student_lists'] as $key => $value) {
+                if($student_id != $value){
+                    array_push($this->detail['student_lists'],$value);
+                }
+            }
+            $this->detail['student_lists'] = $temp;
+        }
+    }
     public function studentList(){
         $this->detail['student_id'] = NULL;
          $this->students = DB::table('students as s')
@@ -163,6 +191,7 @@ class EnrolledStudentLists extends Component
             $this->students->where('s.college_id', '=',$this->studentFilter['college_id']);
         }
 
+
         if (!empty($this->studentFilter['search'])) {
             $this->students
             ->where('s.code','like','%'.$this->studentFilter['search'] .'%')
@@ -171,24 +200,26 @@ class EnrolledStudentLists extends Component
         }
         $this->students = $this->students
             ->where('s.is_active','=',1)
+            ->orwhereIn('s.id', $this->detail['student_lists'])
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'desc')
             ->get()
             ->toArray();
+
     }
     
     public function saveAdd($modal_id){
         $this->validate();
 
-        if(DB::table('enrolled_students')
-            ->where('student_id','=',$this->detail['student_id'])
-            ->where('schedule_id','=',$this->detail['schedule_id'])
-            ->first()
-            ){
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'detail.student_id' => 'Student is already added.',
-            ]);
-        }
+        // if(DB::table('enrolled_students')
+        //     ->where('student_id','=',$this->detail['student_id'])
+        //     ->where('schedule_id','=',$this->detail['schedule_id'])
+        //     ->first()
+        //     ){
+        //     throw \Illuminate\Validation\ValidationException::withMessages([
+        //         'detail.student_id' => 'Student is already added.',
+        //     ]);
+        // }
 
         
         if(
@@ -209,21 +240,23 @@ class EnrolledStudentLists extends Component
 
         ){
             // dd($this->scheduling->is_lec,$enrolled,$this->scheduling->subject_id,$this->detail['student_id']);
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'detail.student_id' => 'Student is already enrolled on same subject in this school year and semester.',
-            ]);
+            // throw \Illuminate\Validation\ValidationException::withMessages([
+            //     'detail.student_id' => 'Student is already enrolled on same subject in this school year and semester.',
+            // ]);
+        }else{
+            foreach ($this->detail['student_lists'] as $key => $value) {
+                $inserted = DB::table('enrolled_students')
+                    ->insert([
+                        'student_id'=>$value,
+                        'schedule_id'=>$this->detail['schedule_id']
+                ]);
+            }
+                $this->dispatch('notifySuccess', 
+                'Added successfully!',
+                    '');
+                $this->dispatch('closeModal',modal_id : $modal_id);
         }
 
-        $inserted = DB::table('enrolled_students')
-            ->insert($this->detail)
-            ;
-        if ($inserted) {
-            // You can dispatch success notification or redirect here
-            $this->dispatch('notifySuccess', 
-            'Added successfully!',
-                '');
-            $this->dispatch('closeModal',modal_id : $modal_id);
-        }
     }
 
     public function deleteStudent($id,$modal_id){

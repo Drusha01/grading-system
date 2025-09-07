@@ -15,7 +15,7 @@
                 <div class="col-md-12 mb-3" wire:ignore>
                     <select name="prerequisite_subject_id" id="prerequisite_subject_id" wire:model.live="detail.prerequisite_subject_id"  multiple="multiple" wire:ignore class="form-select position-relative z-10 select2 @error('detail.prerequisite_subject_id') is-invalid @enderror">  
                         @foreach ($subjects as $key => $value )
-                            <option value="{{ $value->id }}" >{{ $value->subject_id.' - '.$value->subject_code }}</option>
+                            <option value="{{ $value->id }}" >{{ $value->subject_code.' - '.$value->description }}</option>
                         @endforeach
                     </select>
                 </div>
