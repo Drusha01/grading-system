@@ -25,7 +25,7 @@ class CurriculumProspectus extends Component
 
     public $edit = false;
 
-    public $is_table = true;
+    public $is_table = false;
 
     public $permanent = false;
     public $curriculum = [

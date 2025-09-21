@@ -30,10 +30,12 @@ class EditSubject extends Component
         'laboratory_unit' => 0,
     ];
 
+    public $is_major_or_minor = true;
+
     public function rules(){
         return [
-            'detail.college_id' => 'required|exists:colleges,id',
-            'detail.department_id' => 'required|exists:departments,id',
+            'detail.college_id' => 'nullable|exists:colleges,id',
+            'detail.department_id' => 'nullable|exists:departments,id',
             'detail.prerequisite_subject_id' => 'nullable|array',
             'detail.subject_id' => 'required|unique:subjects,subject_id,'.$this->detail['id'],
             'detail.subject_code' => 'required|unique:subjects,subject_code,'.$this->detail['id'],
@@ -42,6 +44,10 @@ class EditSubject extends Component
         ];
     }
 
+    public function updatedIsMajorOrMinor($value){
+        $this->detail['college_id'] = null;
+        $this->detail['department_id'] = null;
+    }
 
     public function updatedDetailCollegeId($value){
         $this->detail['department_id'] = null;
@@ -140,6 +146,12 @@ class EditSubject extends Component
             'lecture_unit'=> $detail->lecture_unit,
             'laboratory_unit' => $detail->laboratory_unit,
         ];
+
+        if(intval($detail->college_id)){
+            $this->is_major_or_minor = true;
+        }else{
+            $this->is_major_or_minor = false;
+        }
 
         $this->colleges = DB::table('colleges')
             ->where('is_active','=',1)

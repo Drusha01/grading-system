@@ -30,10 +30,12 @@ class AddSubject extends Component
         'laboratory_unit' => 0,
     ];
 
+    public $is_major_or_minor = true;
+
     public function rules(){
         return [
-            'detail.college_id' => 'required|exists:colleges,id',
-            'detail.department_id' => 'required|exists:departments,id',
+            'detail.college_id' => 'nullable|exists:colleges,id',
+            'detail.department_id' => 'nullable|exists:departments,id',
             // 'detail.prerequisite_subject_id' => 'nullable|exists:subjects,id',
             'detail.prerequisite_subject_id'             => 'nullable|array',
             'detail.subject_id' => 'required|unique:subjects,subject_id',
@@ -69,6 +71,11 @@ class AddSubject extends Component
             'detail.prerequisite_subject_id.array' => 'The day must be a valid array.',
 
         ];
+    }
+
+    public function updatedIsMajorOrMinor($value){
+        $this->detail['college_id'] = null;
+        $this->detail['department_id'] = null;
     }
 
     public function updatedDetailCollegeId($value){
@@ -120,6 +127,8 @@ class AddSubject extends Component
             ->get()
             ->toArray();
     }
+
+    
 
     public function render()
     {

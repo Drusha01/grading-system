@@ -16,6 +16,24 @@ class CurriculumLists extends Component
 
     public $route = "curriculum";
 
+    public function rules(){
+        return [
+            'detail.school_year_id' => 'required|exists:school_years,id',
+            'detail.prospectus'     => 'required|string',
+            'detail.effective_date' => 'required|date',
+        ];
+    }
+
+    public function messages(){
+        return [
+            'detail.school_year_id.required'    => 'The school year is required.',
+            'detail.school_year_id.exists'      => 'The selected school year does not exist.',
+            'detail.prospectus.required'     => 'The prospectus is required.',
+            'detail.prospectus.string'       => 'The prospectus must be a valid text.',
+            'detail.effective_date.required' => 'The effective date is required.',
+            'detail.effective_date.date'     => 'The effective date must be a valid date.',
+        ];
+    }
     public $curriculum = [
         'id'=> NULL,
         'school_year_id' => NULL,
@@ -83,18 +101,7 @@ class CurriculumLists extends Component
     }
 
     public function saveAdd($modal_id){
-        $validatedData = Validator::make($this->detail, [
-            'school_year_id'    => ['required', 'exists:school_years,id'],
-            'prospectus'     => ['required', 'string'],
-            'effective_date' => ['required', 'date'],
-        ], [
-            'detail.school_year_id.required'    => 'The school year is required.',
-            'detail.school_year_id.exists'      => 'The selected school year does not exist.',
-            'detail.prospectus.required'     => 'The prospectus is required.',
-            'detail.prospectus.string'       => 'The prospectus must be a valid text.',
-            'detail.effective_date.required' => 'The effective date is required.',
-            'detail.effective_date.date'     => 'The effective date must be a valid date.',
-        ])->validate();
+        $this->validate();
 
         if(DB::table('curriculums')
             ->where('department_id','=',$this->detail['department_id'])    

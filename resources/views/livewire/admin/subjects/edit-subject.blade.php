@@ -38,9 +38,16 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-2 mb-3">
+                    <label for="college_id" class="form-label"></label>
+                    <div class="d-flex gap-2">
+                        <input type="checkbox" class="" wire:model.live="is_major_or_minor">
+                        <span>Is Minor / Major Subject?</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
                     <label for="college_id" class="form-label">College</label>
-                    <select name="college_id" id="college_id" wire:model.live="detail.college_id" class="form-select @error('detail.college_id') is-invalid @enderror">  
+                    <select name="college_id" id="college_id" wire:model.live="detail.college_id"  @if(!$is_major_or_minor){{ 'disabled' }} @endif class="form-select @error('detail.college_id') is-invalid @enderror">  
                         <option value="">Select College</option>
                         @foreach ($colleges as $key => $value )
                             <option value="{{ $value->id }}" >{{ $value->code.' - '.$value->name }}</option>
