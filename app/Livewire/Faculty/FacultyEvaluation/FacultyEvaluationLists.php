@@ -704,6 +704,31 @@ class FacultyEvaluationLists extends Component
         }
     }
 
+    public function updateSchoolWorkName($id, $newName)
+    {
+        DB::table('school_works')
+        ->where('id','=',$id)
+        ->update(['school_work_name'=>$newName]);
+        
+        self::school_works();
+    }
+
+    public function updateSchoolWorkDate($id,$newDate){
+      DB::table('school_works')
+        ->where('id','=',$id)
+        ->update(['schedule_date'=>$newDate]);
+        
+        self::school_works();
+    }
+    public function updateSchoolWorkScore($id,$newScore){
+      DB::table('school_works')
+        ->where('id','=',$id)
+        ->update(['max_score'=>$newScore]);
+        
+        self::school_works();
+    }
+
+
     public function updateSchoolWorktype($id, $weight){
         $total_weight = DB::table('school_works_types')
             ->select(DB::raw('sum(weight) as total_weight'))

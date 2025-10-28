@@ -166,7 +166,7 @@
                                     @if(count($school_works_var))
                                         @foreach ($school_works_var as $v_key => $v_value )
                                             @if($value->id != $current_school_work_type->id)
-                                                <th class="text-center">{{ $v_value->school_work_name }} : {{ $v_value->max_score }}</th>
+                                                <th class="text-center">{{ $v_value->school_work_name }} : {{ $v_value->max_score }}<br>{{ date_format(date_create($v_value->schedule_date) ,"M d, Y");}}</th>
                                             @else
                                                
                                             @endif
@@ -316,6 +316,7 @@
                                 @endforeach
                                 <td>
                                     {{ ($total_grade ? number_format($total_grade*100, 2, '.', '') : 'No data') }}
+                                    afd
                                 </td>
                                <td>
                                     @php
@@ -331,16 +332,16 @@
                                                 ->where('term_id','=',$detail['term_id'])
                                                 ->where('student_id','=',$value->id)
                                                 ->update([
-                                                    'grade' => NULL,
+                                                    'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
                                                     'other' => NULL,
                                                 ]);
                                             }else{
                                                 DB::table('term_grades')
                                                 ->insert([
                                                     'schedule_id' => $detail['schedule_id'],
-                                                    'term_id' => $detail['term_id'],
+                                                    'term_id'=>$detail['term_id'],
                                                     'student_id' => $value->id,
-                                                    'grade' => NULL,
+                                                    'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
                                                     'other' => NULL,
                                                 ]);
                                             }
@@ -363,25 +364,44 @@
                                                 DB::table('term_grades')
                                                 ->insert([
                                                     'schedule_id' => $detail['schedule_id'],
-                                                    'term_id' => $detail['term_id'],
+                                                    'term_id'=> $detail['term_id'],
                                                     'student_id' => $value->id,
                                                     'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
                                                     'other' => NULL,
                                                 ]);
                                             }
                                         }
+                                        $mid_term_grade = DB::table('term_grades')
+                                            ->select(
+                                            DB::raw('sum(grade) as grade'))
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->where('term_id','=',$terms[0]->id)
+                                            ->first();
                                     @endphp
-                                    {{ (($total_grade >= 0 ) ? number_format(($total_grade *100* ($term_weight['weight'] / $term_total->total * 100) / 100), 2, '.', '') : "") }}
+                                    @if(floatval($mid_term_grade->grade))
+                                        {{ number_format(($mid_term_grade->grade)*100, 2, '.', '') }}
+                                    @else
+                                        {{ $mid_term_grade }}    
+                                    @endif
                                 </td>
                                 <td>
                                     @php
-                                        $this_grade = $total_grade * ($term_weight['weight'] / $term_total->total * 100) / 100;
+                                        $this_grade = $mid_term_grade->grade * ($term_weight['weight'] / $term_total->total * 100) / 100;
                                         $term_grades = DB::table('term_grades')
                                                 ->select(
                                                 DB::raw('sum(grade) as grade'))
                                                 ->where('schedule_id','=',$detail['schedule_id'])
                                                 ->where('student_id','=',$value->id)
                                                 ->first();
+
+                                        $final_term_grade = DB::table('term_grades')
+                                            ->select(
+                                            DB::raw('sum(grade) as grade'))
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->where('term_id','=',$terms[1]->id)
+                                            ->first();
                                         if($term_grades){
                                             $grade = $term_grades->grade;
                                         }else{
@@ -389,14 +409,13 @@
                                         }
                                     @endphp
                                     @if(floatval($grade))
-                                        {{ number_format(($grade-$this_grade)*100, 2, '.', '') }}
+                                        {{ number_format(($final_term_grade->grade)*100, 2, '.', '') }}
                                     @else
                                         {{ $grade }}    
                                     @endif
                                 </td>   
                                 <td>
                                     @php
-                                    
                                         $lab_lec = DB::table('lab_lec')
                                             ->where('schedule_id','=',$detail['schedule_id'])
                                             ->where('term_id','=',$detail['term_id'])
@@ -656,15 +675,20 @@
                                             <tr class="align-middle">
                                                 <th scope="row" class="px-4">{{ intval($key)+1 }}</th>
                                                 <td class="px-4">
-                                                    {{ $value->school_work_name }}
+                                                    <input type="text" class="form-control" value={{ $value->school_work_name }}
+                                                        wire:change="updateSchoolWorkName({{ $value->id }}, $event.target.value)"
+                                                    >
                                                 </td>
                                                 <td class="px-4">
-                                                    {{ \Carbon\Carbon::parse($value->schedule_date)->format('F j, Y') }}
+                                                    <input type="date" class="form-control" name="" value="{{ \Carbon\Carbon::parse($value->schedule_date)->format('Y-m-d')}}" id=""
+                                                        wire:change="updateSchoolWorkDate({{ $value->id }}, $event.target.value)">
                                                 </td>
                                                 <td class="px-4">
-                                                    {{ $value->max_score }}
+                                                     <input type="number" min="1" class="form-control" value={{ $value->max_score }}
+                                                        wire:change="updateSchoolWorkName({{ $value->id }}, $event.target.value)"
+                                                    >
                                                 </td>
-                                                <td class="d-flex justify-content-center text-center">
+                                                <td class="d-flex justify-content-center gap-1 text-center">
                                                     <button wire:click="deleteSchoolWork({{$value->id }})" type="button" wire:wire:navigate  class="btn btn-outline-danger d-flex justify-content-center items-center">
                                                         <svg fill="currentColor" width="20px"  viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect id="Icons" x="-64" y="-64" width="1280" height="800" style="fill:none;"></rect> <g id="Icons1" serif:id="Icons"> <g id="Strike"> </g> <g id="H1"> </g> <g id="H2"> </g> <g id="H3"> </g> <g id="list-ul"> </g> <g id="hamburger-1"> </g> <g id="hamburger-2"> </g> <g id="list-ol"> </g> <g id="list-task"> </g> <g id="trash"> <path d="M19.186,16.493l0,-1.992c0.043,-3.346 2.865,-6.296 6.277,-6.427c3.072,-0.04 10.144,-0.04 13.216,0c3.346,0.129 6.233,3.012 6.277,6.427l0,1.992l9.106,0l0,4l-4.442,0l0,29.11c-0.043,3.348 -2.865,6.296 -6.278,6.428c-7.462,0.095 -14.926,0.002 -22.39,0.002c-3.396,-0.044 -6.385,-2.96 -6.429,-6.43l0,-29.11l-4.443,0l0,-4l9.106,0Zm26.434,4l-27.099,0c-0.014,9.72 -0.122,19.441 0.002,29.16c0.049,1.25 1.125,2.33 2.379,2.379c7.446,0.095 14.893,0.095 22.338,0c1.273,-0.049 2.363,-1.163 2.38,-2.455l0,-29.084Zm-4.701,-4c-0.014,-0.83 0,-1.973 0,-1.973c0,0 -0.059,-2.418 -2.343,-2.447c-3.003,-0.039 -10.007,-0.039 -13.01,0c-1.273,0.049 -2.363,1.162 -2.38,2.454l0,1.966l17.733,0Z" style="fill-rule:nonzero;"></path> <rect x="22.58" y="28.099" width="3" height="16.327" style="fill-rule:nonzero;"></rect> <rect x="30.571" y="28.099" width="3" height="16.327" style="fill-rule:nonzero;"></rect> <rect x="38.58" y="28.099" width="3" height="16.327" style="fill-rule:nonzero;"></rect> </g> <g id="vertical-menu"> </g> <g id="horizontal-menu"> </g> <g id="sidebar-2"> </g> <g id="Pen"> </g> <g id="Pen1" serif:id="Pen"> </g> <g id="clock"> </g> <g id="external-link"> </g> <g id="hr"> </g> <g id="info"> </g> <g id="warning"> </g> <g id="plus-circle"> </g> <g id="minus-circle"> </g> <g id="vue"> </g> <g id="cog"> </g> <g id="logo"> </g> <g id="radio-check"> </g> <g id="eye-slash"> </g> <g id="eye"> </g> <g id="toggle-off"> </g> <g id="shredder"> </g> <g id="spinner--loading--dots-" serif:id="spinner [loading, dots]"> </g> <g id="react"> </g> <g id="check-selected"> </g> <g id="turn-off"> </g> <g id="code-block"> </g> <g id="user"> </g> <g id="coffee-bean"> </g> <g id="coffee-beans"> <g id="coffee-bean1" serif:id="coffee-bean"> </g> </g> <g id="coffee-bean-filled"> </g> <g id="coffee-beans-filled"> <g id="coffee-bean2" serif:id="coffee-bean"> </g> </g> <g id="clipboard"> </g> <g id="clipboard-paste"> </g> <g id="clipboard-copy"> </g> <g id="Layer1"> </g> </g> </g></svg>
                                                     </button>
@@ -736,13 +760,13 @@
                 <form class="w-100" wire:submit.prevent="updateWeight('weightModal')">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="weightModalTitle">Term Weight</h1>
+                            <h1 class="modal-title fs-5" id="weightModalTitle">Term Weight Percentage</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" id="weightModalclose" aria-label="Close"></button>
                         </div>
                         <div class="modal-body row">
                             @foreach ($temp_terms as $key =>$value )
                                 <div class="col-md-6 mb-3">
-                                    <label for="weight" class="form-label">{{ $value['term_name'] }}Term weight</label>
+                                    <label for="weight" class="form-label">{{ $value['term_name'] }} weight percentage</label>
                                     <input type="number" min="1" step="0.1" id="weight" wire:model="temp_terms.{{ $key }}.weight" placeholder="Term Weight" 
                                         class="form-control @error('term_weight.weight') is-invalid @enderror">
                                     @error('temp_terms.weight')
