@@ -410,7 +410,7 @@
                                     @if(floatval($final_term_grade->grade))
                                         {{ number_format(($final_term_grade->grade)*100, 2, '.', '') }}
                                     @else
-                                        {{ $final_term_grade->grade->grade }}    
+                                        {{ $final_term_grade->grade }}    
                                     @endif
                                 </td>   
                                 <td>
