@@ -410,6 +410,9 @@
                                     @if(floatval($final_term_grade->grade))
                                         {{ number_format(($final_term_grade->grade)*100, 2, '.', '') }}
                                     @else
+                                        @php
+                                        $inc = true
+                                        @endphp
                                         {{ $final_term_grade->grade }}    
                                     @endif
                                 </td>   
