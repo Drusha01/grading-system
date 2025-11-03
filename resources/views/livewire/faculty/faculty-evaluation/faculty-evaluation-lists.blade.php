@@ -316,7 +316,6 @@
                                 @endforeach
                                 <td>
                                     {{ ($total_grade ? number_format($total_grade*100, 2, '.', '') : 'No data') }}
-                                    afd
                                 </td>
                                <td>
                                     @php
@@ -382,7 +381,7 @@
                                     @if(floatval($mid_term_grade->grade))
                                         {{ number_format(($mid_term_grade->grade)*100, 2, '.', '') }}
                                     @else
-                                        {{ $mid_term_grade }}    
+                                        {{ $mid_term_grade->grade}}    
                                     @endif
                                 </td>
                                 <td>
@@ -408,10 +407,10 @@
                                             $grade = '';
                                         }
                                     @endphp
-                                    @if(floatval($grade))
+                                    @if(floatval($final_term_grade->grade))
                                         {{ number_format(($final_term_grade->grade)*100, 2, '.', '') }}
                                     @else
-                                        {{ $grade }}    
+                                        {{ $final_term_grade->grade->grade }}    
                                     @endif
                                 </td>   
                                 <td>
