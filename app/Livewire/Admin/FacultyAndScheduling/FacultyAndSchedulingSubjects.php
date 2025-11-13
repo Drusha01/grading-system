@@ -169,7 +169,7 @@ class FacultyAndSchedulingSubjects extends Component
                 'sh.is_lec' ,
                 'cl.faculty_id',
             )
-            ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
+            ->Join('schedules as sh','sh.id','cl.schedule_id')
             ->leftJoin('subjects as s','s.id','sh.subject_id')
             ->leftJoin('rooms as r','r.id','cl.room_id')
             ->leftJoin('faculty as f','f.id','cl.faculty_id')
@@ -614,6 +614,7 @@ class FacultyAndSchedulingSubjects extends Component
     public function updatedDetailFacultyId($faculty_id){
         $this->getAllSubjects($faculty_id);
 
+        $this->selectSubject();
         //filter only to this school year, 
     }
 
@@ -663,7 +664,7 @@ class FacultyAndSchedulingSubjects extends Component
 
                 )
                 ->leftJoin('rooms as r','r.id','cl.room_id')
-                ->leftJoin('schedules as sh','sh.id','cl.schedule_id')
+                ->join('schedules as sh','sh.id','cl.schedule_id')
                 ->leftJoin('subjects as s','s.id','sh.subject_id')
                 ->leftJoin('faculty as f','f.id','cl.faculty_id')
                 ->leftJoin('users as u','u.id','f.user_id')

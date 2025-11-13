@@ -33,6 +33,7 @@ class FacultyEvaluationLists extends Component
     public $year_levels = []; 
 
     public $terms = [];
+    public $laboratory_grade = [];
 
     public $school_work_types = [];
 
@@ -126,6 +127,7 @@ class FacultyEvaluationLists extends Component
             ->toArray();
 
         self::getDetails();
+        self::getlaboratory_schedules();
         self::terms($this->detail['schedule_id']);
         if(count($this->terms)){
             $this->detail['term_id'] = $this->terms[0]->id;
@@ -354,6 +356,14 @@ class FacultyEvaluationLists extends Component
         ->orderBy('term_order','asc')
         ->get()
         ->toArray();
+
+        if(count($this->laboratory_schedules)){
+            $this->laboratory_terms = DB::table('terms')
+                ->where('schedule_id','=',$this->laboratory_schedules[0]->id)
+                ->orderBy('term_order','asc')
+                ->get()
+                ->toArray();
+        }
         if(count($this->terms) <=0){
             $midterm_id = DB::table('terms')
                 ->insertGetId([
@@ -479,7 +489,7 @@ class FacultyEvaluationLists extends Component
                 'sh.schedule_to',
                 'sh.day' ,
                 'sh.is_lec' ,
-                'cl.subject_id',
+                'sh.subject_id',
                 'cl.room_id',
                 'cl.schedule_id',
                 'cl.faculty_id',
@@ -587,6 +597,43 @@ class FacultyEvaluationLists extends Component
 
     }
 
+    public function getlaboratory_schedules(){
+         $this->laboratory_schedules = DB::table('schedulings as cl')
+            ->select(
+                DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS fullname'),
+                DB::raw("DATE_FORMAT(sh.schedule_from, '%h:%i %p') as schedule_from"),
+                DB::raw("DATE_FORMAT(sh.schedule_to, '%h:%i %p') as schedule_to"),
+                'sh.day' ,
+                DB::raw('sum(ll.sub_weight) as sum'),
+                DB::raw('sum(ll.sub_weight)/count(*) as ave'),
+                DB::raw('count(*) as count'),
+                'cl.id'
+            )
+            ->join('schedules as sh','cl.schedule_id','sh.id')
+            ->join('subjects as s','sh.subject_id','s.id')
+            ->join('lab_lec as ll','ll.schedule_id','cl.id' )
+            ->join('faculty as f','cl.faculty_id','f.id')
+            ->leftJoin('users as u','u.id','f.user_id')
+            ->where('cl.is_lec','=',0)
+            ->where('cl.school_year_id','=',$this->school_year_id)
+            ->where('cl.semester_id','=',$this->semester_id)
+            ->where('cl.college_id','=',$this->schedule->college_id)
+            ->where('cl.department_id','=',$this->schedule->department_id)
+            ->where('sh.subject_id','=',$this->schedule->subject_id)
+            ->groupBy(
+                'u.first_name',
+                'u.middle_name',
+                'u.last_name',
+                'u.suffix',
+                'sh.day',
+                'sh.schedule_from',
+                'sh.schedule_to',
+                'cl.id'
+            )
+            ->get()
+            ->toArray();
+    }
+
     public function open_lablect_weight($modal_id){
 
         $lecture_schedules = DB::table('schedulings as cl')
@@ -620,39 +667,8 @@ class FacultyEvaluationLists extends Component
             ->first();
 
         $this->lecture_weight = $lecture_schedules->ave;
-        // dd($this->school_year_id,$this->schedule->subject_id);
-        $this->laboratory_schedules = DB::table('schedulings as cl')
-            ->select(
-                DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS fullname'),
-                DB::raw("DATE_FORMAT(sh.schedule_from, '%h:%i %p') as schedule_from"),
-                DB::raw("DATE_FORMAT(sh.schedule_to, '%h:%i %p') as schedule_to"),
-                'sh.day' ,
-                DB::raw('sum(ll.sub_weight) as sum'),
-                DB::raw('sum(ll.sub_weight)/count(*) as ave'),
-                DB::raw('count(*) as count'),
-                'cl.id'
-            )
-            ->join('schedules as sh','cl.schedule_id','sh.id')
-            ->join('subjects as s','sh.subject_id','s.id')
-            ->where('cl.is_lec','=',0)
-            ->where('cl.school_year_id','=',$this->school_year_id)
-            ->where('cl.semester_id','=',$this->semester_id)
-            ->where('sh.subject_id','=',$this->schedule->subject_id)
-            ->join('lab_lec as ll','ll.schedule_id','cl.id' )
-            ->join('faculty as f','cl.faculty_id','f.id')
-            ->leftJoin('users as u','u.id','f.user_id')
-            ->groupBy(
-                'u.first_name',
-                'u.middle_name',
-                'u.last_name',
-                'u.suffix',
-                'sh.day',
-                'sh.schedule_from',
-                'sh.schedule_to',
-                'cl.id'
-            )
-            ->get()
-            ->toArray();
+        self::getlaboratory_schedules();
+
         $this->laboratory_schedules  = (array) $this->laboratory_schedules;
 
         $this->laboratory_schedules_weight = [];

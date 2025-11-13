@@ -34,47 +34,15 @@
                     @endforeach
                 </select>
             </div>
+            <div class="col">
+                <a href="{{ route('my-evaluation-lists-final-grading',[
+                        'school_year' => $school_year,
+                        'semester' => $semester,
+                        'schedule_id' => $detail['schedule_id']]) }}" class="btn btn-outline-secondary" target="_blank">
+                    Final Grading
+                </a>
+            </div>
             <div class="d-flex col justify-content-end gap-2">
-                <!-- <div class="dropdown">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <svg viewBox="0 0 24 24" width="15px" class="mx-1" fill="none"  xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 14L11.6464 14.3536L12 14.7071L12.3536 14.3536L12 14ZM12.5 5C12.5 4.72386 12.2761 4.5 12 4.5C11.7239 4.5 11.5 4.72386 11.5 5L12.5 5ZM6.64645 9.35355L11.6464 14.3536L12.3536 13.6464L7.35355 8.64645L6.64645 9.35355ZM12.3536 14.3536L17.3536 9.35355L16.6464 8.64645L11.6464 13.6464L12.3536 14.3536ZM12.5 14L12.5 5L11.5 5L11.5 14L12.5 14Z" fill="currentColor"></path> <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="currentColor"></path> </g></svg>
-                        Import 
-                    </button>
-                    <ul class="dropdown-menu" style="">
-                        <li>
-                            <a class="dropdown-item waves-effect" wire:click="export('Csv','exportModal')">
-                                <span><i class="ti ti-file-text me-1"></i>Import Data</span>
-                            </a>
-                            <a class="dropdown-item waves-effect" wire:click="export('Csv','exportModal')">
-                                <span><i class="ti ti-file-text me-1"></i>Download Template</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div> -->
-                <!-- <div class="btn-group">
-                    <button type="button" class="btn btn btn-outline-primary dropdown-toggle waves-effect"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <svg viewBox="0 0 24 24" width="15px" class="mx-1" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 5L11.6464 4.64645L12 4.29289L12.3536 4.64645L12 5ZM12.5 14C12.5 14.2761 12.2761 14.5 12 14.5C11.7239 14.5 11.5 14.2761 11.5 14L12.5 14ZM6.64645 9.64645L11.6464 4.64645L12.3536 5.35355L7.35355 10.3536L6.64645 9.64645ZM12.3536 4.64645L17.3536 9.64645L16.6464 10.3536L11.6464 5.35355L12.3536 4.64645ZM12.5 5L12.5 14L11.5 14L11.5 5L12.5 5Z" fill="currentColor"></path> <path d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16" stroke="currentColor"></path> </g></svg>
-                        Export
-                    </button>
-                    <ul class="dropdown-menu" style="">
-                        <li>
-                            <a class="dropdown-item waves-effect" wire:click="export('Csv','exportModal')">
-                                <span><i class="ti ti-file-text me-1"></i>Csv</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item waves-effect" wire:click="export('Excel','exportModal')">
-                                <span><i class="ti ti-file-spreadsheet me-1"></i>Excel</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item waves-effect" wire:click="export('Pdf','exportModal')">
-                                <span><i class="ti ti-file-description me-1"></i>Pdf</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div> -->
                 @if ($schedule->is_lec && $schedule->laboratory_unit >0)
                 <button class="btn btn-outline-secondary" wire:click="open_lablect_weight('lablecweightModal')">
                     <svg viewBox="0 0 24 24" height="20px" width="20px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.99923 21H19.9992M11.9992 21V7M11.9992 7C13.1038 7 13.9992 6.10457 13.9992 5M11.9992 7C10.8947 7 9.99923 6.10457 9.99923 5M13.9992 5C13.9992 3.89543 13.1038 3 11.9992 3C10.8947 3 9.99923 3.89543 9.99923 5M13.9992 5H19.9992M9.99923 5H3.99923M5.99923 17C7.51177 17 8.76287 16.1584 8.96934 14.7513C8.98242 14.6621 8.98897 14.6175 8.98385 14.5186C8.98031 14.4503 8.95717 14.3256 8.93599 14.2605C8.90531 14.1664 8.86812 14.1003 8.79375 13.968L5.99923 9L3.2047 13.968C3.13575 14.0906 3.10128 14.1519 3.06939 14.2584C3.04977 14.3239 3.02706 14.4811 3.02735 14.5494C3.02781 14.6606 3.03453 14.6899 3.04799 14.7486C3.30295 15.86 4.5273 17 5.99923 17ZM17.9992 17C19.5118 17 20.7629 16.1584 20.9693 14.7513C20.9824 14.6621 20.989 14.6175 20.9838 14.5186C20.9803 14.4503 20.9572 14.3256 20.936 14.2605C20.9053 14.1664 20.8681 14.1003 20.7937 13.968L17.9992 9L15.2047 13.968C15.1358 14.0906 15.1013 14.1519 15.0694 14.2584C15.0498 14.3239 15.0271 14.4811 15.0273 14.5494C15.0278 14.6606 15.0345 14.6899 15.048 14.7486C15.303 15.86 16.5273 17 17.9992 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -151,6 +119,14 @@
                             </th>
                             @endforeach 
                             <th class="">Total Grade</th>
+                            <th colspan="4">
+                                    {{
+                                    $terms[
+                                        $detail['term_id'] != $terms[0]->id
+                                    ]->term_name 
+                                    }}
+                                Grade
+                            </th>
                         </tr>
                         <tr class="align-middle">
                             <th scope="col" class="sticky-col left-0">#</th>
@@ -198,7 +174,14 @@
                                 @endforeach
                                 - {{number_format( $other_term_weight/$term_total->total*100, 2, '.', '')  }}%</th>
                             <th scope="col" class="">{{ 100 }}</th>
-
+                            @if($schedule->laboratory_unit>0)
+                                @if($schedule->is_lec)
+                                    <th scope="col" class="">Lecture</th>
+                                    <th scope="col" class="">Laboratory</th>
+                                    <th scope="col" class="">Total</th>
+                                @endif
+                                <th scope="col" class="">Weighted Grade</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -407,7 +390,7 @@
                                             $grade = '';
                                         }
                                     @endphp
-                                    @if(floatval($final_term_grade->grade))
+                                    @if(floatval($final_term_grade->grade)>=0)
                                         {{ number_format(($final_term_grade->grade)*100, 2, '.', '') }}
                                     @else
                                         @php
@@ -431,10 +414,8 @@
                                             ->where('student_id','=',$value->id)
                                             ->where('other','=','INC')
                                             ->first()){
-
                                             $grade = NULL;
                                         }else{
-                                            
                                             $term_grades = DB::table('term_grades')
                                                     ->select(
                                                     DB::raw('sum(grade) as grade'))
@@ -459,8 +440,6 @@
                                                 $grade = NULL;
                                             }
                                         }
-
-                                    
                                         if(!$lab_lec_grades ){
                                             DB::table('lab_lec_grades')
                                             ->insert([
@@ -478,7 +457,6 @@
                                     @else
                                         @if($lab_lec_grades)
                                             @php
-
                                                 $other = DB::table('lab_lec_grades')
                                                 ->where('student_id','=',$value->id)
                                                 ->where('id','=',$lab_lec_grades->id)
@@ -494,6 +472,57 @@
                                 @php
                                     $total_grade = 0;
                                 @endphp
+                                @if($schedule->laboratory_unit>0)
+                                @if($schedule->is_lec)
+                                    <th scope="col" class="">
+                                        @php 
+                                            $lecture_grade = DB::table('term_grades')
+                                                ->select(
+                                                DB::raw('sum(grade) as grade'))
+                                                ->where('schedule_id','=',$detail['schedule_id'])
+                                                ->where('student_id','=',$value->id)
+                                                ->where('term_id','=',
+                                                $terms[$detail['term_id'] != $terms[0]->id]->id)
+                                                ->first();
+                                                $total_lab_lec_grade = 0;
+                                        @endphp
+                                        @if(floatval($lecture_grade->grade))
+                                            {{ number_format(($lecture_grade->grade)*100, 2, '.', '') }}
+                                            @php 
+                                                $total_lab_lec_grade += $lecture_grade->grade*100;
+                                            @endphp
+                                        @else
+                                            {{ $lecture_grade->grade}}    
+                                        @endif
+                                    </th>
+                                    <th scope="col" class="">
+                                        @php 
+                                            $laboratory_grade = DB::table('term_grades')
+                                                ->select(
+                                                DB::raw('sum(grade) as grade'))
+                                                ->where('schedule_id','=',$laboratory_schedules[0]->id)
+                                                ->where('student_id','=',$value->id)
+                                                ->where('term_id','=',
+                                                $terms[$detail['term_id'] != $laboratory_terms[0]->id]->id)
+                                                ->first();
+                                        @endphp
+                                        @if(floatval($laboratory_grade->grade))
+                                            {{ number_format(($laboratory_grade->grade)*100, 2, '.', '') }}
+                                            @php 
+                                                $total_lab_lec_grade += $laboratory_grade->grade*100;
+                                            @endphp
+                                        @else
+                                            {{ $laboratory_grade->grade}}    
+                                        @endif
+                                    </th>
+                                    <th scope="col" class="">
+                                        @if(floatval($total_lab_lec_grade))
+                                            {{ number_format(($total_lab_lec_grade), 2, '.', '') }}
+                                        @endif
+                                    </th>
+                                @endif
+                                <th scope="col" class="">Weighted Grade</th>
+                            @endif
                             </tr>
                         @empty
                             <tr class="align-middle">
@@ -793,7 +822,7 @@
                 <form class="w-100" wire:submit.prevent="updateLabWeight('lablecweightModal')">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="weightModalTitle">Lab Weight</h1>
+                            <h1 class="modal-title fs-5" id="weightModalTitle">Lab Lec Weight</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" id="weightModalclose" aria-label="Close"></button>
                         </div>
                         <div class="modal-body row">

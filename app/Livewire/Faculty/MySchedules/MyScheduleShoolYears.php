@@ -31,7 +31,7 @@ class MyScheduleShoolYears extends Component
             ->join('faculty as f', 'f.user_id', 'u.id')
             ->join('schedulings as cl', 'cl.faculty_id', 'f.id')
             ->where('f.user_id', '=', $userId)
-            ->leftJoin('schedules as sh', 'sh.id', 'cl.schedule_id')
+            ->Join('schedules as sh', 'sh.id', 'cl.schedule_id')
             ->leftJoin('school_years as sy', 'sy.id', 'cl.school_year_id')
             ->leftJoin('subjects as s', 's.id', 'sh.subject_id')
             ->leftJoin('rooms as r', 'r.id', 'cl.room_id')

@@ -387,16 +387,14 @@
                                             }
                                         }
                                     @endphp
-                                    @if(floatval($grade))
+                                    @if(floatval($grade)>=0)
                                         {{ number_format(($grade-$this_grade)*100, 2, '.', '') }}
                                     @else
                                         {{ $grade }}    
                                     @endif
-                                    ASF
                                 </td>
                                 <td>
                                     @php
-
                                     $lab_lec = DB::table('lab_lec')
                                         ->where('schedule_id','=',$detail['schedule_id'])
                                         ->where('term_id','=',$detail['term_id'])
