@@ -105,9 +105,13 @@ class FacultyEvaluationLists extends Component
     public $semester_id;
 
     public $laboratory_schedules = [];
+
+    public $laboratory_terms = [];
     public $laboratory_schedules_weight = [];
 
     public $lecture_weight = NULL;
+
+    public $point_grade_equivalent = [];
 
     public function mount($school_year, $semester, $schedule_id){
         $this->school_year = $school_year;
@@ -129,6 +133,8 @@ class FacultyEvaluationLists extends Component
         self::getDetails();
         self::getlaboratory_schedules();
         self::terms($this->detail['schedule_id']);
+        self::getLabLectureWeight();
+
         if(count($this->terms)){
             $this->detail['term_id'] = $this->terms[0]->id;
         }
@@ -138,8 +144,14 @@ class FacultyEvaluationLists extends Component
         self::fetch_terms();
 
         self::initilize_attendance();
+
+        self::pointGradeEquivalent();
         
     
+    }
+
+    public function pointGradeEquivalent(){
+        $this->point_grade_equivalent = DB::table('point_grade_equivalent')->get()->toArray();
     }
 
     public function initilize_attendance(){
@@ -636,6 +648,12 @@ class FacultyEvaluationLists extends Component
 
     public function open_lablect_weight($modal_id){
 
+        self::getLabLectureWeight();
+        $this->dispatch('openModal',modal_id:$modal_id);
+
+    }
+
+    public function getLabLectureWeight(){
         $lecture_schedules = DB::table('schedulings as cl')
             ->select(
                 DB::raw('CONCAT_WS(" ", u.first_name, u.middle_name, u.last_name, u.suffix) AS fullname'),
@@ -680,9 +698,6 @@ class FacultyEvaluationLists extends Component
                 ]
             );
         }
-        $this->dispatch('openModal',modal_id:$modal_id);
-
-        // dd($this->laboratory_schedules,$this->laboratory_schedules_weight   );
     }
 
     public function updateLabWeight($modal_id){

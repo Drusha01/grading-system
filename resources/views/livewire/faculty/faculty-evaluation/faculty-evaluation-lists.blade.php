@@ -177,9 +177,9 @@
                             @if($schedule->laboratory_unit>0)
                                 @if($schedule->is_lec)
                                     <th scope="col" class="">Lecture</th>
-                                    <th scope="col" class="">Laboratory</th>
-                                    <th scope="col" class="">Total</th>
                                 @endif
+                                <th scope="col" class="">Laboratory</th>
+                                <th scope="col" class="">Total</th>
                                 <th scope="col" class="">Weighted Grade</th>
                             @endif
                         </tr>
@@ -471,6 +471,8 @@
                                 </td>
                                 @php
                                     $total_grade = 0;
+                                    $total_lab_lec_grade = 0;
+                                    $total_lab_lec_grade_average = 1;
                                 @endphp
                                 @if($schedule->laboratory_unit>0)
                                 @if($schedule->is_lec)
@@ -484,44 +486,65 @@
                                                 ->where('term_id','=',
                                                 $terms[$detail['term_id'] != $terms[0]->id]->id)
                                                 ->first();
-                                                $total_lab_lec_grade = 0;
+                                                $total_lab_lec_grade_average += 1;
                                         @endphp
                                         @if(floatval($lecture_grade->grade))
-                                            {{ number_format(($lecture_grade->grade)*100, 2, '.', '') }}
+                                            {{ number_format(($lecture_grade->grade/$lecture_weight*100)*100, 2, '.', '') }}
                                             @php 
-                                                $total_lab_lec_grade += $lecture_grade->grade*100;
+                                                $total_lab_lec_grade += $lecture_grade->grade/$lecture_weight*100*100;
                                             @endphp
                                         @else
                                             {{ $lecture_grade->grade}}    
                                         @endif
                                     </th>
-                                    <th scope="col" class="">
-                                        @php 
-                                            $laboratory_grade = DB::table('term_grades')
-                                                ->select(
-                                                DB::raw('sum(grade) as grade'))
-                                                ->where('schedule_id','=',$laboratory_schedules[0]->id)
-                                                ->where('student_id','=',$value->id)
-                                                ->where('term_id','=',
-                                                $terms[$detail['term_id'] != $laboratory_terms[0]->id]->id)
-                                                ->first();
-                                        @endphp
-                                        @if(floatval($laboratory_grade->grade))
-                                            {{ number_format(($laboratory_grade->grade)*100, 2, '.', '') }}
-                                            @php 
-                                                $total_lab_lec_grade += $laboratory_grade->grade*100;
-                                            @endphp
-                                        @else
-                                            {{ $laboratory_grade->grade}}    
-                                        @endif
-                                    </th>
-                                    <th scope="col" class="">
-                                        @if(floatval($total_lab_lec_grade))
-                                            {{ number_format(($total_lab_lec_grade), 2, '.', '') }}
-                                        @endif
-                                    </th>
                                 @endif
-                                <th scope="col" class="">Weighted Grade</th>
+                                <th scope="col" class="">
+                                    @php 
+                                        $laboratory_grade = DB::table('term_grades')
+                                            ->select(
+                                            DB::raw('sum(grade) as grade'))
+                                            ->where('schedule_id','=',$laboratory_schedules[0]->id)
+                                            ->where('student_id','=',$value->id)
+                                            ->where('term_id','=',
+                                            $laboratory_terms[$terms[$detail['term_id'] != $terms[0]->id]->term_name != $laboratory_terms[0]->term_name]->id)
+                                            ->first();
+                                    @endphp
+                                    @if(floatval($laboratory_grade->grade))
+                                        {{ number_format(($laboratory_grade->grade / ($laboratory_terms[$terms[$detail['term_id'] != $terms[0]->id]->term_name != $laboratory_terms[0]->term_name]->weight))*10000, 2, '.', '') }}
+                                        @php 
+                                            $total_lab_lec_grade += ($laboratory_grade->grade / ($laboratory_terms[$terms[$detail['term_id'] != $terms[0]->id]->term_name != $laboratory_terms[0]->term_name]->weight))*10000;
+                                        @endphp
+                                    @else
+                                        {{ $laboratory_grade->grade}}  
+                                    @endif
+                                </th>
+                                <th scope="col" class="">
+                                    @if(floatval($total_lab_lec_grade))
+                                        {{ number_format(($total_lab_lec_grade/$total_lab_lec_grade_average), 2, '.', '') }}
+                                    @else
+                                        0   
+                                    @endif
+                                </th>
+                                <th scope="col" class="">
+                                    @if(floatval($total_lab_lec_grade))
+                                        @php
+                                          $point_grade = true;
+                                        @endphp
+                                        @foreach($point_grade_equivalent as $p_value)
+                                            @if(($total_lab_lec_grade/$total_lab_lec_grade_average) >$p_value->minimum  && $total_lab_lec_grade/$total_lab_lec_grade_average < $p_value->maximum+1)
+                                                {{ $p_value->grade }}
+                                                @php
+                                                    $point_grade = false;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        @if($point_grade)
+                                            N/A
+                                        @endif
+                                    @else 
+                                        0
+                                    @endif
+                                </th>
                             @endif
                             </tr>
                         @empty
