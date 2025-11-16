@@ -66,7 +66,7 @@ class MyScheduleLists extends Component
             ->leftJoin('school_years as sy', 'sy.id', 'cl.school_year_id')
             ->leftJoin('semesters as sm', 'sm.id', 'cl.semester_id')
             ->where('sy.id', '=', $this->school_year_id)
-            ->where('sy.id', '=', $this->school_year_id)
+            ->where('sm.id', '=', $this->semester_id)
             ->where('sh.subject_id', '<>', NULL)
             ->Join('schedules as sh','sh.id','cl.schedule_id')
             ->leftJoin('subjects as s','s.id','sh.subject_id')

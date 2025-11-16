@@ -615,6 +615,7 @@ class FacultyAndSchedulingSubjects extends Component
         $this->getAllSubjects($faculty_id);
 
         $this->selectSubject();
+        $this->filterSubject();
         //filter only to this school year, 
     }
 

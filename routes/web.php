@@ -163,7 +163,7 @@ use App\Livewire\Faculty\EnrolledStudent\EnrolledStudentLists as FacultyEnrolled
 use App\Livewire\Faculty\MySchedules\MyScheduleLists;
 use App\Livewire\Faculty\FacultyEvaluation\FacultyEvaluationLists;
 use App\Livewire\Faculty\FacultyEvaluation\AttendanceLists as FacultyAttendanceLists;
-use App\Livewire\Faculty\FacultyEvaluation\FacultyEvaluationFinalGradingLists;
+use App\Livewire\Faculty\FacultyEvaluation\EvaluationFinalGradingLists as FacultyEvaluationFinalGradingLists;
 use App\Livewire\Faculty\MySchedules\MyScheduleShoolYears;
 use App\Livewire\Faculty\MySchedules\MyScheduleSemesters;
 
@@ -384,8 +384,8 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
                 Route::get('/',MyScheduleSemesters::class)->name('my-schedule-semesters-lists');
                 Route::prefix('/{semester}')->group(function () {
                     Route::get('/enrolled-students-{schedule_id}',FacultyEnrolledStudentLists::class)->name('my-enrolled-students');
+                    Route::get('/evaluation-final-grading-{schedule_id}',FacultyEvaluationFinalGradingLists::class)->name('my-evaluation-lists-final-grading');
                     Route::get('/evaluation-{schedule_id}/attendance-{id}',FacultyAttendanceLists::class)->name('my-attendance-lists');
-                    Route::get('/evaluation-final-grading-{schedule_id}',EvaluationFinalGradingLists::class)->name('my-evaluation-lists-final-grading');
                     Route::get('/evaluation-{schedule_id}',FacultyEvaluationLists::class)->name('my-evaluation-lists');
                     Route::get('/',MyScheduleLists::class)->name('my-schedule-lists');
                 });

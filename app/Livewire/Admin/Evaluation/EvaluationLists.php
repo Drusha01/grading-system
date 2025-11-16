@@ -364,7 +364,7 @@ class EvaluationLists extends Component
                 'id' => NULL,
                 'schedule_id' => $schedule_id,
                 'term_id' => $midterm_id,
-                'sub_weight' => 50.0,
+                'sub_weight' => ($this->schedule->laboratory_unit>0 && $this->schedule->lecture_unit>0 ? 50.0 : 100.0),
                 'is_lecture' => $this->schedule->is_lec,
             ]);
     
@@ -373,7 +373,7 @@ class EvaluationLists extends Component
                 'id' => NULL,
                 'schedule_id' => $schedule_id,
                 'term_id' => $finalterm_id,
-                'sub_weight' => 50.0,
+                'sub_weight' => ($this->schedule->laboratory_unit>0 && $this->schedule->lecture_unit>0 ? 50.0 : 100.0),
                 'is_lecture' => $this->schedule->is_lec,
             ]);
         
