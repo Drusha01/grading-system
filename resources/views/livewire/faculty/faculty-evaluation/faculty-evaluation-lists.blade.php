@@ -475,7 +475,6 @@
                                         @else
                                             {{ $lecture_grade->grade}}    
                                         @endif
-                                        {{  $total_lab_lec_grade }}
                                     </th>
                                 @endif
                                 @if($schedule->laboratory_unit>0)
