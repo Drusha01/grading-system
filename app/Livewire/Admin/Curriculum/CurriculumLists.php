@@ -54,6 +54,9 @@ class CurriculumLists extends Component
     public $school_years;
 
     public function mount($college,$department){
+        $this->curriculum['college'] = $college;
+        $this->curriculum['department'] = $department;
+
         $this->detail['college_id'] = DB::table('colleges')->where('code','=',$college)->first()->id;
         $this->detail['department_id'] = DB::table('departments')->where('code','=',$department)->first()->id;
 

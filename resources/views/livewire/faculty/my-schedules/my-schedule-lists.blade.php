@@ -72,6 +72,7 @@
                         <tr class="align-middle">
                             <th scope="col" class="px-4">#</th>
                             <th scope="col" class="px-4 ">Subject ID</th>
+                            <th scope="col" class="px-4 ">Description</th>
                             <th scope="col" class="px-4 ">Room</th>
                             <th scope="col" class="px-4 ">Start period</th>
                             <th scope="col" class="px-4 ">End period</th>
@@ -89,6 +90,9 @@
                                                     target="_blank">
                                             {{$value->subject}}
                                         </a>
+                                    </td>
+                                    <td class="px-4">
+                                            {{$value->description}}
                                     </td>
                                     <td class="px-4">
                                         <a href="{{route('my-room-view',$value->room_id)  }}" target="_blank">

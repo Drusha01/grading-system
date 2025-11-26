@@ -319,7 +319,7 @@ Route::middleware([IsAuthenticated::class,IsValid::class])->group(function () {
         });
 
         Route::prefix('curriculums')->group(function () {
-            Route::get('/subjects/{curriculum_id}',CurriculumProspectus::class)->name('curriculum-lists-enrolled');
+            Route::get('/{college}/{department}/{curriculum_id}',CurriculumProspectus::class)->name('curriculum-lists-enrolled');
             Route::get('/{college}/{department}',CurriculumLists::class)->name('curriculum-lists');
             Route::get('/{college}',CurriculumDepartments::class)->name('curriculum-lists-departments');
             Route::get('/',CurriculumColleges::class)->name('curriculum-lists-college');

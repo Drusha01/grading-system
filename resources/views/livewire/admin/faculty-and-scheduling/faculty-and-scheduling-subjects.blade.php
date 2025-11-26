@@ -58,6 +58,7 @@
                         <tr class="align-middle">
                             <th scope="col" class="px-4">#</th>
                             <th scope="col" class="px-4 ">Subject ID</th>
+                            <th scope="col" class="px-4 ">Description</th>
                             <th scope="col" class="px-4 ">Faculty name</th>
                             <th scope="col" class="px-4 ">Room</th>
                             <th scope="col" class="px-4 ">Start period</th>
@@ -75,6 +76,9 @@
                                         <a href="{{route('subject-view',$value->subject_id)}}" target="_blank">
                                             {{$value->subject}}
                                         </a>
+                                    </td>
+                                    <td class="px-4">
+                                            {{$value->description}}
                                     </td>
                                     <td class="px-4">
                                         @if($value->faculty_fullname)
