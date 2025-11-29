@@ -98,14 +98,14 @@
                                 {{ $value->weight }}
                                 @endif
                             @endforeach
+                            @if($schedule->is_lec)
+                            <th scope="col" class="">Lecture</th>
+                            @endif
                             @if($schedule->laboratory_unit>0)
-                                @if($schedule->is_lec)
-                                    <th scope="col" class="">Lecture</th>
-                                @endif
                                 <th scope="col" class="">Laboratory</th>
+                            @endif
                                 <th scope="col" class="">Total</th>
                                 <th scope="col" class="">Weighted Grade</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
