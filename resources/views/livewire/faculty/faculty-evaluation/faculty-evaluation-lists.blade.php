@@ -157,7 +157,7 @@
                                 ->first();
                             @endphp
                             <th scope="col" class="">{{ 100 }}</th>
-                            @if($schedule->is_lec)
+                            @if($schedule->lecture_unit>0)
                                 <th scope="col" class="">Lecture</th>
                             @endif
                             @if($schedule->laboratory_unit>0)
