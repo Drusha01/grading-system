@@ -458,7 +458,7 @@
                                                 ->where('student_id','=',$value->id)
                                                 ->first();
                                         @endphp
-                                        @if(floatval($lab_lec_grade->grade))
+                                        @if($lab_lec_grade != null && floatval($lab_lec_grade->grade))
                                             {{ number_format(($lab_lec_grade->grade/$lab_lec_grade->sub_weight)*100*100, 2, '.', '') }}
                                             @php 
                                                 $total_lab_lec_grade +=  floatval($lab_lec_grade->grade) ? floatval($lab_lec_grade->grade/$lab_lec_grade->sub_weight * 100 * 100):0;
@@ -477,7 +477,7 @@
                                                 ->first();                                            
                                             $total_lab_lec_grade_average += 1;
                                         @endphp
-                                         @if(floatval($lab_lec_grade->grade))
+                                         @if($lab_lec_grade != null && floatval($lab_lec_grade->grade))
                                             {{ number_format(($lab_lec_grade->grade/$lab_lec_grade->sub_weight)*100*100, 2, '.', '') }}
                                             @php 
                                                 $total_lab_lec_grade +=  floatval($lab_lec_grade->grade) ? floatval($lab_lec_grade->grade/$lab_lec_grade->sub_weight * 100 * 100):0;
