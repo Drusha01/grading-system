@@ -69,12 +69,7 @@
                                     ->first();
                             @endphp
                             <th colspan="4">
-                                    {{
-                                    $terms[
-                                        $detail['term_id'] != $terms[0]->id
-                                    ]->term_name 
-                                    }}
-                                Grade
+                                Final Grade
                             </th>
                         </tr>
                         <tr class="align-middle">
@@ -136,7 +131,6 @@
                                     $total_lab_lec_grade = 0;
                                     $total_lab_lec_grade_average = 0;
                                 @endphp
-                                @if($schedule->laboratory_unit>0)
                                 @if($schedule->is_lec)
                                     <th scope="col" class="">
                                         @php 
