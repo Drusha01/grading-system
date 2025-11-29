@@ -131,7 +131,7 @@
                                     $total_lab_lec_grade = 0;
                                     $total_lab_lec_grade_average = 0;
                                 @endphp
-                                @if($schedule->is_lec)
+                                @if($schedule->lecture_unit>0)
                                     <th scope="col" class="">
                                         @php 
                                             $total_lab_lec_grade_average += 1;
