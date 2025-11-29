@@ -78,7 +78,7 @@
                             @endphp
                             <label for="" class="fs-3">{{ $t_value->term_name }} Grade :
                                 @if($term_grade->grade)
-                                    {{ number_format($term_grade->grade, 2, '.', '') }}
+                                    {{ number_format($term_grade->grade*100, 2, '.', '') }}
                                     @php
                                         if($total_grade != 'INC'){
                                             $total_grade += ($term_grade->grade) ;
@@ -96,7 +96,7 @@
                 @endforeach
                 <label for="" class="fs-1 fw-bold">Total Grade : 
                     @if(floatval($total_grade))
-                        {{ number_format($total_grade, 2, '.', '') }}
+                        {{ number_format($total_grade*100, 2, '.', '') }}
                     @else
                         @php
                         $other = DB::table('lab_lec_grades')
