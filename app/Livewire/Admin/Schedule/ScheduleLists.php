@@ -72,6 +72,7 @@ class ScheduleLists extends Component
                 'sj.subject_code' ,
                 'sj.lecture_unit',
                 'sj.laboratory_unit',
+                's.is_active',
             )
             ->leftjoin('faculty as f','f.id','s.faculty_id')
             ->leftJoin('users as u','u.id','f.user_id')

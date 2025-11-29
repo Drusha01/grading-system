@@ -84,7 +84,7 @@
 
             <div class="row">
                 <p class="text-danger d-flex justify-content-center">
-                    Deleting this will really delete the schedule completely ?
+                    Are you sure you want to delete this?
                 </p>
             </div>
 

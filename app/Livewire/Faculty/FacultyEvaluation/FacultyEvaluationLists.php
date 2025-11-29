@@ -531,6 +531,9 @@ class FacultyEvaluationLists extends Component
             ->leftjoin('year_levels as yl','yl.id','cl.year_level_id')
             ->where('cl.id','=',$this->detail['schedule_id'])
             ->first();
+        if($this->schedule == null){
+            redirect(route('my-schedule-school-years-lists'));
+        }
     }
 
     public function add_school_work_type(){

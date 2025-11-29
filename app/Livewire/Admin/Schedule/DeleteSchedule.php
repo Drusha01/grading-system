@@ -112,7 +112,9 @@ class DeleteSchedule extends Component
 
         if(DB::table('schedules')
             ->where('id','=',$this->detail['id'])
-            ->delete()){
+            ->update([
+                'is_active'=>0
+            ])){
         }
         $this->dispatch('notifySuccess', 
         'Deleted successfully!',
