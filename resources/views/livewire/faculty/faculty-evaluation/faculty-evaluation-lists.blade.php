@@ -15,6 +15,9 @@
             </button>
         </div>
     </div>
+
+
+
     <div class="container-fluid">
         <div class="table-header">
             <livewire:admin.BreadCrumb.BreadCrumb/>
@@ -23,16 +26,38 @@
             <div class="col-4">
                 <input type="search" wire:model.live="filters.search" name="" id="" placeholder="Search ... " class="form-control">
             </div>
+            <div class="col-2 d-flex justify-items-start gap-1 ">
+                <label for="" class="mt-2">Term </label>
+                <select name="" id="" class="form-control" wire:model.live="detail.term_id">
+                    @foreach ($terms as $key =>$value )
+                        <option value="{{ $value->id }}">{{ $value->term_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <a href="{{ route('my-evaluation-lists-final-grading',[
+                        'school_year' => $school_year,
+                        'semester' => $semester,
+                        'schedule_id' => $detail['schedule_id']]) }}" class="btn btn-outline-secondary" target="_blank">
+                    Final Grading
+                </a>
+            </div>
             <div class="d-flex col justify-content-end gap-2">
                 @if ($schedule->is_lec && $schedule->laboratory_unit >0)
-                    <button class="btn btn-outline-secondary" wire:click="open_lablect_weight('lablecweightModal')">
-                        <svg viewBox="0 0 24 24" height="20px" width="20px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.99923 21H19.9992M11.9992 21V7M11.9992 7C13.1038 7 13.9992 6.10457 13.9992 5M11.9992 7C10.8947 7 9.99923 6.10457 9.99923 5M13.9992 5C13.9992 3.89543 13.1038 3 11.9992 3C10.8947 3 9.99923 3.89543 9.99923 5M13.9992 5H19.9992M9.99923 5H3.99923M5.99923 17C7.51177 17 8.76287 16.1584 8.96934 14.7513C8.98242 14.6621 8.98897 14.6175 8.98385 14.5186C8.98031 14.4503 8.95717 14.3256 8.93599 14.2605C8.90531 14.1664 8.86812 14.1003 8.79375 13.968L5.99923 9L3.2047 13.968C3.13575 14.0906 3.10128 14.1519 3.06939 14.2584C3.04977 14.3239 3.02706 14.4811 3.02735 14.5494C3.02781 14.6606 3.03453 14.6899 3.04799 14.7486C3.30295 15.86 4.5273 17 5.99923 17ZM17.9992 17C19.5118 17 20.7629 16.1584 20.9693 14.7513C20.9824 14.6621 20.989 14.6175 20.9838 14.5186C20.9803 14.4503 20.9572 14.3256 20.936 14.2605C20.9053 14.1664 20.8681 14.1003 20.7937 13.968L17.9992 9L15.2047 13.968C15.1358 14.0906 15.1013 14.1519 15.0694 14.2584C15.0498 14.3239 15.0271 14.4811 15.0273 14.5494C15.0278 14.6606 15.0345 14.6899 15.048 14.7486C15.303 15.86 16.5273 17 17.9992 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                    </button>
+                <button class="btn btn-outline-secondary" wire:click="open_lablect_weight('lablecweightModal')">
+                    <svg viewBox="0 0 24 24" height="20px" width="20px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.99923 21H19.9992M11.9992 21V7M11.9992 7C13.1038 7 13.9992 6.10457 13.9992 5M11.9992 7C10.8947 7 9.99923 6.10457 9.99923 5M13.9992 5C13.9992 3.89543 13.1038 3 11.9992 3C10.8947 3 9.99923 3.89543 9.99923 5M13.9992 5H19.9992M9.99923 5H3.99923M5.99923 17C7.51177 17 8.76287 16.1584 8.96934 14.7513C8.98242 14.6621 8.98897 14.6175 8.98385 14.5186C8.98031 14.4503 8.95717 14.3256 8.93599 14.2605C8.90531 14.1664 8.86812 14.1003 8.79375 13.968L5.99923 9L3.2047 13.968C3.13575 14.0906 3.10128 14.1519 3.06939 14.2584C3.04977 14.3239 3.02706 14.4811 3.02735 14.5494C3.02781 14.6606 3.03453 14.6899 3.04799 14.7486C3.30295 15.86 4.5273 17 5.99923 17ZM17.9992 17C19.5118 17 20.7629 16.1584 20.9693 14.7513C20.9824 14.6621 20.989 14.6175 20.9838 14.5186C20.9803 14.4503 20.9572 14.3256 20.936 14.2605C20.9053 14.1664 20.8681 14.1003 20.7937 13.968L17.9992 9L15.2047 13.968C15.1358 14.0906 15.1013 14.1519 15.0694 14.2584C15.0498 14.3239 15.0271 14.4811 15.0273 14.5494C15.0278 14.6606 15.0345 14.6899 15.048 14.7486C15.303 15.86 16.5273 17 17.9992 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                </button>
                 @endif
                 <button class="btn btn-outline-primary" wire:click="open_term_weight('weightModal')">
                     <svg viewBox="0 0 24 24" height="20px" width="20px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.99923 21H19.9992M11.9992 21V7M11.9992 7C13.1038 7 13.9992 6.10457 13.9992 5M11.9992 7C10.8947 7 9.99923 6.10457 9.99923 5M13.9992 5C13.9992 3.89543 13.1038 3 11.9992 3C10.8947 3 9.99923 3.89543 9.99923 5M13.9992 5H19.9992M9.99923 5H3.99923M5.99923 17C7.51177 17 8.76287 16.1584 8.96934 14.7513C8.98242 14.6621 8.98897 14.6175 8.98385 14.5186C8.98031 14.4503 8.95717 14.3256 8.93599 14.2605C8.90531 14.1664 8.86812 14.1003 8.79375 13.968L5.99923 9L3.2047 13.968C3.13575 14.0906 3.10128 14.1519 3.06939 14.2584C3.04977 14.3239 3.02706 14.4811 3.02735 14.5494C3.02781 14.6606 3.03453 14.6899 3.04799 14.7486C3.30295 15.86 4.5273 17 5.99923 17ZM17.9992 17C19.5118 17 20.7629 16.1584 20.9693 14.7513C20.9824 14.6621 20.989 14.6175 20.9838 14.5186C20.9803 14.4503 20.9572 14.3256 20.936 14.2605C20.9053 14.1664 20.8681 14.1003 20.7937 13.968L17.9992 9L15.2047 13.968C15.1358 14.0906 15.1013 14.1519 15.0694 14.2584C15.0498 14.3239 15.0271 14.4811 15.0273 14.5494C15.0278 14.6606 15.0345 14.6899 15.048 14.7486C15.303 15.86 16.5273 17 17.9992 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                 </button>
-                <a href="{{ route('enrolled-student-lists',[
+                <button class="btn btn-outline-primary" wire:click="open_school_work_modal('addSchoolWorkModal')">
+                    <svg height="20px" width="20px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="currentCoolor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:currentColor;} </style> <g> <polygon class="st0" points="374.107,448.835 34.01,448.835 34.01,194.102 164.947,194.102 164.947,63.165 374.107,63.165 374.107,96.698 408.117,64.049 408.117,29.155 164.947,29.155 34.01,160.092 0,194.102 0,482.845 408.117,482.845 408.117,282.596 374.107,318.034 "></polygon> <path class="st0" d="M508.609,118.774l-51.325-51.325c-4.521-4.522-11.852-4.522-16.372,0L224.216,275.561 c-1.344,1.344-2.336,2.998-2.889,4.815l-26.21,86.117c-2.697,8.861,5.586,17.144,14.447,14.447l88.886-27.052l210.159-218.741 C513.13,130.626,513.13,123.295,508.609,118.774z M243.986,349.323l-16.877-18.447l11.698-38.447l29.139,15.678l15.682,29.145 L243.986,349.323z M476.036,110.577L291.414,296.372l-11.728-11.728l185.804-184.631l10.547,10.546 C476.036,110.567,476.036,110.571,476.036,110.577z"></path> </g> </g></svg>
+                </button>
+                <a class="btn btn-primary" wire:click="open_school_work_types_modal('addSchoolWorkTypeModal')">
+                    <svg fill="currentColor" width="20px" viewBox="-8 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>paper</title> <path d="M13.52 5.72h-7.4c-0.36 0-0.56 0.2-0.6 0.24l-5.28 5.28c-0.040 0.040-0.24 0.24-0.24 0.56v12.2c0 1.24 1 2.24 2.24 2.24h11.24c1.24 0 2.24-1 2.24-2.24v-16.040c0.040-1.24-0.96-2.24-2.2-2.24zM5.28 8.56v1.8c0 0.32-0.24 0.56-0.56 0.56h-1.84l2.4-2.36zM14.080 24.040c0 0.32-0.28 0.56-0.56 0.56h-11.28c-0.32 0-0.56-0.28-0.56-0.56v-11.36h3.040c1.24 0 2.24-1 2.24-2.24v-3.040h6.52c0.32 0 0.56 0.24 0.56 0.56l0.040 16.080z"></path> </g></svg>
+                </a>
+                <a href="{{ route('my-enrolled-students',[
                         'school_year' => $school_year,
                         'semester' => $semester,
                         'schedule_id' => $detail['schedule_id']]) }}" class="btn btn-outline-secondary d-flex justify-content-center items-center" wire:wire:navigate>
@@ -68,8 +93,33 @@
                                     ->where('term_id','=',$this->detail['term_id'])
                                     ->first();
                             @endphp
-                            <th colspan="4">
-                                Final Grade
+                            @forelse ($school_work_types as $key => $value )
+                                @php
+                                    $school_works_var = DB::table('school_works')
+                                        ->select(DB::raw('count(*) as total'))
+                                        ->where('school_work_type_id','=',$value->id)
+                                        ->first();
+                                @endphp
+                                @if($value->weight > 0)
+                                    @if($value->id != $current_school_work_type->id)
+                                        <th colspan="{{ ( $school_works_var->total >0 ? intval($school_works_var->total) + 1: 1) }}" 
+                                            class="text-center">{{$value->school_work_type}} {{ number_format($value->weight /$weight->total_weight * 100, 2, '.', '') }}%</th>
+                                    @else
+                                        <th colspan="1" class="text-center">{{$value->school_work_type}} {{ number_format($value->weight / $weight->total_weight * 100 , 2, '.', '') }}%</th>
+                                    @endif
+                                @endif
+                            @empty
+                                <th colspan="1" class="text-center">No School Work Type</th>
+                            @endforelse
+                            <th class="">Total</th>
+                            <th class="">Total Term Grade</th>
+                            <th colspan="{{ ($schedule->is_lec ? "4": "3") }}">
+                                    {{
+                                    $terms[
+                                        $detail['term_id'] != $terms[0]->id
+                                    ]->term_name 
+                                    }}
+                                Grade
                             </th>
                         </tr>
                         <tr class="align-middle">
@@ -82,30 +132,39 @@
                                         ->get()
                                         ->toArray();
                                 @endphp
-                            @empty
-                            @endforelse
-                            @php
-                                $term_total = DB::table('terms')
-                                    ->select(DB::raw('sum(weight) as total'))
-                                    ->where('schedule_id','=',$detail['schedule_id'])
-                                    ->first();
-                            @endphp
-                            @foreach ($terms as $key =>$value )
-                                @if($value->id != $detail['term_id'])
-                                @php 
-                                    $other_term_weight = $value->weight;
-                                @endphp 
-                                {{ $value->weight }}
+                                @if($value->weight > 0)
+                                    @if(count($school_works_var))
+                                        @foreach ($school_works_var as $v_key => $v_value )
+                                            @if($value->id != $current_school_work_type->id)
+                                                <th class="text-center">{{ $v_value->school_work_name }} : {{ $v_value->max_score }}<br>{{ date_format(date_create($v_value->schedule_date) ,"M d, Y");}}</th>
+                                            @else
+                                               
+                                            @endif
+                                        @endforeach
+                                        <th class="text-center">Avg - {{ number_format($value->weight /$weight->total_weight * 100, 2, '.', '') }}%</th>
+                                    @else 
+                                        <th class="text-center">No Data</th>
+                                    @endif
                                 @endif
-                            @endforeach
+                            @empty
+                                <th colspan="1" class="text-center">No School Work Type</th>
+                            @endforelse
+                            <th scope="col" class=""></th>
+                            @php
+                            $term_total = DB::table('terms')
+                                ->select(DB::raw('sum(weight) as total'))
+                                ->where('schedule_id','=',$detail['schedule_id'])
+                                ->first();
+                            @endphp
+                            <th scope="col" class="">{{ 100 }}</th>
                             @if($schedule->is_lec)
-                            <th scope="col" class="">Lecture</th>
+                                <th scope="col" class="">Lecture</th>
                             @endif
-                            @if($schedule->laboratory_unit>0)
+                            @if($schedule->laboratory_unit>0 || $schedule->is_lec == 0)
                                 <th scope="col" class="">Laboratory</th>
                             @endif
-                                <th scope="col" class="">Total</th>
-                                <th scope="col" class="">Weighted Grade</th>
+                            <th scope="col" class="">Total</th>
+                            <th scope="col" class="">Weighted Grade</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,10 +186,269 @@
                                     </div>
                                 </td>
                                 @php
+                                    $score_key = 0;
+                                    $average = 0;
+                                    $temp_sub_total_score = 0;
+                                    $temp_sub_total_max_score = 0;
+                                    $school_work_type_id = 0;
+                                    $sub_total_score = 0;
+                                    $sub_total_max_score = 0;
+                                    $school_work_type_count = 0;
+                                    $school_work_type_count_prev = 0;
+                                    $school_work_type_weight = 0;
+
+                                    $sub_average = 0;
+                                    $multiplier = 55;
+                                    $offset = 45;
+                                    $total_grade = 0;
+                                    $inc = false;
+                                @endphp
+                                @foreach ($student_scores[$key] as $v_key =>$v_value )
+                                    @php
+                                        if($v_value['school_work_type_id'] == NULL ){
+                                            $sub_total_score = $temp_sub_total_score;
+                                            $sub_total_max_score = $temp_sub_total_max_score;
+                                            $temp_sub_total_score = 0;
+                                            $temp_sub_total_max_score = 0;
+                                            $school_work_type_count_prev = $school_work_type_count;
+                                            $school_work_type_count = 0;
+                                        }else{
+                                            $school_work_type_id = $v_value['school_work_type_id'];
+                                            $temp_sub_total_max_score += $v_value['max_score'];
+                                            $temp_sub_total_score += $v_value['score'];
+                                            $school_work_type_count += 1;
+                                            if($weight->total_weight){
+                                                $school_work_type_weight = $v_value['weight']/ $weight->total_weight * 100;
+                                            }
+                                            if(intval($v_value['score'])){
+                                                $sub_average += ($v_value['score']/$v_value['max_score'] );
+                                            }
+                                            if(is_null($v_value['score'])){
+                                                if($v_value['school_work_type_id'] == $current_school_work_type->id) {  
+                                                    // $inc = true;
+                                                }else{
+                                                    $inc = true;
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    @if($v_value['school_work_id'])
+                                        @if($v_value['weight'] > 0 )
+                                            @if($v_value['school_work_type_id'] != $current_school_work_type->id)
+                                                <td class="" wire:key="{{ $value->id.'-'.$v_value['school_work_type_id'].'-'.$v_value['score']}}">
+                                                    <div class="d-flex align-middle">
+                                                        <input type="number" name="" id="" value="{{ $v_value['score'] }}" class="form-control" style=" min-width:100px;" 
+                                                            wire:change="updateScore(
+                                                            {{ ($v_value['score_id']>=0 ? $v_value['score_id'] : 0) }},
+                                                            {{ $v_value['schedule_id'] }},
+                                                            {{ $v_value['student_id'] }},
+                                                            {{ $v_value['term_id'] }},
+                                                            {{ $v_value['school_work_id']}},
+                                                            $event.target.value,
+                                                            {{ $v_value['max_score'] }})">
+                                                    </div>
+                                                </td>
+                                            @endif
+                                        @endif
+                                    @else
+                                        @if( $v_value['school_work_type_id'] != $current_school_work_type->id )
+                                            @if($v_value['weight'] > 0)
+                                                <td class="">
+                                                    <span>
+                                                        @if($sub_total_score)
+                                                            <!-- {{ $sub_total_score}} / {{$sub_total_max_score }} -->
+                                                            
+                                                            @php
+                                                                $sub_total = $sub_average / $school_work_type_count_prev
+                                                            @endphp
+                                                            {{ number_format( $sub_total*100, 2, '.', '')    }}
+                                                            {{  number_format(( $sub_total * $school_work_type_weight), 2, '.', '')}}
+                                                        @php
+                                                                $total_grade +=  ($sub_total * $school_work_type_weight/100);
+                                                                $sub_average = 0;
+                                                        @endphp
+                                                        @else 
+                                                        ---- 
+                                                        @endif
+                                                    </span>
+                                                </td>
+                                            @else
+                                                @php
+                                                  $sub_average = 0;
+                                                @endphp
+                                            @endif
+                                        @endif
+                                    @endif
+                                @endforeach
+                                <td>
+                                    {{ ($total_grade ? number_format($total_grade*100, 2, '.', '') : 'No data') }}
+                                </td>
+                                    @php
+                                        if($total_grade >= 0 && $inc ){
+                                            if(DB::table('term_grades')
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('term_id','=',$detail['term_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->first()
+                                            ){
+                                                DB::table('term_grades')
+                                                ->where('schedule_id','=',$detail['schedule_id'])
+                                                ->where('term_id','=',$detail['term_id'])
+                                                ->where('student_id','=',$value->id)
+                                                ->update([
+                                                    'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
+                                                    'other' => NULL,
+                                                ]);
+                                            }else{
+                                                DB::table('term_grades')
+                                                ->insert([
+                                                    'schedule_id' => $detail['schedule_id'],
+                                                    'term_id'=>$detail['term_id'],
+                                                    'student_id' => $value->id,
+                                                    'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
+                                                    'other' => NULL,
+                                                ]);
+                                            }
+                                        }else{
+                                            if(DB::table('term_grades')
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('term_id','=',$detail['term_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->first()
+                                            ){
+                                                DB::table('term_grades')
+                                                ->where('schedule_id','=',$detail['schedule_id'])
+                                                ->where('term_id','=',$detail['term_id'])
+                                                ->where('student_id','=',$value->id)
+                                                ->update([
+                                                    'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
+                                                    'other' => NULL,
+                                                ]);
+                                            }else{
+                                                DB::table('term_grades')
+                                                ->insert([
+                                                    'schedule_id' => $detail['schedule_id'],
+                                                    'term_id'=> $detail['term_id'],
+                                                    'student_id' => $value->id,
+                                                    'grade' => $total_grade * ($term_weight['weight']/ $term_total->total * 100) / 100,
+                                                    'other' => NULL,
+                                                ]);
+                                            }
+                                        }
+                                        $mid_term_grade = DB::table('term_grades')
+                                            ->select(
+                                            DB::raw('sum(grade) as grade'))
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->where('term_id','=',$terms[0]->id)
+                                            ->first();
+                                    @endphp
+                                    @if(floatval($mid_term_grade->grade))
+                                    @else
+                                    @endif
+                                    @php
+                                        $this_grade = $mid_term_grade->grade * ($term_weight['weight'] / $term_total->total * 100) / 100;
+                                        $term_grades = DB::table('term_grades')
+                                                ->select(
+                                                DB::raw('sum(grade) as grade'))
+                                                ->where('schedule_id','=',$detail['schedule_id'])
+                                                ->where('student_id','=',$value->id)
+                                                ->first();
+
+                                        $final_term_grade = DB::table('term_grades')
+                                            ->select(
+                                            DB::raw('sum(grade) as grade'))
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->where('term_id','=',$terms[1]->id)
+                                            ->first();
+                                        if($term_grades){
+                                            $grade = $term_grades->grade;
+                                        }else{
+                                            $grade = '';
+                                        }
+                                    @endphp
+                                    @if(floatval($final_term_grade->grade)>=0)
+                                    @else
+                                        @php
+                                        $inc = true
+                                        @endphp
+                                    @endif
+                                <td>
+                                    @php
+                                        $lab_lec = DB::table('lab_lec')
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('term_id','=',$detail['term_id'])
+                                            ->first();
+                                        $lab_lec_grades = DB::table('lab_lec_grades')
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->first();
+                                        if(DB::table('term_grades')
+                                            ->where('schedule_id','=',$detail['schedule_id'])
+                                            ->where('student_id','=',$value->id)
+                                            ->where('other','=','INC')
+                                            ->first()){
+                                            $grade = NULL;
+                                        }else{
+                                            $term_grades = DB::table('term_grades')
+                                                    ->select(
+                                                    DB::raw('sum(grade) as grade'))
+                                                    ->where('schedule_id','=',$detail['schedule_id'])
+                                                    ->where('student_id','=',$value->id)
+                                                    ->first();
+                                            if($term_grades){
+                                                $grade = $term_grades->grade;
+                                                if($lab_lec_grades){
+
+                                                    DB::table('lab_lec_grades')
+                                                    ->where('id','=',$lab_lec_grades->id)
+                                                    ->where('student_id','=',$value->id)
+                                                    ->update([
+                                                        'schedule_id' => $detail['schedule_id'],
+                                                        'sub_weight' => $lab_lec->sub_weight,
+                                                        'grade' => (floatval($grade) ? $grade * $lab_lec->sub_weight/100 : NULL),
+                                                    ]);
+                                                }
+                                                
+                                            }else{
+                                                $grade = NULL;
+                                            }
+                                        }
+                                        if(!$lab_lec_grades ){
+                                            DB::table('lab_lec_grades')
+                                            ->insert([
+                                                'schedule_id' => $detail['schedule_id'],
+                                                'student_id' => $value->id,
+                                                'sub_weight' => $lab_lec->sub_weight,
+                                                'grade' => (floatval($grade) ? $grade*$lab_lec->sub_weight/100 : NULL),
+                                                'other' => (floatval($grade) ? NULL : NULL),
+                                            ]);
+                                        }
+
+                                    @endphp
+                                    @if(floatval($grade) && !$inc)
+                                        {{ number_format($grade*100, 2, '.', '') }}
+                                    @else
+                                        @if($lab_lec_grades)
+                                            @php
+                                                $other = DB::table('lab_lec_grades')
+                                                ->where('student_id','=',$value->id)
+                                                ->where('id','=',$lab_lec_grades->id)
+                                                ->first();
+                                                if($other){
+                                                    $grade = $other->other;
+                                                }
+                                            @endphp
+                                            <input type="text" class="form-control" value="{{$grade }}" wire:change="updateLabLecGrades({{ $lab_lec_grades->id }},{{ $value->id }},$event.target.value,)">
+                                        @endif
+                                    @endif
+                                </td>
+                                @php
                                     $total_grade = 0;
                                     $total_lab_lec_grade = 0;
                                     $total_lab_lec_grade_average = 0;
-                                @endphp
+                                @endphp 
                                 @if($schedule->is_lec)
                                     <th scope="col" class="">
                                         @php 
@@ -140,7 +458,7 @@
                                                 ->where('student_id','=',$value->id)
                                                 ->first();
                                         @endphp
-                                         @if($lab_lec_grade != null && floatval($lab_lec_grade->grade))
+                                        @if($lab_lec_grade != null && floatval($lab_lec_grade->grade))
                                             {{ number_format(($lab_lec_grade->grade/$lab_lec_grade->sub_weight)*100*100, 2, '.', '') }}
                                             @php 
                                                 $total_lab_lec_grade +=  floatval($lab_lec_grade->grade) ? floatval($lab_lec_grade->grade/$lab_lec_grade->sub_weight * 100 * 100):0;
@@ -160,7 +478,6 @@
                                             $total_lab_lec_grade_average += 1;
                                         @endphp
                                          @if($lab_lec_grade != null && floatval($lab_lec_grade->grade))
-
                                             {{ number_format(($lab_lec_grade->grade/$lab_lec_grade->sub_weight)*100*100, 2, '.', '') }}
                                             @php 
                                                 $total_lab_lec_grade +=  floatval($lab_lec_grade->grade) ? floatval($lab_lec_grade->grade/$lab_lec_grade->sub_weight * 100 * 100):0;
