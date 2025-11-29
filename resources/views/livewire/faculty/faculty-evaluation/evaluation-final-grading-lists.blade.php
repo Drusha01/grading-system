@@ -197,7 +197,6 @@
                                         0
                                     @endif
                                 </th>
-                            @endif
                             </tr>
                         @empty
                             <tr class="align-middle">
