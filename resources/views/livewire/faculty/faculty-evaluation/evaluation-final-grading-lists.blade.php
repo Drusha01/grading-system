@@ -146,7 +146,7 @@
                                                 $total_lab_lec_grade +=  floatval($lab_lec_grade->grade) ? floatval($lab_lec_grade->grade/$lab_lec_grade->sub_weight * 100 * 100):0;
                                             @endphp
                                         @else
-                                            {{ $lab_lec_grade->other}}    
+                                            {{$lab_lec_grade ? $lab_lec_grade->other : ""}}    
                                         @endif
                                     </th>
                                 @endif
@@ -165,7 +165,7 @@
                                                 $total_lab_lec_grade +=  floatval($lab_lec_grade->grade) ? floatval($lab_lec_grade->grade/$lab_lec_grade->sub_weight * 100 * 100):0;
                                             @endphp
                                         @else
-                                            {{ $lab_lec_grade->other}}    
+                                            {{$lab_lec_grade ? $lab_lec_grade->other : ""}}    
                                         @endif
                                     </th>
                                 @endif

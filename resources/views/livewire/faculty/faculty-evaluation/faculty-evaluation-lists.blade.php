@@ -449,7 +449,7 @@
                                     $total_lab_lec_grade = 0;
                                     $total_lab_lec_grade_average = 0;
                                 @endphp 
-                                @if($schedule->is_lec)
+                                @if($schedule->lecture_unit>0)
                                     <th scope="col" class="">
                                         @php 
                                             $total_lab_lec_grade_average += 1;
@@ -464,7 +464,7 @@
                                                 $total_lab_lec_grade +=  floatval($lab_lec_grade->grade) ? floatval($lab_lec_grade->grade/$lab_lec_grade->sub_weight * 100 * 100):0;
                                             @endphp
                                         @else
-                                            {{ $lab_lec_grade->other}}    
+                                            {{$lab_lec_grade ? $lab_lec_grade->other : ""}}    
                                         @endif
                                     </th>
                                 @endif
@@ -483,7 +483,7 @@
                                                 $total_lab_lec_grade +=  floatval($lab_lec_grade->grade) ? floatval($lab_lec_grade->grade/$lab_lec_grade->sub_weight * 100 * 100):0;
                                             @endphp
                                         @else
-                                            {{ $lab_lec_grade->other}}    
+                                            {{$lab_lec_grade ? $lab_lec_grade->other : ""}}    
                                         @endif
                                     </th>
                                 @endif
