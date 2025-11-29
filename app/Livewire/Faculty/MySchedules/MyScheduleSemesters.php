@@ -65,7 +65,7 @@ class MyScheduleSemesters extends Component
                 'sm.semester',
             )
             ->orderBy('sm.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.faculty.my-schedules.my-schedule-semesters',[
             'table_data' =>$table_data
         ])

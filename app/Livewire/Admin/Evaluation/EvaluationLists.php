@@ -256,7 +256,7 @@ class EvaluationLists extends Component
         $table_data = $table_data
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
 
         $student_id = $table_data->pluck('id');
 

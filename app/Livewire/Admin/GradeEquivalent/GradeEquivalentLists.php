@@ -24,7 +24,7 @@ class GradeEquivalentLists extends Component
         $table_data = DB::table('point_grade_equivalent as pge')
             ->orwhere('pge.grade','like','%'.$this->filters['search'] .'%')
             ->orderBy('pge.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.grade-equivalent.grade-equivalent-lists',[
          'table_data'=>$table_data
         ])

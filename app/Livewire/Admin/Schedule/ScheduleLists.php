@@ -88,7 +88,7 @@ class ScheduleLists extends Component
             });
         }
             $table_data = $table_data
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.schedule.schedule-lists',[
             'table_data'=>$table_data
         ])

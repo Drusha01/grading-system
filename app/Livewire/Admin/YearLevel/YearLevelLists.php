@@ -25,7 +25,7 @@ class YearLevelLists extends Component
             ->orwhere('yl.year_level','like','%'.$this->filters['search'] .'%')
             ->orderBy('yl.is_active','desc')
             ->orderBy('yl.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.year-level.year-level-lists',[
             'table_data'=>$table_data
         ])

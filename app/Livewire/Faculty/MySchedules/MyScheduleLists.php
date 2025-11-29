@@ -83,7 +83,7 @@ class MyScheduleLists extends Component
         $table_data = $table_data
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
 
         return view('livewire.faculty.my-schedules.my-schedule-lists',[
             'table_data'=>$table_data

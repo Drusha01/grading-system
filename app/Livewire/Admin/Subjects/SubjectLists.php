@@ -78,7 +78,7 @@ class SubjectLists extends Component
         $table_data = $table_data
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
 
         return view('livewire.admin.subjects.subject-lists',[
             'table_data'=>$table_data

@@ -72,7 +72,7 @@ class DepartmentLists extends Component
         $table_data = $table_data
             ->orderBy('d.is_active', 'desc')
             ->orderBy('d.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.department.department-lists',[
             'table_data'=>$table_data
         ])

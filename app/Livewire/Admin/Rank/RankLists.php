@@ -29,7 +29,7 @@ class RankLists extends Component
             ->orwhere('r.name','like','%'.$this->filters['search'] .'%')
             ->orderBy('r.is_active','desc')
             ->orderBy('r.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.rank.rank-lists',[
             'table_data'=>$table_data
         ])

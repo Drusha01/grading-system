@@ -17,7 +17,7 @@ class SchoolYearLists extends Component
     public function render()
     {
         $table_data = DB::table('school_years')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         
         return view('livewire.admin.school-year.school-year-lists',[
             'table_data'=>$table_data

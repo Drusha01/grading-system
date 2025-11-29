@@ -73,7 +73,7 @@ class MyGrades extends Component
             }
             $table_data = $table_data
             ->orderBy('date_created', 'asc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
 
         $this->equivalent_grade = DB::table('point_grade_equivalent')
             ->get()

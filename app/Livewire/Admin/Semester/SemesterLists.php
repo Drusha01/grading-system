@@ -43,7 +43,7 @@ class SemesterLists extends Component
             ->orwhere('s.semester','like','%'.$this->filters['search'] .'%')
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.semester.semester-lists',[
             'table_data'=>$table_data
         ])

@@ -81,7 +81,7 @@ class CurriculumLists extends Component
             ->where('college_id','=',$this->detail['college_id'])
             ->where('department_id','=',$this->detail['department_id'])
             ->orderBy('c.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         
         return view('livewire.admin.curriculum.curriculum-lists',[
             'table_data' =>$table_data

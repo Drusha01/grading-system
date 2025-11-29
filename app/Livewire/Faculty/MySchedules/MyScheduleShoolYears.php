@@ -55,7 +55,7 @@ class MyScheduleShoolYears extends Component
                 'sy.date_end',
             )
             ->orderBy('sy.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.faculty.my-schedules.my-schedule-shool-years',[
             'table_data' =>$table_data
         ])

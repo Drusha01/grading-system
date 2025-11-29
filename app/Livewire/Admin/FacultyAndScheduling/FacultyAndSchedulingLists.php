@@ -19,7 +19,7 @@ class FacultyAndSchedulingLists extends Component
     {
         $table_data = DB::table('school_years as sy')
             ->orderBy('sy.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         
         return view('livewire.admin.faculty-and-scheduling.faculty-and-scheduling-lists',[
             'table_data' =>$table_data

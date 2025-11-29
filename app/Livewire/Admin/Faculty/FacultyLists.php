@@ -131,7 +131,7 @@ class FacultyLists extends Component
         $table_data = $table_data
             ->orderBy('u.is_active','desc')
             ->orderBy('f.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
 
         return view('livewire.admin.faculty.faculty-lists',[
             'table_data'=>$table_data
