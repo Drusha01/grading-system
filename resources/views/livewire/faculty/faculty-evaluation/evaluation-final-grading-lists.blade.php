@@ -131,7 +131,7 @@
                                     $total_lab_lec_grade = 0;
                                     $total_lab_lec_grade_average = 0;
                                 @endphp
-                                @if($schedule->lecture_unit>0)
+                                @if($schedule->is_lec)
                                     <th scope="col" class="">
                                         @php 
                                             $total_lab_lec_grade_average += 1;
@@ -150,7 +150,7 @@
                                         @endif
                                     </th>
                                 @endif
-                                @if($schedule->laboratory_unit>0)
+                                @if($schedule->laboratory_unit>0 || $schedule->is_lec == 0)
                                     <th scope="col" class="">
                                         @php 
                                             $lab_lec_grade = DB::table('lab_lec_grades')
