@@ -501,7 +501,7 @@
                                         $point_grade = true;
                                         @endphp
                                         @foreach($point_grade_equivalent as $p_value)
-                                            @if(($total_lab_lec_grade/$total_lab_lec_grade_average) >$p_value->minimum  && $total_lab_lec_grade/$total_lab_lec_grade_average < $p_value->maximum+1)
+                                            @if(($total_lab_lec_grade/$total_lab_lec_grade_average) >= $p_value->minimum  && $total_lab_lec_grade/$total_lab_lec_grade_average < $p_value->maximum+1)
                                                 {{ $p_value->grade }}
                                                 @php
                                                     $point_grade = false;

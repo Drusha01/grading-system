@@ -95,7 +95,6 @@
                                 @php 
                                     $other_term_weight = $value->weight;
                                 @endphp 
-                                {{ $value->weight }}
                                 @endif
                             @endforeach
                             @if($schedule->is_lec)
