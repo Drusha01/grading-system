@@ -204,7 +204,7 @@ class FacultyAndSchedulingSubjects extends Component
         $table_data = $table_data
             ->orderBy('s.is_active','desc')
             ->orderBy('s.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.faculty-and-scheduling.faculty-and-scheduling-subjects',[
             'table_data'=>$table_data
         ])

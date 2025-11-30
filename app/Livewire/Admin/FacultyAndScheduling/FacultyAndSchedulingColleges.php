@@ -31,7 +31,7 @@ class FacultyAndSchedulingColleges extends Component
             ->orwhere('c.name','like','%'.$this->filters['search'] .'%')
             ->orderBy('c.is_active','desc')
             ->orderBy('c.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.faculty-and-scheduling.faculty-and-scheduling-colleges',[
             'table_data'=>$table_data
         ])
