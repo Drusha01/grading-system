@@ -180,7 +180,7 @@
                                     </button>
                                 </div>
                                 @error('detail.password') 
-                                    <span class="text-white">{{ $message }}</span> 
+                                    <span class="text-danger">{{ $message }}</span> 
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
@@ -202,7 +202,7 @@
                                     </button>
                                 </div>
                                 @error('detail.confirm_password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
