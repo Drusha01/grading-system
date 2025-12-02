@@ -51,15 +51,6 @@ class AddStudent extends Component
             'detail.middle_name' => 'nullable|string|max:255',
             'detail.last_name' => 'required|string|max:255',
             'detail.suffix' => 'nullable|string|max:255',
-            'detail.password' => [
-                'required',
-                Password::min(8)
-                    ->mixedCase()
-                    ->letters()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
-            ],
         ];
     }
 

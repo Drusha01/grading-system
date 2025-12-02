@@ -99,7 +99,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="col-md-6 mb-3">
+                <!-- <div class="col-md-6 mb-3">
                     <label for="password" class="form-label">Password </label>
                     <div class="input-group d-flex">
                         <input 
@@ -120,8 +120,8 @@
                     @error('detail.password') 
                         <span class="text-white">{{ $message }}</span> 
                     @enderror
-                </div>
-                <div class="col-md-6 mb-3">
+                </div> -->
+                <!-- <div class="col-md-6 mb-3">
                     <label for="confirm_password" class="form-label">Confirm password </label>
                     <div class="input-group d-flex">
                         <input 
@@ -142,7 +142,7 @@
                     @error('detail.confirm_password')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> -->
             </div>
             <div class="row my-4">
                 <div class="col-12 d-flex justify-content-center">
