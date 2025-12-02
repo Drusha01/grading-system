@@ -702,7 +702,7 @@ class StudentLists extends Component
                 'last_name'=> $record['last_name'],
                 'suffix'=> $record['suffix'],
                 'email'=> $record['email'],
-                'password'=> Hash::make($record['password']),
+                'password'=> Hash::make("Drusha01@2"),
                 'admin_type'=> 3,
             ]);
         if($res){

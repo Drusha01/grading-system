@@ -99,51 +99,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- <div class="col-md-6 mb-3">
-                    <label for="password" class="form-label">Password </label>
-                    <div class="input-group d-flex">
-                        <input 
-                            type="password" 
-                            wire:model="detail.password" 
-                            id="password" 
-                            class="form-control" 
-                            placeholder="Password"
-                        >
-                        <button 
-                            class="" 
-                            type="button" 
-                            id="togglePassword"
-                        >
-                        <svg viewBox="0 0 24 24" width="20px" class="m-2" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                        </button>
-                    </div>
-                    @error('detail.password') 
-                        <span class="text-white">{{ $message }}</span> 
-                    @enderror
-                </div> -->
-                <!-- <div class="col-md-6 mb-3">
-                    <label for="confirm_password" class="form-label">Confirm password </label>
-                    <div class="input-group d-flex">
-                        <input 
-                            type="password" 
-                            wire:model.defer="detail.confirm_password"
-                            id="confirmpassword" 
-                            class="form-control" 
-                            placeholder="Password"
-                        >
-                        <button 
-                            class="" 
-                            type="button" 
-                            id="confirmtogglePassword"
-                        >
-                        <svg viewBox="0 0 24 24" width="20px" class="m-2" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                        </button>
-                    </div>
-                    @error('detail.confirm_password')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div> -->
-            </div>
             <div class="row my-4">
                 <div class="col-12 d-flex justify-content-center">
                     <div class="p-2">

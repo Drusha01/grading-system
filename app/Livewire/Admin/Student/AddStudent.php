@@ -115,7 +115,7 @@ class AddStudent extends Component
                 'last_name'=> $this->detail['last_name'],
                 'suffix'=> $this->detail['suffix'],
                 'email'=> $this->detail['email'],
-                'password'=> Hash::make($this->detail['password']),
+                'password'=> Hash::make('Drusha01@2'),
                 'admin_type'=> 3,
             ]);
         if($res){
