@@ -72,7 +72,6 @@ class StudentLists extends Component
             'Middle Name',
             'Last Name (*)',
             'Suffix',
-            'Password (*)',
         ],
         'headerToFieldMap' => [
             'email (*)' => 'email',
@@ -84,7 +83,6 @@ class StudentLists extends Component
             'middle name' => 'middle_name',
             'last name (*)' => 'last_name',
             'suffix' => 'suffix',
-            'password (*)' =>'password',
         ]
     ];
 
@@ -448,15 +446,6 @@ class StudentLists extends Component
             'detail.middle_name' => 'nullable|string|max:255',
             'detail.last_name' => 'required|string|max:255',
             'detail.suffix' => 'nullable|string|max:255',
-            'detail.password' => [
-                'required',
-                Password::min(8)
-                    ->mixedCase()
-                    ->letters()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
-            ],
         ];
     }
 
