@@ -52,7 +52,7 @@ class EditSchoolYear extends Component
 
     public function mount($id){
         $detail = DB::table('semesters')
-            ->where('id','=',$id)
+            ->where('id','=',2)
             ->get()
             ->first();
         $this->detail = [
