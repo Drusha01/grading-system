@@ -48,7 +48,7 @@ class CurriculumDepartments extends Component
         $table_data = $table_data
             ->orderBy('d.is_active', 'desc')
             ->orderBy('d.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.curriculum.curriculum-departments',[
             'table_data'=>$table_data
         ])

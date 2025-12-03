@@ -110,7 +110,7 @@ class CurriculumProspectus extends Component
             }
             if($this->is_table){
                 $table_data = $table_data
-                ->paginate(10);
+                ->paginate(10)->withPath(url()->current());
             }else{
                 $table_data = $table_data
                 ->get()

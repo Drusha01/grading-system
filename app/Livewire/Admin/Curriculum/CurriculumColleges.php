@@ -30,7 +30,7 @@ class CurriculumColleges extends Component
             ->orwhere('c.name','like','%'.$this->filters['search'] .'%')
             ->orderBy('c.is_active','desc')
             ->orderBy('c.id', 'desc')
-            ->paginate(10);
+            ->paginate(10)->withPath(url()->current());
         return view('livewire.admin.curriculum.curriculum-colleges',[
             'table_data'=>$table_data
         ])
